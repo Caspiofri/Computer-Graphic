@@ -13,12 +13,15 @@
   <ItemGroup>
     <ClCompile Include="..\Utils\Utils.cpp" />
     <ClCompile Include="..\Utils\wavefront_obj.cpp" />
+    <ClCompile Include="BBox.cpp" />
     <ClCompile Include="GLMesh.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Utils\Utils.h" />
     <ClInclude Include="..\Utils\wavefront_obj.h" />
+    <ClInclude Include="BBox.h" />
+    <ClInclude Include="common_glm_config.h" />
     <ClInclude Include="GLMesh.h" />
   </ItemGroup>
   <ItemGroup>

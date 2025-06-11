@@ -16,6 +16,8 @@
 #include <glm/vec4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "OpenGL/GLMesh.h"
+
 LARGE_INTEGER ElapsedMicroseconds;
 
 
@@ -28,6 +30,9 @@ GLuint g_programID = 0;
 
 //obj data type
 Wavefront_obj objScene;
+GLMesh _mesh;
+bool _isMeshLoaded = false;
+
 
 void TW_CALL loadOBJModel(void* clientData);
 void initScene();
@@ -41,7 +46,8 @@ void PassiveMouseMotion(int x, int y);
 void Keyboard(unsigned char k, int x, int y);
 void Special(int k, int x, int y);
 void Terminate(void);
-
+//custom functions:
+void TweakBarSettings(void);
 
 int main(int argc, char *argv[])
 {
@@ -70,6 +76,9 @@ int main(int argc, char *argv[])
 	atexit(Terminate);  // called after glutMainLoop ends
 
 	// Create a tweak bar
+	TweakBarSettings();
+
+	// Create a tweak bar
 	TwBar* bar = TwNewBar("TweakBar");
 
 	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLUT and OpenGL.' "); // Message added to the help bar.
@@ -92,6 +101,7 @@ int main(int argc, char *argv[])
 }
 
 
+
 void TW_CALL loadOBJModel(void *data)
 {
 	std::wstring str = getOpenFileName();
@@ -101,6 +111,17 @@ void TW_CALL loadOBJModel(void *data)
 	if(result)
 	{
 		std::cout << "The obj file was loaded successfully" << std::endl;
+		//clear the mesh if it was loaded before	
+		if (_isMeshLoaded)
+		{
+			_mesh.reset();
+		}
+		//upload the data to the mesh
+		_mesh.uploadFrom(objScene);
+
+		std::cout << "Obj was loaded to mesh" << std::endl;
+		_isMeshLoaded = true;
+
 	}
 	else
 	{
@@ -205,10 +226,23 @@ void drawScene()
 	GLuint scale_id = glGetUniformLocation(g_programID, "scale");
 	glUniform1f(scale_id, g_scale);
 
-	// Draw the cube using indices
-	int numIndices = 36;
-	//int numIndices = 18; //half cube only
-	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+
+	if (_isMeshLoaded)
+	{
+		std::cout << "[drawScene]: start draw mesh ... " << std::endl;
+
+		// Bind the VAO of the mesh
+		_mesh.draw();
+
+		std::cout << "[drawScene]: draw mesh executed !" <<  std::endl;
+
+	}
+	else
+	{
+		// If no mesh is loaded, draw a default cube
+		int numIndices = 36; // 6 faces * 2 triangles per face * 3 indices per triangle
+		glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+	}
 
 	// Unbind the shader program after drawing
 	glUseProgram(0);

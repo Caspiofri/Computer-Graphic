@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <Glew/include/gl/glew.h>
 #include "FreeImage/FreeImage.h"
+#include <vector>
 
 #include <string>
 
