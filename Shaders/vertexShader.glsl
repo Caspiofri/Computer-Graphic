@@ -1,8 +1,7 @@
 #version 460 //compatible with OpenGL version 4.6 (latest version)
 
-//in vec4 vNormal; //add this
-in vec4 vPosition;
-in vec4 vColor;
+layout(location = 0) in vec4 vPosition;
+layout(location = 1) in vec4 vColor;
 
 uniform mat4 rotation; 
 uniform mat4 translation;

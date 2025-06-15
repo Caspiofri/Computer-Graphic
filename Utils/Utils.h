@@ -12,12 +12,12 @@
 #define BUFFER_OFFSET(offset)   ((GLvoid*) (offset))
 
 
-struct Shader
-{
-	std::string filename;
-	GLenum      type;
-	std::string source;
-};
+//struct Shader
+//{
+//	std::string filename;
+//	GLenum      type;
+//	std::string source;
+//};
 
 
 void printMatrixArray(const glm::mat4x4& mat);
@@ -28,8 +28,8 @@ void createTranslationMatrix(float tx, float ty, float tz, glm::mat4x4& mat);
 void createPerspectiveProjectionMatrix(float nearPlane, float farPlane, float right, float top, glm::mat4x4& mat);
 void displayMessage(const std::string& str);
 std::wstring getOpenFileName();
-GLuint initShader(std::string vertexShaderFileName, std::string fragmentShaderFileName);
-std::string readShaderSource(const std::string& shaderFileName);
+//GLuint initShader(std::string vertexShaderFileName, std::string fragmentShaderFileName);
+//std::string readShaderSource(const std::string& shaderFileName);
 void createCube(std::vector<glm::vec4>& positions, std::vector<glm::vec4>& colors, std::vector<glm::uvec3>& triangleIndices);
 void displaySoftwareStatus();
 bool LoadImage(const char* filename, BYTE** bits, unsigned int& width, unsigned int& height, FREE_IMAGE_COLOR_TYPE& colorType);

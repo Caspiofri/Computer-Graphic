@@ -1,19 +1,24 @@
-#include "GLMesh.h"
+#include "MeshLoader.h"
 #include "common_glm_config.h"
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
 
-GLMesh::GLMesh()
-	: _vao(0), _vbo(0), _ebo(0), _indexCount(0)
+MeshLoader::MeshLoader()
 {
-
 }
-GLMesh::~GLMesh()
+MeshLoader ::~MeshLoader()
 {
 	reset();
 }
 
-void GLMesh::uploadFrom(const Wavefront_obj& obj) {
+bool MeshLoader::uploadFrom(const std::wstring& filePath) {
+	std::cerr << "[uploadFrom] inside uploadFrom" << std::endl;
+
+	Wavefront_obj wf;
+	if (!wf.load_file(filePath)) {  // Now passing std::wstring
+		std::cerr << "Failed to load OBJ file: " << std::endl;
+		return false;
+	}
 
 	// Clear previous data
 	_vertices.clear();
@@ -21,11 +26,12 @@ void GLMesh::uploadFrom(const Wavefront_obj& obj) {
 	_normals.clear();
 
 	glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	for (const auto& v : obj.m_points) {
+	for (const auto& v : wf.m_points) {
 		int index = _vertices.size();
 		Vertex vert;
 		vert.position = glm::vec4(v[0], v[1], v[2], 1.0f);
 		vert.normal = glm::vec3(0.0f); 
+		
 		// to do - change to texture 
 		//vert.texcoord = glm::vec3(0.0f); // Assuming no texture coordinates for now
 
@@ -45,7 +51,7 @@ void GLMesh::uploadFrom(const Wavefront_obj& obj) {
 		_vertices.push_back(vert);
 	}
 
-	for (const auto& f : obj.m_faces) {
+	for (const auto& f : wf.m_faces) {
 		_indices.push_back(f.v[0]);
 		_indices.push_back(f.v[1]);
 		_indices.push_back(f.v[2]);
@@ -57,7 +63,7 @@ void GLMesh::uploadFrom(const Wavefront_obj& obj) {
 			<< _indices[i + 1] << ", "
 			<< _indices[i + 2] << "\n";
 	}
-	// --- (2) Compute face normals and accumulate them for each vertex ---
+
 	size_t F = _indices.size() / 3;
 	std::vector<glm::vec3> faceNormals(F);
 
@@ -101,45 +107,11 @@ void GLMesh::uploadFrom(const Wavefront_obj& obj) {
 	//updateBoundingBox();
 
 	// Count the indexes for the EBO
-	_indexCount = static_cast<GLsizei>(_indices.size());
-
-	// Building buffers
-	glGenVertexArrays(1, &_vao);
-	glBindVertexArray(_vao);
-	std::cout << "[uploadFrom] _vao = " << _vao << std::endl;
-
-	glGenBuffers(1, &_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
-	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), _vertices.data(), GL_STATIC_DRAW);
-	std::cout << "[uploadFrom] _vbo = " << _vbo << std::endl;
-
-	glGenBuffers(1, &_ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), _indices.data(), GL_STATIC_DRAW);
-
-	std::cout << "[uploadFrom] _ebo = " << _ebo << std::endl;
-
-	// Setting vertex attributes
-	glEnableVertexAttribArray(0); // Position
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-
-	// DEBUGING
-	glEnableVertexAttribArray(1); // color
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
-
-
-	//glEnableVertexAttribArray(1); // Normal
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-
-	//glEnableVertexAttribArray(2); // Texture 
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoord));
-
-
-	glBindVertexArray(0); // Unbind VAO
-
+	//_indexCount = static_cast<GLsizei>(_indices.size());
+	return true;
 }
 
-void GLMesh::normalizeModel()
+void MeshLoader::normalizeModel()
 {
 	glm::vec3 minPoint(FLT_MAX), maxPoint(-FLT_MAX);
 	for (const auto& vertex : _vertices) {
@@ -163,29 +135,20 @@ void GLMesh::normalizeModel()
 //
 //}
 
-void GLMesh::reset() {
-	if (_vao) {
-		glDeleteVertexArrays(1, &_vao);
-		_vao = 0;
-	}
-	if (_vbo) {
-		glDeleteBuffers(1, &_vbo);
-		_vbo = 0;
-	}
-	if (_ebo) {
-		glDeleteBuffers(1, &_ebo);
-		_ebo = 0;
-	}
-	_indexCount = 0;
+void MeshLoader::reset() {
+	_vertices.clear();
+	_indices.clear();
+	_normals.clear();
+	//_boundingBox.reset();
 }
 
-void GLMesh::draw() const {
-	if (_vao) {
-		glBindVertexArray(_vao);
-		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(_indexCount), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-	}
-	else {
-		std::cerr << "Error: VAO is not initialized." << std::endl;
-	}
-}
+//void MeshLoader::draw() const {
+//	if (_vao) {
+//		glBindVertexArray(_vao);
+//		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(_indexCount), GL_UNSIGNED_INT, 0);
+//		glBindVertexArray(0);
+//	}
+//	else {
+//		std::cerr << "Error: VAO is not initialized." << std::endl;
+//	}
+//}

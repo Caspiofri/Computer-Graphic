@@ -14,19 +14,33 @@
     <ClCompile Include="..\Utils\Utils.cpp" />
     <ClCompile Include="..\Utils\wavefront_obj.cpp" />
     <ClCompile Include="BBox.cpp" />
-    <ClCompile Include="GLMesh.cpp" />
+    <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="TriangleMesh.cpp" />
+    <ClCompile Include="VertexBufferBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Utils\Utils.h" />
     <ClInclude Include="..\Utils\wavefront_obj.h" />
     <ClInclude Include="BBox.h" />
     <ClInclude Include="common_glm_config.h" />
-    <ClInclude Include="GLMesh.h" />
+    <ClInclude Include="MeshLoader.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="TriangleMesh.h" />
+    <ClInclude Include="VertexBufferBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\fragmentShader.glsl" />
     <None Include="..\Shaders\vertexShader.glsl" />
+    <None Include="lineFragmentShader.glsl" />
+    <None Include="lineVertexShader.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0E4AD993-21E0-4CF9-910B-3E132BF6083C}</ProjectGuid>

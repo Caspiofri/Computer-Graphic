@@ -5,7 +5,6 @@
 
 #include "Utils/Utils.h"
 #include "Utils/wavefront_obj.h"
-#include "OpenGL/GLMesh.h"
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
@@ -13,9 +12,11 @@
 
 #include "BBox.h"
 
-class GLMesh
+class MeshLoader
 {
-private:
+public:
+	MeshLoader();
+	~MeshLoader();
 	struct Vertex
 	{
 		glm::vec4 position;
@@ -23,7 +24,21 @@ private:
 		//glm::vec3 texcoord;
 		glm::vec4 color;
 	};
-	BBox _boundingBox; // Bounding box member
+
+	bool uploadFrom(const std::wstring& filePath);
+
+	void computeNormals();
+	//void updateBoundingBox(); // Recompute the bounding box
+
+	void draw() const;
+	void reset();
+
+	//getters
+	std::vector<Vertex> getVertices() const { return _vertices; }
+	std::vector<glm::vec3> getNormals() const { return _normals; }
+	std::vector<unsigned int> getIndices() const { return _indices; }
+
+private:
 	std::vector<Vertex> _vertices;
 	std::vector<glm::vec3> _normals;
 	std::vector<unsigned int> _indices;
@@ -36,16 +51,5 @@ private:
 	size_t _indexCount;
 
 	void normalizeModel();
-
-public:
-	GLMesh();
-	~GLMesh();
-
-	void uploadFrom(const Wavefront_obj& obj);
-	void computeNormals();
-	void updateBoundingBox(); // Recompute the bounding box
-
-	void draw() const;
-	void reset();
 
 };

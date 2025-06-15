@@ -16,7 +16,8 @@
 #include <glm/vec4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "OpenGL/GLMesh.h"
+#include "Scene.h"
+#include "Shader.h"
 
 LARGE_INTEGER ElapsedMicroseconds;
 
@@ -24,14 +25,12 @@ LARGE_INTEGER ElapsedMicroseconds;
 float g_scale = 1.0f;
 float g_quaternion[4] = {0.0f, 0.0f, 0.0f, 1.0f}; //[x,y,z,w] - w is the real part
 
-GLuint g_programID = 0;
+Shader* triangleShader = nullptr;
 
 
-
-//obj data type
-Wavefront_obj objScene;
-GLMesh _mesh;
-bool _isMeshLoaded = false;
+//Variables of Main:
+Scene _scene;
+bool _isMeshLoaded = true;
 
 
 void TW_CALL loadOBJModel(void* clientData);
@@ -46,8 +45,8 @@ void PassiveMouseMotion(int x, int y);
 void Keyboard(unsigned char k, int x, int y);
 void Special(int k, int x, int y);
 void Terminate(void);
-//custom functions:
-void TweakBarSettings(void);
+////custom functions:
+//void TweakBarSettings(void);
 
 int main(int argc, char *argv[])
 {
@@ -71,12 +70,30 @@ int main(int argc, char *argv[])
 	//required because the GLUT key event functions do not report key modifiers states.
 	//TwGLUTModifiersFunc(glutGetModifiers);
 
-	initScene();
+	// Initialize Shaders
+	std::cout << "\n-- Step 1 : Setting Shader .. -- ";
+
+
+	triangleShader = new Shader("..\\Shaders\\vertexShader.glsl", "..\\Shaders\\fragmentShader.glsl");
+	if(!triangleShader->getID())
+	{
+		std::cout << "\nFatal Error in shader creation!\n\a\a\a";
+		return 0;
+	}
+	std::cout << "\n -- Step 1 : Done!  ";
+
+	std::cout << "\n-- Step 2 : init Scene With Cube .. -- ";
+	// Init the scene
+	_scene.initSceneWithCube(triangleShader);
+	
+	std::cout << "\n-- Step 2 : Done!  ";
 
 	atexit(Terminate);  // called after glutMainLoop ends
 
-	// Create a tweak bar
-	TweakBarSettings();
+	//// Create a tweak bar
+	//TweakBarSettings();
+
+	std::cout << "\n-- Step 3 : call TweakBar.. -- ";
 
 	// Create a tweak bar
 	TwBar* bar = TwNewBar("TweakBar");
@@ -92,7 +109,7 @@ int main(int argc, char *argv[])
 	//add 'g_quaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
 	TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &g_quaternion, " label='Object rotation' opened=true help='This is object rotation' ");
 
-
+	std::cout << "\n-- Step 4 : call glutMainLoop.. -- ";
 
 	// Call the GLUT main loop
 	glutMainLoop();
@@ -104,22 +121,30 @@ int main(int argc, char *argv[])
 
 void TW_CALL loadOBJModel(void *data)
 {
-	std::wstring str = getOpenFileName();
+	std::cerr << "[loadOBJModel]:calling loadOBJModel" << std::endl;
 
-	bool result = objScene.load_file(str);
+	std::wstring fileName = getOpenFileName();
+	Scene* _scene = static_cast<Scene*>(data);
+	if (!_scene) {
+		std::cerr << "Error: Scene instance is null!" << std::endl;
+		return;
+	}
+	std::cout << "[loadOBJModel]: try loading model" << std::endl;
+
+	bool result = _scene->loadModel(fileName , triangleShader);
 
 	if(result)
 	{
-		std::cout << "The obj file was loaded successfully" << std::endl;
-		//clear the mesh if it was loaded before	
-		if (_isMeshLoaded)
-		{
-			_mesh.reset();
-		}
-		//upload the data to the mesh
-		_mesh.uploadFrom(objScene);
+		std::cout << "[loadOBJModel]: model loaded successfully" << std::endl;
+		//std::cout << "The obj file was loaded successfully" << std::endl;
+		////clear the mesh if it was loaded before	
+		//if (_isMeshLoaded)
+		//{
+		//	_mesh.reset();
+		//}
+		////upload the data to the mesh
+		//_mesh.uploadFrom(objScene);
 
-		std::cout << "Obj was loaded to mesh" << std::endl;
 		_isMeshLoaded = true;
 
 	}
@@ -128,8 +153,8 @@ void TW_CALL loadOBJModel(void *data)
 		std::cerr << "Failed to load obj file" << std::endl;
 	}
 
-	std::cout << "The number of vertices in the model is: " << objScene.m_points.size() << std::endl;
-	std::cout << "The number of triangles in the model is: " << objScene.m_faces.size() << std::endl;
+	std::cout << "The number of vertices in the model is: " << _scene->getMeshLoader().getVertices().size() << std::endl;
+	std::cout << "The number of triangles in the model is: " << _scene->getMeshLoader().getIndices().size() << std::endl;
 
 }
 
@@ -171,31 +196,19 @@ void initGraphics(int argc, char* argv[])
 
 void drawScene()
 {
-	if(g_programID == 0)
+	std::cerr << "[drawScene] starting .. " << std::endl;
+
+	if (!triangleShader->getID())
 	{
+		std::cerr << "[drawScene] no triangleShader id.. exiting .. " << std::endl;
 		return;
 	}
-
-// 	std::cout << "g_vertexArrayID: " << g_vertexArrayID << std::endl;
-// 	std::cout << "g_vertexBufferObjectID: " << g_vertexBufferObjectID << std::endl;
-// 	std::cout << "g_programID: " << g_programID << std::endl;
-
-	glUseProgram(g_programID);
 
 	glm::mat4x4 mat_rotation;
 	ConvertQuaternionToMatrix(g_quaternion, mat_rotation);
 
-	GLuint mat_rotation_id = glGetUniformLocation(g_programID, "rotation");
-	glUniformMatrix4fv(mat_rotation_id, 1, false, glm::value_ptr(mat_rotation));
-
-
 	glm::mat4x4 mat_translation;
 	createTranslationMatrix(0.0f, 0.0f, -5.0f, mat_translation);
-// 	printMatrixArray(mat_translation); std::cout << std::endl;
-// 	printMatrix(mat_translation); std::cout << std::endl;
-
-	GLuint mat_translation_id = glGetUniformLocation(g_programID, "translation");
-	glUniformMatrix4fv(mat_translation_id, 1, false, glm::value_ptr(mat_translation));
 
 	glm::mat4x4 mat_projection;
 
@@ -220,28 +233,28 @@ void drawScene()
 
 	createPerspectiveProjectionMatrix(nearPlane, farPlane, right, top, mat_projection);
 
-	GLuint mat_projection_id = glGetUniformLocation(g_programID, "projection");
-	glUniformMatrix4fv(mat_projection_id, 1, false, glm::value_ptr(mat_projection));
-
-	GLuint scale_id = glGetUniformLocation(g_programID, "scale");
-	glUniform1f(scale_id, g_scale);
 
 
 	if (_isMeshLoaded)
 	{
-		std::cout << "[drawScene]: start draw mesh ... " << std::endl;
+		std::cout << "[drawScene]: _isMeshLoaded is true... " << std::endl;
 
 		// Bind the VAO of the mesh
-		_mesh.draw();
+		_scene.draw(mat_rotation, mat_translation, mat_projection);
 
 		std::cout << "[drawScene]: draw mesh executed !" <<  std::endl;
 
 	}
 	else
 	{
+		std::cout << "[drawScene]: no mesh loaded - rendering cube ... " << std::endl;
 		// If no mesh is loaded, draw a default cube
 		int numIndices = 36; // 6 faces * 2 triangles per face * 3 indices per triangle
-		glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
+		std::cout << "[drawScene]: calling initSceneWithCube" << std::endl;
+		_scene.initSceneWithCube(triangleShader);
+		
+		std::cout << "[drawScene]: calling draw scene" << std::endl;
+		_scene.draw(mat_rotation, mat_translation, mat_projection);
 	}
 
 	// Unbind the shader program after drawing
@@ -337,61 +350,60 @@ void Terminate(void)
 }
 
 
-void initScene()
-{
-	std::vector<glm::vec4> positions;
-	std::vector<glm::vec4> colors;
-	std::vector<glm::uvec3> triangleIndices; //triplets of indices
-	createCube(positions, colors, triangleIndices);
-	
-	GLuint vertexArrayObjectID = 0;
-	//create a Vertex Array Object (VAO)
-	glGenVertexArrays(1, &vertexArrayObjectID);
-	glBindVertexArray(vertexArrayObjectID);
-
-	GLuint vertexBufferObjectID = 0;
-	//create and initialize a Vertex Buffer Object (VBO)
-	glGenBuffers(1, &vertexBufferObjectID);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectID);
-
-	int numV = 8;
-
-	//this will allocate memory for the buffer object on the GPU
-	glBufferData(GL_ARRAY_BUFFER, numV*(sizeof(glm::vec4) + sizeof(glm::vec4)), NULL, GL_STATIC_DRAW);
-	//this will copy the data from CPU memory to GPU memory
-	//glBufferSubData redefines the data store for the buffer object currently bound to target
-	glBufferSubData(GL_ARRAY_BUFFER, 0, numV*sizeof(glm::vec4), positions.data());
-	//the colors are appended to the buffer right after the positions
-	glBufferSubData(GL_ARRAY_BUFFER, numV*sizeof(glm::vec4), numV*sizeof(glm::vec4), colors.data());
-
-
-	//create, load, compile, attach vertex and fragment shader
-	g_programID = initShader("..\\Shaders\\vertexShader.glsl", "..\\Shaders\\fragmentShader.glsl");
-	if(!g_programID)
-	{
-		std::cout << "\nFatal Error in shader creation!\n\a\a\a";
-		return;
-	}
-
-	//get the identifier of the attribute "vPosition" in the active gl program
-	GLint vPosition_id = glGetAttribLocation(g_programID, "vPosition");
-	//this enables the generic vertex attribute array such that the values in the generic vertex attribute array
-	//will be accessed and used for rendering when calls are made to vertex array commands such as glDrawArrays or glDrawElements.
-	glEnableVertexAttribArray(vPosition_id);
-	//specifies an offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the GL_ARRAY_BUFFER target
-	glVertexAttribPointer(vPosition_id, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-
-
-	GLuint vColor_id = glGetAttribLocation(g_programID, "vColor" );
-	glEnableVertexAttribArray(vColor_id);
-	//note that the pointer offset is not 0, indicating that the color data in the vertex array buffer starts right after the geometry data.
-	glVertexAttribPointer(vColor_id, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(numV*sizeof(glm::vec4)));
-
-	GLuint indexBufferObjectID = 0;
-	// Create and bind an Element Buffer Object (EBO)
-	glGenBuffers(1, &indexBufferObjectID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObjectID);
-
-	// Allocate and transfer the index data to the GPU
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndices.size() * sizeof(glm::uvec3), triangleIndices.data(), GL_STATIC_DRAW);
-}
+//void initScene()
+//{
+//	std::vector<glm::vec4> positions;
+//	std::vector<glm::vec4> colors;
+//	std::vector<glm::uvec3> triangleIndices; //triplets of indices
+//	createCube(positions, colors, triangleIndices);
+//	
+//	GLuint vertexArrayObjectID = 0;
+//	//create a Vertex Array Object (VAO)
+//	glGenVertexArrays(1, &vertexArrayObjectID);
+//	glBindVertexArray(vertexArrayObjectID);
+//
+//	GLuint vertexBufferObjectID = 0;
+//	//create and initialize a Vertex Buffer Object (VBO)
+//	glGenBuffers(1, &vertexBufferObjectID);
+//	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObjectID);
+//
+//	int numV = 8;
+//
+//	//this will allocate memory for the buffer object on the GPU
+//	glBufferData(GL_ARRAY_BUFFER, numV*(sizeof(glm::vec4) + sizeof(glm::vec4)), NULL, GL_STATIC_DRAW);
+//	//this will copy the data from CPU memory to GPU memory
+//	//glBufferSubData redefines the data store for the buffer object currently bound to target
+//	glBufferSubData(GL_ARRAY_BUFFER, 0, numV*sizeof(glm::vec4), positions.data());
+//	//the colors are appended to the buffer right after the positions
+//	glBufferSubData(GL_ARRAY_BUFFER, numV*sizeof(glm::vec4), numV*sizeof(glm::vec4), colors.data());
+//
+//	//create, load, compile, attach vertex and fragment shader
+//	g_programID = Shader::initShader("..\\Shaders\\vertexShader.glsl", "..\\Shaders\\fragmentShader.glsl");
+//	if(!g_programID)
+//	{
+//		std::cout << "\nFatal Error in shader creation!\n\a\a\a";
+//		return;
+//	}
+//
+//	//get the identifier of the attribute "vPosition" in the active gl program
+//	GLint vPosition_id = glGetAttribLocation(g_programID, "vPosition");
+//	//this enables the generic vertex attribute array such that the values in the generic vertex attribute array
+//	//will be accessed and used for rendering when calls are made to vertex array commands such as glDrawArrays or glDrawElements.
+//	glEnableVertexAttribArray(vPosition_id);
+//	//specifies an offset of the first component of the first generic vertex attribute in the array in the data store of the buffer currently bound to the GL_ARRAY_BUFFER target
+//	glVertexAttribPointer(vPosition_id, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+//
+//
+//	GLuint vColor_id = glGetAttribLocation(g_programID, "vColor" );
+//	glEnableVertexAttribArray(vColor_id);
+//	//note that the pointer offset is not 0, indicating that the color data in the vertex array buffer starts right after the geometry data.
+//	glVertexAttribPointer(vColor_id, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(numV*sizeof(glm::vec4)));
+//
+//	GLuint indexBufferObjectID = 0;
+//	// Create and bind an Element Buffer Object (EBO)
+//	glGenBuffers(1, &indexBufferObjectID);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferObjectID);
+//
+//	// Allocate and transfer the index data to the GPU
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangleIndices.size() * sizeof(glm::uvec3), triangleIndices.data(), GL_STATIC_DRAW);
+//}
