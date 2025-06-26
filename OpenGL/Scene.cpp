@@ -13,7 +13,7 @@
 
 bool Scene::loadModel(const std::wstring& filename , Shader* shader) {
 	MeshLoader loader;
-	std::cerr << "[loadModel] before uploadFrom" << std::endl;
+	std::cerr << "[loadModel] ======== before uploadFrom========= " << std::endl;
 
 	bool result = loader.uploadFrom(filename); // loader holds vertices, indices, normals, and colors
 	if (!result) {
@@ -41,7 +41,7 @@ bool Scene::loadModel(const std::wstring& filename , Shader* shader) {
 	return true;
 }
 
-void Scene::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection)
+void Scene::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, float scale)
 {
 
 	if (!_mesh)
@@ -50,7 +50,6 @@ void Scene::draw(const glm::mat4& rotation, const glm::mat4& translation, const 
 		return;
 	}
 	std::cerr << "[Scene::draw] drawing mesh" << std::endl;
-	const float scale = 1.0f; // Default scale, can be adjusted as needed
 	_mesh->draw(rotation, translation, projection , scale);
 
 	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;

@@ -17,6 +17,7 @@
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -30,6 +31,7 @@
     <ClInclude Include="common_glm_config.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Renderable.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
