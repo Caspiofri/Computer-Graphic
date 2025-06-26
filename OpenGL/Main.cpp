@@ -45,8 +45,9 @@ void PassiveMouseMotion(int x, int y);
 void Keyboard(unsigned char k, int x, int y);
 void Special(int k, int x, int y);
 void Terminate(void);
-////custom functions:
-//void TweakBarSettings(void);
+
+//custom functions:
+void TweakBarSettings(void);
 
 int main(int argc, char *argv[])
 {
@@ -96,19 +97,8 @@ int main(int argc, char *argv[])
 	std::cout << "\n-- Step 3 : call TweakBar.. -- ";
 
 	// Create a tweak bar
-	TwBar* bar = TwNewBar("TweakBar");
-
-	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLUT and OpenGL.' "); // Message added to the help bar.
-	TwDefine(" TweakBar size='350 800' color='96 216 224' "); // change default tweak bar size and color
-	TwAddButton(bar, "open", loadOBJModel, NULL, " label='Open OBJ File...' ");
-
-	//read only - displaying the draw timer in micro seconds
-	TwAddVarRO(bar, "time (us)", TW_TYPE_UINT32, &ElapsedMicroseconds.LowPart, "help='shows the drawing time in micro seconds'");
-	//add 'g_scale' to 'bar': this is a modifiable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [s] and [S].
-	TwAddVarRW(bar, "Scale", TW_TYPE_FLOAT, &g_scale, " label='Scale' min=0.01 max=10.0 step=0.01 group=Engine keyIncr=s keyDecr=S");
-	//add 'g_quaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
-	TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &g_quaternion, " label='Object rotation' opened=true help='This is object rotation' ");
-
+	TweakBarSettings();
+	
 	std::cout << "\n-- Step 4 : call glutMainLoop.. -- ";
 
 	// Call the GLUT main loop
@@ -118,10 +108,27 @@ int main(int argc, char *argv[])
 }
 
 
+void TweakBarSettings()
+{
+	TwBar* bar = TwNewBar("TweakBar");
+
+	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLUT and OpenGL.' "); // Message added to the help bar.
+	TwDefine(" TweakBar size='350 800' color='96 216 224' "); // change default tweak bar size and color
+	TwAddButton(bar, "open", loadOBJModel, &_scene, " label='Open OBJ File...' ");
+
+	//read only - displaying the draw timer in micro seconds
+	TwAddVarRO(bar, "time (us)", TW_TYPE_UINT32, &ElapsedMicroseconds.LowPart, "help='shows the drawing time in micro seconds'");
+	//add 'g_scale' to 'bar': this is a modifiable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [s] and [S].
+	TwAddVarRW(bar, "Scale", TW_TYPE_FLOAT, &g_scale, " label='Scale' min=0.01 max=10.0 step=0.01 group=Engine keyIncr=s keyDecr=S");
+	//add 'g_quaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
+	TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &g_quaternion, " label='Object rotation' opened=true help='This is object rotation' ");
+
+}
+
 
 void TW_CALL loadOBJModel(void *data)
 {
-	std::cerr << "[loadOBJModel]:calling loadOBJModel" << std::endl;
+	std::cerr << "================[loadOBJModel]:calling loadOBJModel ============" << std::endl;
 
 	std::wstring fileName = getOpenFileName();
 	Scene* _scene = static_cast<Scene*>(data);
