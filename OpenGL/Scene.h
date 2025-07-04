@@ -9,6 +9,7 @@
 //#include <glm/ext/matrix_float4x4.hpp>
 #include "MeshLoader.h"
 #include "TriangleMesh.h"
+#include "Object.h"
 //#include "Mathlib.h"
 //#include "Light.h"
 
@@ -21,21 +22,20 @@ public:
 	void initSceneWithCube(Shader* shader);
 	void toggleNormals(bool show);
 	void toggleBBox(bool show);
-	std::unique_ptr<TriangleMesh> getMesh() const { return std::make_unique<TriangleMesh>(*_mesh); } // Return a copy of the mesh
-
+	
+	const Object& getObject() const { return _object; }
+	Object& getObject() { return _object; }
 	// Setters
 	//void setShowNormals(bool show) { _showNormals = show; }
 	//void setShowBBox(bool show) { _showBBox = show; }
 	// Getters
-	MeshLoader getMeshLoader() const { return _meshLoader; }
 
 private:
-	std::unique_ptr<TriangleMesh> _mesh;
 	//std::unique_ptr<LineSet> _normals;
 	//std::unique_ptr<LineSet> _bbox;
 
 	//std::shared_ptr<Shader> _lineShader;
-	MeshLoader _meshLoader;
+	Object _object;
 	bool _showNormals = false;
 	bool _showBBox = false;
 };

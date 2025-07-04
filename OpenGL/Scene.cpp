@@ -9,27 +9,29 @@
 #include "MeshLoader.h"
 #include "Scene.h"
 #include "Utils/Utils.h"
+#include "Object.h"
+#include "Vertex.h"
 
-
-bool Scene::loadModel(const std::wstring& filename , Shader* shader) {
-	MeshLoader loader;
+bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
 	std::cerr << "[loadModel] ======== before uploadFrom========= " << std::endl;
 
-	bool result = loader.uploadFrom(filename); // loader holds vertices, indices, normals, and colors
-	if (!result) {
-        // Replace the problematic line with the following:
-        std::wcout.imbue(std::locale("en_US.UTF-8"));
-        std::wcout << L"Failed to load model from file: " << filename << std::endl;
+	if (!(_object.loadMesh(filename))) {
+		std::wcout.imbue(std::locale("en_US.UTF-8"));
+		std::wcout << L"Failed to load model from file: " << filename << std::endl;
 		return false;
 	}
 	// Send to renderable(Trianglemesh) data from object  
-	_mesh = std::make_unique<TriangleMesh>(loader.getVertices(), loader.getIndices(), shader);
-
+	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), shader));
+	if(_object.getMeshLoader().getVertices().empty())
+	{
+		std::cerr << "Mesh not loaded!" << std::endl;
+		return false;
+	}
 	if (_showNormals) {
 		std::cerr << "renderer of normals" << std::endl;
 
-	/*	std::vector<glm::vec3> lines = generateNormalLines(vertexData);
-		_normals = std::make_unique<LineSet>(lines, _lineShader);*/
+		/*	std::vector<glm::vec3> lines = generateNormalLines(vertexData);
+			_normals = std::make_unique<LineSet>(lines, _lineShader);*/
 	}
 
 	if (_showBBox) {
@@ -44,13 +46,8 @@ bool Scene::loadModel(const std::wstring& filename , Shader* shader) {
 void Scene::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, float scale)
 {
 
-	if (!_mesh)
-	{	// Check if the mesh is loaded
-		std::cerr << "Mesh not loaded!" << std::endl;
-		return;
-	}
 	std::cerr << "[Scene::draw] drawing mesh" << std::endl;
-	_mesh->draw(rotation, translation, projection , scale);
+	_object.draw(rotation, translation, projection, scale);
 
 	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
 
@@ -64,6 +61,7 @@ void Scene::draw(const glm::mat4& rotation, const glm::mat4& translation, const 
 	}
 
 }
+
 
 void Scene::initSceneWithCube(Shader* shader)
 {
@@ -83,12 +81,12 @@ void Scene::initSceneWithCube(Shader* shader)
 	for (size_t i = 0; i < triangles.size(); ++i)
 		std::cout << "[initSceneWithCube] tri[" << i << "] = " << glm::to_string(triangles[i]) << std::endl;
 
-	std::vector<MeshLoader::Vertex> vertices;
+	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
 	std::cerr << "[initSceneWithCube] creating vertexes" << std::endl;
 	for (size_t i = 0; i < positions.size(); ++i) {
-		MeshLoader::Vertex v;
+		Vertex v;
 		v.position = positions[i];
 		v.color = colors[i];
 		v.normal = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -108,5 +106,5 @@ void Scene::initSceneWithCube(Shader* shader)
 		std::cout << "[initSceneWithCube] triangle " << i / 3 << ": " << indices[i] << ", " << indices[i + 1] << ", " << indices[i + 2] << std::endl;
 
 	std::cerr << "[initSceneWithCube] calling TriangleMesh " << std::endl;
-	_mesh = std::make_unique<TriangleMesh>(vertices, indices, shader);
+	_object.setMeshDrawer(std::make_unique<TriangleMesh>(vertices, indices, shader));
 }

@@ -11,19 +11,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "BBox.h"
+#include "Vertex.h"
 
 class MeshLoader
 {
 public:
 	MeshLoader();
 	~MeshLoader();
-	struct Vertex
-	{
-		glm::vec4 position;
-		glm::vec3 normal;
-		//glm::vec3 texcoord;
-		glm::vec4 color;
-	};
 
 	bool uploadFrom(const std::wstring& filePath);
 

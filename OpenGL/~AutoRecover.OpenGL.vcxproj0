@@ -40,7 +40,6 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TriangleMesh.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBufferBuilder.h" />
   </ItemGroup>
   <ItemGroup>

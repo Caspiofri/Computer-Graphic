@@ -92,11 +92,6 @@ void Renderer::drawScene()
 	{
 		std::cout << "[drawScene]: _isMeshLoaded is true... " << std::endl;
 
-		// Bind the VAO of the mesh
-		_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
-
-		std::cout << "[drawScene]: draw mesh executed !" << std::endl;
-
 	}
 	else
 	{
@@ -105,11 +100,11 @@ void Renderer::drawScene()
 		int numIndices = 36; // 6 faces * 2 triangles per face * 3 indices per triangle
 		std::cout << "[drawScene]: calling initSceneWithCube" << std::endl;
 		_scene.initSceneWithCube(_triangleShader);
-
-		std::cout << "[drawScene]: calling draw scene" << std::endl;
-		_scene.draw(mat_rotation, mat_translation, mat_projection , Settings::_scale);
 	}
+	std::cout << "[drawScene]: calling draw scene" << std::endl;
+	_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
 
+	std::cout << "[drawScene]: draw mesh executed !" << std::endl;
 	// Unbind the shader program after drawing
 	glUseProgram(0);
 

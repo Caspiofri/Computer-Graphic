@@ -14,7 +14,6 @@
     <ClCompile Include="..\Utils\Utils.cpp" />
     <ClCompile Include="..\Utils\wavefront_obj.cpp" />
     <ClCompile Include="BBox.cpp" />
-    <ClCompile Include="MathLib.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -31,7 +30,6 @@
     <ClInclude Include="..\Utils\wavefront_obj.h" />
     <ClInclude Include="BBox.h" />
     <ClInclude Include="common_glm_config.h" />
-    <ClInclude Include="MathLib.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Renderable.h" />
@@ -40,7 +38,6 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="TriangleMesh.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBufferBuilder.h" />
   </ItemGroup>
   <ItemGroup>

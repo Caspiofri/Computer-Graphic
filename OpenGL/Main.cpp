@@ -132,9 +132,8 @@ void TW_CALL loadOBJModel(void *data)
 	{
 		std::cerr << "Failed to load obj file" << std::endl;
 	}
-
-	std::cout << "The number of vertices in the model is: " << _renderer.getScene().getMeshLoader().getVertices().size() << std::endl;
-	std::cout << "The number of triangles in the model is: " << _renderer.getScene().getMeshLoader().getIndices().size() << std::endl;
+	std::cout << "The number of vertices in the model is: " << _renderer.getScene().getObject().getMeshLoader().getVertices().size() << std::endl;
+	std::cout << "The number of triangles in the model is: " << _renderer.getScene().getObject().getMeshLoader().getIndices().size() << std::endl;
 
 }
 
