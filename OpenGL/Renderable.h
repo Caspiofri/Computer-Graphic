@@ -10,7 +10,8 @@ public:
 	Renderable(Shader* shader, GLenum drawMode);
 	virtual ~Renderable();
 
-	void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection , const float scale);
+	void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const float scale);
+
 	virtual void setupBuffers() = 0; // Abstract method to be implemented by derived classes
 
 protected:

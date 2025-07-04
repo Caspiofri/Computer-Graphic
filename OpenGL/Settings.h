@@ -8,4 +8,8 @@ namespace Settings {
 	// object transformation settings:
 	extern float _scale; // Scale factor for the model
 	extern float _quaternion[4]; // Quaternion for rotation [x, y, z, w]
+
+	//object settings :
+	extern double _objTransX, _objTransY, _objTransZ;
+	extern double _objRotX, _objRotY, _objRotZ;
 }

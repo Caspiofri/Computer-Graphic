@@ -108,3 +108,4 @@ void Scene::initSceneWithCube(Shader* shader)
 	std::cerr << "[initSceneWithCube] calling TriangleMesh " << std::endl;
 	_object.setMeshDrawer(std::make_unique<TriangleMesh>(vertices, indices, shader));
 }
+

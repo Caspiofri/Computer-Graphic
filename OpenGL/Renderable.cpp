@@ -11,7 +11,7 @@ Renderable::~Renderable() {
 	glDeleteVertexArrays(1, &_vao);
 }
 
-void Renderable::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection , const float scale)
+void Renderable::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, const glm::mat4& worldMatrix, const glm::mat4& objectMatrix, const float scale)
 {
 	std::cout << "[Renderable::draw]: start drawing" << std::endl;
 
@@ -30,6 +30,12 @@ void Renderable::draw(const glm::mat4& rotation, const glm::mat4& translation, c
 	_shader->setMat4("translation", translation);
 
 	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
+	_shader->setMat4("objecMatrix", objectMatrix);
+
+	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
+	_shader->setMat4("objecMatrix", worldMatrix);
+
+	std::cout << "[Renderable::draw]: sending object matrix" << std::endl;
 	_shader->setMat4("projection", projection);
 
 	_shader->setFloat("scale", scale);

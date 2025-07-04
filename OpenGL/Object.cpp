@@ -2,9 +2,71 @@
 #include "MathLib.h"
 #include <iostream>
 #include "common_glm_config.h"
+#include "Settings.h"
 #include <glm/gtx/string_cast.hpp> 
 
 Object::Object() : _meshLoader() {};
+
+void Object::ApplyTransformations() {
+	std::cout << "ApplyTransformations called!" << std::endl;
+	// the call order is row vector, cause of the shader
+	_objectMatrix = _objectScaleMatrix * _objectRotationMatrix * _objectTranslationMatrix;
+
+}
+
+void Object::UpdateObjectLocalTransform()
+{
+	glm::vec3 t(Settings::_objTransX, Settings::_objTransY, Settings::_objTransZ);
+	glm::vec3 r(Settings::_objRotX, Settings::_objRotY, Settings::_objRotZ); // ברדיאנים
+	float s = static_cast<float>(Settings::_scale);
+
+	clearTransformations();
+	translate(t);
+	rotate(r.x, glm::vec3(1, 0, 0));
+	rotate(r.y, glm::vec3(0, 1, 0));
+	rotate(r.z, glm::vec3(0, 0, 1));
+	scale(glm::vec3(s));
+	ApplyTransformations();
+
+}
+
+void Object::translate(glm::vec3 translation) {
+	glm::mat4 translationMatrix = glm::mat4(1.0f);
+	translationMatrix = MathLib::translation(translation);
+	_objectTranslationMatrix = translationMatrix * _objectTranslationMatrix;
+	//ApplyTransformations();
+}
+
+void Object::rotate(float angle, glm::vec3 axis) {
+	axis = MathLib::normalize(axis);
+
+	glm::mat4 rotationMatrix = glm::mat4(1.0f);
+
+	if (axis == glm::vec3(1, 0, 0)) {
+		rotationMatrix = MathLib::rotationX(angle);
+	}
+	else if (axis == glm::vec3(0, 1, 0)) {
+		rotationMatrix = MathLib::rotationY(angle);
+	}
+	else if (axis == glm::vec3(0, 0, 1)) {
+		rotationMatrix = MathLib::rotationZ(angle);
+	}
+
+	_objectRotationMatrix = rotationMatrix * _objectRotationMatrix;
+	//ApplyTransformations();
+}
+void Object::scale(glm::vec3 scaleFactor) {
+	_objectScaleMatrix = MathLib::scaling(scaleFactor);
+	ApplyTransformations();
+}
+
+void Object::setObjectMatrix(const glm::mat4& mat)
+{
+	_objectMatrix = mat;
+}
+const glm::mat4& Object::getObjectMatrix() const {
+	return _objectMatrix;
+}
 
 bool Object::loadMesh(const std::wstring& filePath) {
 	if (!_meshLoader.uploadFrom(filePath)) {
@@ -13,8 +75,13 @@ bool Object::loadMesh(const std::wstring& filePath) {
 	return true;
 }
 void Object::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, const float scale) {
+	std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
+
+	UpdateObjectLocalTransform();
 	if (_meshDrawer) {
-		_meshDrawer->draw(rotation, translation, projection, scale);
+		glm::mat4 worldMatrix = glm::mat4(1.0f);
+
+		_meshDrawer->draw(rotation, translation, projection,worldMatrix,_objectMatrix, scale);
 	}
 	else {
 		std::cerr << "[Object::draw] No mesh drawer set. Cannot draw object." << std::endl;
@@ -23,6 +90,11 @@ void Object::draw(const glm::mat4& rotation, const glm::mat4& translation, const
 
 void Object::clear() {
 	_meshLoader.reset();
+	_meshDrawer.reset();
+	_objectTranslationMatrix = glm::mat4(1.0f);
+	_objectRotationMatrix = glm::mat4(1.0f);
+	_objectScaleMatrix = glm::mat4(1.0f);
+	_objectMatrix = glm::mat4(1.0f);
 }
 
 void Object::buildMeshDrawerFromLoader(Shader* shader) {

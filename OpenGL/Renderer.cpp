@@ -60,6 +60,7 @@ void Renderer::drawScene()
 	glm::mat4x4 mat_rotation;
 	ConvertQuaternionToMatrix(Settings::_quaternion, mat_rotation);
 
+
 	glm::mat4x4 mat_translation;
 	createTranslationMatrix(0.0f, 0.0f, -5.0f, mat_translation);
 

@@ -108,6 +108,13 @@ void TweakBarSettings()
 	//add 'g_quaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
 	TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &Settings:: _quaternion, " label='Object rotation' opened=true help='This is object rotation' ");
 
+	// Object Transformations
+	TwAddVarRW(bar, "Translate Object X", TW_TYPE_DOUBLE, &Settings::_objTransX, " group='Object Transform' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Object Y", TW_TYPE_DOUBLE, &Settings::_objTransY, "group='Object Transform' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Object Z", TW_TYPE_DOUBLE, &Settings::_objTransZ, "group='Object Transform' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Rotate Object X", TW_TYPE_DOUBLE, &Settings::_objRotX, "group='Object Transform' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Rotate Object Y", TW_TYPE_DOUBLE, &Settings::_objRotY, "group='Object Transform' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Rotate Object Z", TW_TYPE_DOUBLE, &Settings::_objRotZ, "group='Object Transform' min=-180 max=180 step=1 ");
 }
 
 
