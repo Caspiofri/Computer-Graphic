@@ -74,9 +74,9 @@ glm::mat4 MathLib::identity() {
 
 glm::mat4 MathLib::translation(const glm::vec3& v1) {
     glm::mat4 mat = MathLib::identity();
-    mat[3][0] = v1.x;
-    mat[3][1] = v1.y;
-    mat[3][2] = v1.z;
+    mat[0][3] = v1.x;
+    mat[1][3] = v1.y;
+    mat[2][3] = v1.z;
     return mat;
 }
 

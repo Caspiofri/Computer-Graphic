@@ -1,6 +1,8 @@
 #pragma once
 #include "MeshLoader.h"
 #include "TriangleMesh.h"
+#include "MathLib.h"
+#include <glm/glm.hpp>
 #include <set>
 
 class Object {
@@ -40,7 +42,10 @@ public:
     std::unique_ptr<TriangleMesh> getMeshDrawer() const {
         return std::make_unique<TriangleMesh>(*_meshDrawer);
     }
-
+    
+	glm::mat4 getObjectTranslationMatrix() const {
+		return _objectTranslationMatrix;
+	}
     // Setter:
     MeshLoader setMeshLoader(const MeshLoader& mesh) { return _meshLoader = mesh; }
 

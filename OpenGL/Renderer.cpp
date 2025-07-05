@@ -6,9 +6,11 @@
 #include "Shader.h"
 #include "Renderer.h"
 #include "TriangleMesh.h"
+#include "common_glm_config.h"
 #include "Settings.h"
 #include <iostream>
 #include <string>
+#include <glm/gtx/string_cast.hpp>
 
 void Renderer::initScene() {
 	std::cout << "\n-- Renderer::initScene: starting .. -- ";
@@ -61,8 +63,15 @@ void Renderer::drawScene()
 	ConvertQuaternionToMatrix(Settings::_quaternion, mat_rotation);
 
 
+	//glm::mat4x4 mat_translation;
+	//createTranslationMatrix(0.0f, 0.0f, -5.0f, mat_translation);
+
 	glm::mat4x4 mat_translation;
-	createTranslationMatrix(0.0f, 0.0f, -5.0f, mat_translation);
+	std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
+
+	getScene().getObject().UpdateObjectLocalTransform();
+	mat_translation = getScene().getObject().getObjectTranslationMatrix();
+	//std::cerr << "[Renderer::drawScene()] mat_translation from object:\n" << glm::to_string(mat_translation) << std::endl;
 
 	glm::mat4x4 mat_projection;
 
@@ -86,8 +95,6 @@ void Renderer::drawScene()
 	}
 
 	createPerspectiveProjectionMatrix(nearPlane, farPlane, right, top, mat_projection);
-
-
 
 	if (_isMeshLoaded)
 	{

@@ -30,10 +30,10 @@ void Renderable::draw(const glm::mat4& rotation, const glm::mat4& translation, c
 	_shader->setMat4("translation", translation);
 
 	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
-	_shader->setMat4("objecMatrix", objectMatrix);
+	_shader->setMat4("objectMatrix", objectMatrix);
 
 	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
-	_shader->setMat4("objecMatrix", worldMatrix);
+	_shader->setMat4("worldMatrix", worldMatrix);
 
 	std::cout << "[Renderable::draw]: sending object matrix" << std::endl;
 	_shader->setMat4("projection", projection);

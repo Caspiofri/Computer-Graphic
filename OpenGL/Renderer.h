@@ -35,7 +35,8 @@ public:
 
 	// Getters
 	Shader* getTriangleShader() { return _triangleShader ; }
-	const Scene& getScene() const { return _scene; }
+	//const Scene& getScene() const { return _scene; }
+	Scene& getScene() { return _scene; }
 
 	// Setters
 	void setTriangleShader(Shader* shader) { _triangleShader = shader; }

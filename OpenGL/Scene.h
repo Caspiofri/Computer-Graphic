@@ -23,7 +23,7 @@ public:
 	void toggleNormals(bool show);
 	void toggleBBox(bool show);
 	
-	const Object& getObject() const { return _object; }
+	//const Object& getObject() const { return _object; }
 	Object& getObject() { return _object; }
 	// Setters
 	//void setShowNormals(bool show) { _showNormals = show; }

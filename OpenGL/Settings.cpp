@@ -14,6 +14,6 @@ namespace Settings {
 	float _quaternion[4] = { 0.0f, 0.0f, 0.0f, 1.0f }; //[x,y,z,w] - w is the real part
 
 	// object Transformations
-	double _objTransX = 0.0, _objTransY = 0.0, _objTransZ = 0.0;
+	double _objTransX = 0.0, _objTransY = 0.0, _objTransZ = -5.0;
 	double _objRotX = 0.0, _objRotY = 0.0, _objRotZ = 0.0;
 }
