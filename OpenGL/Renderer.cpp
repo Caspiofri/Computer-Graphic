@@ -59,24 +59,21 @@ void Renderer::drawScene()
 		return;
 	}
 
-	//glm::mat4x4 mat_rotation;
-	//ConvertQuaternionToMatrix(Settings::_quaternion, mat_rotation);
-
-
-	//glm::mat4x4 mat_translation;
-	//createTranslationMatrix(0.0f, 0.0f, -5.0f, mat_translation);
-
-	glm::mat4x4 mat_translation;
-	glm::mat4x4 mat_rotation;
-	//std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
-
+	//update object local transform
 	getScene().getObject().UpdateObjectLocalTransform();
+	
+	std::cerr << "[drawScene] callung UpdateWorldTransform.. " << std::endl;
+	getScene().getObject().UpdateWorldTransform();
 
-	/*mat_translation = getScene().getObject().getObjectTranslationMatrix();
-	mat_rotation = getScene().getObject().getObjectRotationMatrix();*/
-	//std::cerr << "[Renderer::drawScene()] mat_translation from object:\n" << glm::to_string(mat_translation) << std::endl;
+	//get object matrix
 	glm::mat4x4 objectMatrix;
+	glm::mat4x4 worldMatrix;
 	objectMatrix = getScene().getObject().getObjectMatrix();
+	std::cerr << "[drawScene] calling worldMatrix.. " << std::endl;
+
+	worldMatrix = getScene().getObject().getWorldMatrix();
+	std::cerr << "[drawScene] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
+
 
 	glm::mat4x4 mat_projection;
 
@@ -116,7 +113,7 @@ void Renderer::drawScene()
 	}
 	std::cout << "[drawScene]: calling draw scene" << std::endl;
 	//_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
-	_scene.draw(objectMatrix, mat_projection, Settings::_scale);
+	_scene.draw(objectMatrix, worldMatrix, mat_projection, Settings::_scale);
 
 	std::cout << "[drawScene]: draw mesh executed !" << std::endl;
 	// Unbind the shader program after drawing

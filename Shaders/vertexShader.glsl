@@ -3,8 +3,6 @@
 layout(location = 0) in vec4 vPosition;
 layout(location = 1) in vec4 vColor;
 
-uniform mat4 rotation; 
-uniform mat4 translation;
 uniform mat4 objectMatrix;
 uniform mat4 worldMatrix;
 uniform mat4 projection;
@@ -28,7 +26,7 @@ void main()
 	//gl_Position = gl_Position * rotation * translation * projection;
 	
 
-	gl_Position = gl_Position * objectMatrix  * projection;
+	gl_Position = gl_Position * objectMatrix  * worldMatrix  * projection;
 
 
 	color = vColor; //pass throgh the color

@@ -105,14 +105,22 @@ void TweakBarSettings()
 	TwAddVarRO(bar, "time (us)", TW_TYPE_UINT32, &ElapsedMicroseconds.LowPart, "help='shows the drawing time in micro seconds'");
 	//add 'g_scale' to 'bar': this is a modifiable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [s] and [S].
 	TwAddVarRW(bar, "Scale", TW_TYPE_FLOAT, &Settings::_scale, " label='Scale' min=0.01 max=10.0 step=0.01 group=Engine keyIncr=s keyDecr=S");
-	//add 'g_quaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
-	TwAddVarRW(bar, "Rotation", TW_TYPE_QUAT4F, &Settings:: _quaternion, " label='Object rotation' opened=true help='This is object rotation' ");
-
+	//add 'g_objQuaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
+	
 	// Object Transformations
+	TwAddVarRW(bar, "Object Rotation", TW_TYPE_QUAT4F, &Settings::_objQuaternion,
+		" group='Object Transform' label='Object rotation' opened=true help='This is object rotation' ");
 	TwAddVarRW(bar, "Translate Object X", TW_TYPE_DOUBLE, &Settings::_objTransX, " group='Object Transform' min=-10 max=10 step=0.1 ");
 	TwAddVarRW(bar, "Translate Object Y", TW_TYPE_DOUBLE, &Settings::_objTransY, "group='Object Transform' min=-10 max=10 step=0.1 ");
 	TwAddVarRW(bar, "Translate Object Z", TW_TYPE_DOUBLE, &Settings::_objTransZ, "group='Object Transform' min=-10 max=10 step=0.1 ");
 	
+	// world Transformations
+	TwAddVarRW(bar, "World Rotation", TW_TYPE_QUAT4F, &Settings::_worldQuaternion,
+		" group='World Transform' label='World rotation' opened=true help='This is World rotation' ");	
+	TwAddVarRW(bar, "Translate World X", TW_TYPE_DOUBLE, &Settings::_worldTransX, " group='World Transform' step=0.1 ");
+	TwAddVarRW(bar, "Translate World Y", TW_TYPE_DOUBLE, &Settings::_worldTransY, " group='World Transform' step=0.1 ");
+	TwAddVarRW(bar, "Translate World Z", TW_TYPE_DOUBLE, &Settings::_worldTransZ, " group='World Transform' step=0.1 ");
+
 }
 
 

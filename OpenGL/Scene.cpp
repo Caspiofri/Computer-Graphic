@@ -43,11 +43,13 @@ bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
 	return true;
 }
 
-void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& projection, float scale)
+void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, float scale)
 {
 
 	std::cerr << "[Scene::draw] drawing mesh" << std::endl;
-	_object.draw(objectMatrix, projection, scale);
+	std::cerr << "[Scene::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
+
+	_object.draw(objectMatrix, worldMatrix ,  projection, scale);
 
 	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
 
