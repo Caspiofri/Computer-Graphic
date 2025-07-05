@@ -12,15 +12,12 @@ void Object::ApplyTransformations() {
 	std::cout << "ApplyTransformations called!" << std::endl;
 	// the call order is row vector, cause of the shader
 
+	//_objectMatrix = _objectTranslationMatrix * _objectRotationMatrix;
+	_objectMatrix = _objectRotationMatrix * _objectTranslationMatrix;
 
-	_objectMatrix = _objectTranslationMatrix * _objectRotationMatrix * _objectScaleMatrix;
-
-	std::cerr << "[ApplyTransformations] _objectMatrix:\n" << glm::to_string(_objectTranslationMatrix) << std::endl;
-	std::cerr << "[ApplyTransformations] worldMatrix:\n" << glm::to_string(_objectRotationMatrix) << std::endl;
-	std::cerr << "[ApplyTransformations] rotation:\n" << glm::to_string(_objectScaleMatrix) << std::endl;
-	std::cerr << "[ApplyTransformations] rotation:\n" << glm::to_string(_objectMatrix) << std::endl;
-
-
+	std::cerr << "[ApplyTransformations] _objectTranslationMatrix:\n" << glm::to_string(_objectTranslationMatrix) << std::endl;
+	std::cerr << "[ApplyTransformations] _objectRotationMatrix:\n" << glm::to_string(_objectRotationMatrix) << std::endl;
+	std::cerr << "[ApplyTransformations] _objectMatrix:\n" << glm::to_string(_objectMatrix) << std::endl;
 }
 
 void Object::UpdateObjectLocalTransform() 
@@ -67,7 +64,7 @@ bool Object::loadMesh(const std::wstring& filePath) {
 	}
 	return true;
 }
-void Object::draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, const float scale) {
+void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& projection  , float scale) {
 	//std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
 
 	//UpdateObjectLocalTransform();
@@ -75,13 +72,8 @@ void Object::draw(const glm::mat4& rotation, const glm::mat4& translation, const
 	
 		glm::mat4 worldMatrix = glm::mat4(1.0f);
 		std::cerr << "[Object::draw] matrices before drawing: " << std::endl;
-		std::cerr << "[Object::draw] _objectMatrix:\n" << glm::to_string(_objectMatrix) << std::endl;
-		std::cerr << "[Object::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
-		std::cerr << "[Object::draw] rotation:\n" << glm::to_string(rotation) << std::endl;
-		std::cerr << "[Object::draw] new translation:\n" << glm::to_string(translation) << std::endl;
-		std::cerr << "[Object::draw] projection:\n" << glm::to_string(projection) << std::endl;
-		std::cerr << "[Object::draw] scale: " << scale << std::endl;
-		_meshDrawer->draw(rotation, translation, projection,worldMatrix,_objectMatrix, scale);
+		std::cerr << "[Object::draw] _objectMatrix:\n" << glm::to_string(objectMatrix) << std::endl;
+		_meshDrawer->draw(objectMatrix, projection,worldMatrix , scale);
 	}
 	else {
 		std::cerr << "[Object::draw] No mesh drawer set. Cannot draw object." << std::endl;

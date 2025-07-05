@@ -25,10 +25,10 @@ void main()
 	gl_Position.w = gl_Position.w / scale;
 
 	//first rotate, then translate in world coordinates, and finally project. We are assuming row vectors notations as the vector is on the left hand side of the matrix
-	gl_Position = gl_Position * rotation * translation * projection;
+	//gl_Position = gl_Position * rotation * translation * projection;
 	
 
-	//gl_Position = gl_Position * objectMatrix  * projection;
+	gl_Position = gl_Position * objectMatrix  * projection;
 
 
 	color = vColor; //pass throgh the color

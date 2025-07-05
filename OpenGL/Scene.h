@@ -16,7 +16,7 @@
 class Scene {
 public:
 	bool loadModel(const std::wstring& filename, Shader* shader);
-	void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection, float scale);
+	void draw(const glm::mat4& objectMatrix, const glm::mat4& projection, float scale);
 	// Loading of the model from a file
 	//void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection);          // Render the scene with the given view-projection matrix
 	void initSceneWithCube(Shader* shader);

@@ -72,9 +72,11 @@ void Renderer::drawScene()
 
 	getScene().getObject().UpdateObjectLocalTransform();
 
-	mat_translation = getScene().getObject().getObjectTranslationMatrix();
-	mat_rotation = getScene().getObject().getObjectRotationMatrix();
+	/*mat_translation = getScene().getObject().getObjectTranslationMatrix();
+	mat_rotation = getScene().getObject().getObjectRotationMatrix();*/
 	//std::cerr << "[Renderer::drawScene()] mat_translation from object:\n" << glm::to_string(mat_translation) << std::endl;
+	glm::mat4x4 objectMatrix;
+	objectMatrix = getScene().getObject().getObjectMatrix();
 
 	glm::mat4x4 mat_projection;
 
@@ -113,7 +115,8 @@ void Renderer::drawScene()
 		_scene.initSceneWithCube(_triangleShader);
 	}
 	std::cout << "[drawScene]: calling draw scene" << std::endl;
-	_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
+	//_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
+	_scene.draw(objectMatrix, mat_projection, Settings::_scale);
 
 	std::cout << "[drawScene]: draw mesh executed !" << std::endl;
 	// Unbind the shader program after drawing
