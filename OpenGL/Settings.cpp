@@ -15,5 +15,4 @@ namespace Settings {
 
 	// object Transformations
 	double _objTransX = 0.0, _objTransY = 0.0, _objTransZ = -5.0;
-	double _objRotX = 0.0, _objRotY = 0.0, _objRotZ = 0.0;
 }

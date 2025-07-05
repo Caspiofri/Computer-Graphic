@@ -59,18 +59,21 @@ void Renderer::drawScene()
 		return;
 	}
 
-	glm::mat4x4 mat_rotation;
-	ConvertQuaternionToMatrix(Settings::_quaternion, mat_rotation);
+	//glm::mat4x4 mat_rotation;
+	//ConvertQuaternionToMatrix(Settings::_quaternion, mat_rotation);
 
 
 	//glm::mat4x4 mat_translation;
 	//createTranslationMatrix(0.0f, 0.0f, -5.0f, mat_translation);
 
 	glm::mat4x4 mat_translation;
-	std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
+	glm::mat4x4 mat_rotation;
+	//std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
 
 	getScene().getObject().UpdateObjectLocalTransform();
+
 	mat_translation = getScene().getObject().getObjectTranslationMatrix();
+	mat_rotation = getScene().getObject().getObjectRotationMatrix();
 	//std::cerr << "[Renderer::drawScene()] mat_translation from object:\n" << glm::to_string(mat_translation) << std::endl;
 
 	glm::mat4x4 mat_projection;

@@ -34,7 +34,9 @@ public:
 
     // Gettert:
     MeshLoader getMeshLoader() const { return _meshLoader; }
-    void rotate(float angle, glm::vec3 axis);
+    //void rotate(float angle, glm::vec3 axis);
+    void rotate();
+
     void scale(glm::vec3 scaleFactor);
     void updateObjectMatrix();
     void setObjectMatrix(const glm::mat4& mat);
@@ -46,6 +48,9 @@ public:
 	glm::mat4 getObjectTranslationMatrix() const {
 		return _objectTranslationMatrix;
 	}
+    glm::mat4 getObjectRotationMatrix() const {
+        return _objectRotationMatrix;
+    }
     // Setter:
     MeshLoader setMeshLoader(const MeshLoader& mesh) { return _meshLoader = mesh; }
 

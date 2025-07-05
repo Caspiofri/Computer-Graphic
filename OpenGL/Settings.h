@@ -11,5 +11,4 @@ namespace Settings {
 
 	//object settings :
 	extern double _objTransX, _objTransY, _objTransZ;
-	extern double _objRotX, _objRotY, _objRotZ;
 }

@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "MathLib.h"
+#include "Utils/Utils.h"
 #include <iostream>
 #include "common_glm_config.h"
 #include "Settings.h"
@@ -25,14 +26,12 @@ void Object::ApplyTransformations() {
 void Object::UpdateObjectLocalTransform() 
 {
 	glm::vec3 t(Settings::_objTransX, Settings::_objTransY, Settings::_objTransZ);
-	glm::vec3 r(Settings::_objRotX, Settings::_objRotY, Settings::_objRotZ);
+	//glm::vec3 r(Settings::_objRotX, Settings::_objRotY, Settings::_objRotZ);
 	float s = static_cast<float>(Settings::_scale);
 
 	clearTransformations();
 	translate(t);
-	rotate(r.x, glm::vec3(1, 0, 0));
-	rotate(r.y, glm::vec3(0, 1, 0));
-	rotate(r.z, glm::vec3(0, 0, 1));
+	rotate();
 	scale(glm::vec3(s));
 	ApplyTransformations();
 
@@ -45,22 +44,8 @@ void Object::translate(glm::vec3 translation) {
 	//ApplyTransformations();
 }
 
-void Object::rotate(float angle, glm::vec3 axis) {
-	axis = MathLib::normalize(axis);
-
-	glm::mat4 rotationMatrix = glm::mat4(1.0f);
-
-	if (axis == glm::vec3(1, 0, 0)) {
-		rotationMatrix = MathLib::rotationX(angle);
-	}
-	else if (axis == glm::vec3(0, 1, 0)) {
-		rotationMatrix = MathLib::rotationY(angle);
-	}
-	else if (axis == glm::vec3(0, 0, 1)) {
-		rotationMatrix = MathLib::rotationZ(angle);
-	}
-
-	_objectRotationMatrix = rotationMatrix * _objectRotationMatrix;
+void Object::rotate() {
+	ConvertQuaternionToMatrix(Settings::_quaternion, _objectRotationMatrix);
 	//ApplyTransformations();
 }
 void Object::scale(glm::vec3 scaleFactor) {
