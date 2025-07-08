@@ -18,7 +18,6 @@ public:
     void Camera::UpdateAspectRatio(float aspectRatio);
 
 
-
     // Rotations
     void rotateY(float angleDegrees);  // Rotate around Y-axis
     void rotateX(float angleDegrees); // Rotate around X-axis

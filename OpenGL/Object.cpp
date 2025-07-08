@@ -119,7 +119,7 @@ bool Object::loadMesh(const std::wstring& filePath) {
 	}
 	return true;
 }
-void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection , float scale) {
+void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection , float scale) {
 	//std::cerr << "[Object]:calling UpdateObjectLocalTransform" << std::endl;
 
 	//UpdateObjectLocalTransform();
@@ -127,8 +127,10 @@ void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, c
 	
 		std::cerr << "[Object::draw] matrices before drawing: " << std::endl;
 		std::cerr << "[Object::draw] projection:\n" << glm::to_string(projection) << std::endl;
-		//std::cerr << "[Object::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
-		_meshDrawer->draw(objectMatrix, projection,worldMatrix , scale);
+		std::cerr << "[Object::draw] view:\n" << glm::to_string(view) << std::endl;
+		std::cerr << "[Object::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
+		std::cerr << "[Object::draw] objectMatrix:\n" << glm::to_string(objectMatrix) << std::endl;
+		_meshDrawer->draw(objectMatrix, worldMatrix,view, projection, scale);
 	}
 	else {
 		std::cerr << "[Object::draw] No mesh drawer set. Cannot draw object." << std::endl;

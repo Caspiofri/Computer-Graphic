@@ -38,7 +38,7 @@ public:
     }
 
     bool loadMesh(const std::wstring& filePath);
-    void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const float scale);
+    void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection, const float scale);
     void buildMeshDrawerFromLoader(Shader* shader);
     void clear();
 

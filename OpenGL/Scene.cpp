@@ -52,7 +52,7 @@ void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, co
 	std::cerr << "[Scene::draw] projection:\n" << glm::to_string(projection) << std::endl;
 	std::cerr << "[Scene::draw] view:\n" << glm::to_string(view) << std::endl;
 
-	_object.draw(objectMatrix, worldMatrix ,  projection, scale);
+	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale);
 
 	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
 

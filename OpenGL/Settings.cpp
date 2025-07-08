@@ -19,7 +19,7 @@ namespace Settings {
 
 	// object Transformations
 	float _objQuaternion[4] = { 0.0f, 0.0f, 0.0f, 1.0f }; //[x,y,z,w] - w is the real part
-	double _objTransX = 0.0, _objTransY = 0.0, _objTransZ = -5.0;
+	double _objTransX = 0.0, _objTransY = 0.0, _objTransZ = 0.0;
 
 	//world Transformations
 	float _worldQuaternion[4] = { 0.0f, 0.0f, 0.0f, 1.0f }; //[x,y,z,w] - w is the real part

@@ -11,7 +11,7 @@ Renderable::~Renderable() {
 	glDeleteVertexArrays(1, &_vao);
 }
 
-void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& projection, const glm::mat4& worldMatrix, const float scale)
+void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view , const glm::mat4& projection,const float scale)
 {
 	std::cout << "[Renderable::draw]: start drawing" << std::endl;
 
@@ -23,11 +23,6 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& projection
 	std::cout << "[Renderable::draw]: activating shader" << std::endl;
 	_shader->use();
 
-	/*std::cout << "[Renderable::draw]: sending rotation matrix" << std::endl;
-	_shader->setMat4("rotation", rotation);
-
-	std::cout << "[Renderable::draw]: sending translation matrix" << std::endl;
-	_shader->setMat4("translation", translation);*/
 
 	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
 	_shader->setMat4("objectMatrix", objectMatrix);
@@ -35,7 +30,10 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& projection
 	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
 	_shader->setMat4("worldMatrix", worldMatrix);
 
-	std::cout << "[Renderable::draw]: sending object matrix" << std::endl;
+	std::cout << "[Renderable::draw]: sending view matrix" << std::endl;
+	_shader->setMat4("view", view);
+
+	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
 	_shader->setMat4("projection", projection);
 
 	_shader->setFloat("scale", scale);
