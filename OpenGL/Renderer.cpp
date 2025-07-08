@@ -25,6 +25,7 @@ void Renderer::initScene() {
 	
 	std::cout << "\n -- Step 1 : Done!  ";
 	std::cout << "\n-- Step 2 : init Scene With Cube .. -- ";
+	_scene.initializeScene();
 	_scene.initSceneWithCube(_triangleShader);
 
 }
@@ -69,34 +70,18 @@ void Renderer::drawScene()
 	glm::mat4x4 objectMatrix;
 	glm::mat4x4 worldMatrix;
 	objectMatrix = getScene().getObject().getObjectMatrix();
-	std::cerr << "[drawScene] calling worldMatrix.. " << std::endl;
-
 	worldMatrix = getScene().getObject().getWorldMatrix();
-	std::cerr << "[drawScene] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
-
-
+	
+	
+	std::cerr << "[drawScene] mat_projection:\n" << glm::to_string(worldMatrix) << std::endl;
 	glm::mat4x4 mat_projection;
+	glm::mat4x4 mat_view;
 
-	const float nearPlane = 1.0f;
-	const float farPlane = 1000.0f;
-	float top = 0.0f;
-	float right = 0.0f;
+	getScene().updateCameraMatrices();
 
-	int width = glutGet(GLUT_WINDOW_WIDTH);
-	int height = glutGet(GLUT_WINDOW_HEIGHT);
-	float aspectRatio = (float)width / (float)height;
-	if (width > height)
-	{
-		top = 0.25f;
-		right = aspectRatio * top;
-	}
-	else
-	{
-		right = 0.25f;
-		top = right / aspectRatio;
-	}
-
-	createPerspectiveProjectionMatrix(nearPlane, farPlane, right, top, mat_projection);
+	mat_projection = getScene().getCamera().getProjectionMatrix();
+	mat_view = getScene().getCamera().getViewMatrix();
+	
 
 	if (_isMeshLoaded)
 	{
@@ -111,9 +96,8 @@ void Renderer::drawScene()
 		std::cout << "[drawScene]: calling initSceneWithCube" << std::endl;
 		_scene.initSceneWithCube(_triangleShader);
 	}
-	std::cout << "[drawScene]: calling draw scene" << std::endl;
 	//_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
-	_scene.draw(objectMatrix, worldMatrix, mat_projection, Settings::_scale);
+	_scene.draw(objectMatrix, worldMatrix, mat_projection, mat_view, Settings::_scale);
 
 	std::cout << "[drawScene]: draw mesh executed !" << std::endl;
 	// Unbind the shader program after drawing

@@ -5,7 +5,7 @@
 #include <vector>
 //#include "Utils.h"
 //#include "../Obj Parser/wavefront_obj.h"
-//#include "Camera.h"
+#include "Camera.h"
 //#include <glm/ext/matrix_float4x4.hpp>
 #include "MeshLoader.h"
 #include "TriangleMesh.h"
@@ -16,15 +16,18 @@
 class Scene {
 public:
 	bool loadModel(const std::wstring& filename, Shader* shader);
-	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, float scale);
+	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
+	void initializeScene();
 	// Loading of the model from a file
 	//void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection);          // Render the scene with the given view-projection matrix
 	void initSceneWithCube(Shader* shader);
 	void toggleNormals(bool show);
 	void toggleBBox(bool show);
+
+	void updateCameraMatrices();
 	
-	//const Object& getObject() const { return _object; }
 	Object& getObject() { return _object; }
+	Camera& getCamera() { return _camera; }
 	// Setters
 	//void setShowNormals(bool show) { _showNormals = show; }
 	//void setShowBBox(bool show) { _showBBox = show; }
@@ -36,6 +39,7 @@ private:
 
 	//std::shared_ptr<Shader> _lineShader;
 	Object _object;
+	Camera _camera;
 	bool _showNormals = false;
 	bool _showBBox = false;
 };

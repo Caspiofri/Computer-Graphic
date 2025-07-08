@@ -121,23 +121,31 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Translate World Y", TW_TYPE_DOUBLE, &Settings::_worldTransY, " group='World Transform' step=0.1 ");
 	TwAddVarRW(bar, "Translate World Z", TW_TYPE_DOUBLE, &Settings::_worldTransZ, " group='World Transform' step=0.1 ");
 
+	// Perspective
+	TwAddVarRW(bar, "Near Plane", TW_TYPE_DOUBLE, &Settings::_nearPlane,"group='Perspective' min=0.01 max=10 step=0.01");
+	TwAddVarRW(bar, "Far Plane", TW_TYPE_DOUBLE, &Settings::_farPlane,"group='Perspective' min=11 max=5000 step=10");
+	TwAddVarRW(bar, "Field of View", TW_TYPE_DOUBLE, &Settings::_fov,"group='Perspective' min=0.1 max=120 step=1");
+
+	// Camera Controls
+	TwAddVarRW(bar, "Translate Camera X", TW_TYPE_DOUBLE, &Settings::_camTransX, " group='Camera Controls' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Camera Y", TW_TYPE_DOUBLE, &Settings::_camTransY, "group='Camera Controls' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Camera Z", TW_TYPE_DOUBLE, &Settings::_camTransZ, "group='Camera Controls' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Rotate Camera X", TW_TYPE_DOUBLE, &Settings::_camRotX, "group='Camera Controls' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Rotate Camera Y", TW_TYPE_DOUBLE, &Settings::_camRotY, "group='Camera Controls' min=-89.0f max=-89.0f step=1 ");
+	TwAddVarRW(bar, "Rotate Camera Z", TW_TYPE_DOUBLE, &Settings::_camRotZ, "group='Camera Controls' min=-180 max=180 step=1 ");
+
+	//TwAddButton(bar, "LookAt", LookAtCallback, &_scene, "group='Camera Controls' label='Look At Object' ");
+
 }
 
 
 void TW_CALL loadOBJModel(void *data)
 {
-	std::cerr << "================[loadOBJModel]:calling loadOBJModel ============" << std::endl;
-
 	std::wstring fileName = getOpenFileName();
-
-	std::cout << "[loadOBJModel]: try loading model" << std::endl;
-
 	bool result = _renderer.loadModelToScene(fileName);
 
 	if(result)
 	{
-		std::cout << "[loadOBJModel]: model loaded successfully" << std::endl;
-
 		_isMeshLoaded = true;
 
 	}
@@ -188,9 +196,6 @@ void initGraphics(int argc, char* argv[])
 //callback function called by GLUT to render screen
 void Display()
 {
-//  	static int counter = 0;
-//  	std::cout << "C: " << counter << std::endl;
-//  	counter++;
 
 	glClearColor(0.0, 0.0, 0.0, 1.0); //set the background color to black
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //init z-buffer and framebuffer
@@ -226,6 +231,7 @@ void Reshape(int width, int height)
 {
 	glViewport(0, 0, width, height);
 
+	Settings::setScreenSize(width, height);
 	// Send the new window size to AntTweakBar
 	TwWindowSize(width, height);
 	glutPostRedisplay();

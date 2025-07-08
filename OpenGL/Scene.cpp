@@ -1,5 +1,6 @@
 #pragma once
 #include "common_glm_config.h"
+#include "Settings.h"
 #include <string>
 #include <Glew/include/gl/glew.h>
 #include <glm/glm.hpp>
@@ -43,11 +44,13 @@ bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
 	return true;
 }
 
-void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, float scale)
+void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
 
 	std::cerr << "[Scene::draw] drawing mesh" << std::endl;
 	std::cerr << "[Scene::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
+	std::cerr << "[Scene::draw] projection:\n" << glm::to_string(projection) << std::endl;
+	std::cerr << "[Scene::draw] view:\n" << glm::to_string(view) << std::endl;
 
 	_object.draw(objectMatrix, worldMatrix ,  projection, scale);
 
@@ -63,7 +66,19 @@ void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, co
 	}
 
 }
+// ===== Initialize Camera in Scene =====
+void Scene::initializeScene() {
 
+	/*_light1 = Light();
+	_light2 = Light();
+	_light2.setEnabled(false);
+
+	_ambientLight = glm::vec3(0.2f);*/ // a low ambient intensity default (or 1.0f for full white)
+
+	_camera = Camera();
+
+	//updateCameraMatrices();
+}
 
 void Scene::initSceneWithCube(Shader* shader)
 {
@@ -75,13 +90,6 @@ void Scene::initSceneWithCube(Shader* shader)
 
 	std::cerr << "[initSceneWithCube] creating cube" << std::endl;
 	createCube(positions, colors, triangles);
-
-	for (size_t i = 0; i < positions.size(); ++i)
-		std::cout << "[initSceneWithCube] pos[" << i << "] = " << glm::to_string(positions[i]) << std::endl;
-	for (size_t i = 0; i < colors.size(); ++i)
-		std::cout << "[initSceneWithCube] color[" << i << "] = " << glm::to_string(colors[i]) << std::endl;
-	for (size_t i = 0; i < triangles.size(); ++i)
-		std::cout << "[initSceneWithCube] tri[" << i << "] = " << glm::to_string(triangles[i]) << std::endl;
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -111,3 +119,12 @@ void Scene::initSceneWithCube(Shader* shader)
 	_object.setMeshDrawer(std::make_unique<TriangleMesh>(vertices, indices, shader));
 }
 
+
+void Scene::updateCameraMatrices() {
+	std::cerr << "[Scene::initializeScene] _aspectRatio:\n" << Settings::_aspectRatio << std::endl;
+	std::cerr << "[Scene::initializeScene] _farPlane:\n" << Settings::_farPlane << std::endl;
+	std::cerr << "[Scene::initializeScene] _nearPlane:\n" << Settings::_nearPlane << std::endl;
+	_camera.updateFromUI();
+	_camera.updateViewMatrix();
+	_camera.setPerspective();
+}
