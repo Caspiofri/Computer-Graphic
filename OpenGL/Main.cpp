@@ -131,7 +131,7 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Translate Camera Y", TW_TYPE_DOUBLE, &Settings::_camTransY, "group='Camera Controls' min=-10 max=10 step=0.1 ");
 	TwAddVarRW(bar, "Translate Camera Z", TW_TYPE_DOUBLE, &Settings::_camTransZ, "group='Camera Controls' min=-10 max=10 step=0.1 ");
 	TwAddVarRW(bar, "Rotate Camera X", TW_TYPE_DOUBLE, &Settings::_camRotX, "group='Camera Controls' min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "Rotate Camera Y", TW_TYPE_DOUBLE, &Settings::_camRotY, "group='Camera Controls' min=-89.0f max=-89.0f step=1 ");
+	TwAddVarRW(bar, "Rotate Camera Y", TW_TYPE_DOUBLE, &Settings::_camRotY, "group='Camera Controls' min=-89.0f max=89.0f step=1 ");
 	TwAddVarRW(bar, "Rotate Camera Z", TW_TYPE_DOUBLE, &Settings::_camRotZ, "group='Camera Controls' min=-180 max=180 step=1 ");
 
 	//TwAddButton(bar, "LookAt", LookAtCallback, &_scene, "group='Camera Controls' label='Look At Object' ");
