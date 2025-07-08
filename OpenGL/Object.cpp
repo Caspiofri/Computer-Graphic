@@ -38,8 +38,8 @@ void Object::UpdateObjectLocalTransform()
 	float s = static_cast<float>(Settings::_scale);
 
 	clearObjTransformations();
-	translate(t);
-	rotate();
+	translateObj(t);
+	rotateObj();
 	scale(glm::vec3(s));
 	ApplyTransformations();
 
@@ -62,19 +62,24 @@ void Object::UpdateWorldTransform()
 
 }
 
-
-void Object::translate(glm::vec3 translation) {
+// Calculations for object metrics
+void Object::translateObj(glm::vec3 translation) {
 	glm::mat4 translationMatrix = glm::mat4(1.0f);
 	translationMatrix = MathLib::translation(translation);
 	_objectTranslationMatrix = translationMatrix * _objectTranslationMatrix;
-	//ApplyTransformations();
 }
 
-void Object::rotate() {
+void Object::rotateObj() {
 	ConvertQuaternionToMatrix(Settings::_objQuaternion, _objectRotationMatrix);
-	//ApplyTransformations();
 }
 
+void Object::scale(glm::vec3 scaleFactor) {
+	_objectScaleMatrix = MathLib::scaling(scaleFactor);
+	ApplyTransformations();
+}
+
+
+// World Calculations for world metrics
 void Object::translateWorld(glm::vec3 translation) {
 	std::cerr << "[translateWorld] worldMatrix:\n" << glm::to_string(translation) << std::endl;
 
@@ -92,10 +97,6 @@ void Object::rotateWorld() {
 	//ApplyTransformations();
 }
 
-void Object::scale(glm::vec3 scaleFactor) {
-	_objectScaleMatrix = MathLib::scaling(scaleFactor);
-	ApplyTransformations();
-}
 
 void Object::setObjectMatrix(const glm::mat4& mat)
 {

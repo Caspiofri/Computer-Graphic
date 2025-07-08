@@ -47,8 +47,8 @@ public:
     MeshLoader getMeshLoader() const { return _meshLoader; }
     //void rotate(float angle, glm::vec3 axis);
    
-    void translate(glm::vec3 translation);
-    void rotate();
+    void translateObj(glm::vec3 translation);
+    void rotateObj();
 
 
     void translateWorld(glm::vec3 translation);
