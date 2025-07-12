@@ -31,6 +31,7 @@ public:
 	void initGraphics(int argc, char* argv[]);
 
 	Shader* _triangleShader = nullptr;
+	Shader* _lineShader = nullptr;
 	Scene _scene;
 
 	// Getters
@@ -40,6 +41,7 @@ public:
 
 	// Setters
 	void setTriangleShader(Shader* shader) { _triangleShader = shader; }
+	void setLineShader(Shader* shader) { _lineShader = shader; }
 
 private:
 	//std::vector<Pixel> _pixels;

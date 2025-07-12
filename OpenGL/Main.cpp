@@ -134,8 +134,11 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Rotate Camera Y", TW_TYPE_DOUBLE, &Settings::_camRotY, "group='Camera Controls' min=-89.0f max=89.0f step=1 ");
 	TwAddVarRW(bar, "Rotate Camera Z", TW_TYPE_DOUBLE, &Settings::_camRotZ, "group='Camera Controls' min=-180 max=180 step=1 ");
 
-	//TwAddButton(bar, "LookAt", LookAtCallback, &_scene, "group='Camera Controls' label='Look At Object' ");
-
+	// Object Geometry Visualization
+	TwAddVarRW(bar, "Show Bounding Box", TW_TYPE_BOOL8, &Settings::_BBoxBtn, " group='Object Geometry Visualization' label='Show Bounding Box' ");
+	TwAddVarRW(bar, "Show Vertex Normals", TW_TYPE_BOOL8, &Settings::_vertexNormalsBtn, " group='Object Geometry Visualization' label='Show Vertex Normals' ");
+	TwAddVarRW(bar, "Normal Scale", TW_TYPE_DOUBLE, &Settings::_normalScale, " group='Object Geometry Visualization' min=0.1 max=5 step=0.1 ");
+	
 }
 
 

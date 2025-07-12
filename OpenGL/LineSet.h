@@ -7,12 +7,9 @@
 
 class LineSet : public Renderable {
 public:
-	LineSet(const std::vector<glm::vec3>& points, Shader* shader)
-		: Renderable(shader, GL_LINES), _points(points) {
-		setupBuffers();
-	}
+	LineSet(const std::vector<Vertex>& points, Shader* shader);
 	void setupBuffers() override;
 
 private:
-	std::vector<glm::vec3> _points;
+	std::vector<Vertex> _points;
 };

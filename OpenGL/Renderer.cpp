@@ -19,7 +19,13 @@ void Renderer::initScene() {
 
 	if (!_triangleShader->getID())
 	{
-		std::cout << "\nFatal Error in shader creation!\n\a\a\a";
+		std::cout << "\nFatal Error in Triangle shader creation!\n\a\a\a";
+		return;
+	}
+	setLineShader(new Shader("lineVertexShader.glsl", "lineFragmentShader.glsl"));
+	if (!_lineShader->getID())
+	{
+		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
 		return;
 	}
 	
@@ -32,12 +38,12 @@ void Renderer::initScene() {
 
 bool Renderer::loadModelToScene(const std::wstring& filename) {
 	std::wcout << "[Renderer::loadModelToScene] loading model from file: " << filename << std::endl;
-	if (!_triangleShader || !_triangleShader->getID())
+	if (!_triangleShader || !_triangleShader->getID() || !_lineShader->getID())
 	{
 		std::cerr << "[Renderer::loadModelToScene] Shader not initialized or invalid." << std::endl;
 		return false;
 	}
-	bool result = _scene.loadModel(filename, _triangleShader);
+	bool result = _scene.loadModel(filename, _triangleShader , _lineShader);
 	if (result)
 	{
 		std::cout << "[Renderer::loadModelToScene] Model loaded successfully." << std::endl;
@@ -62,8 +68,6 @@ void Renderer::drawScene()
 
 	//update object local transform
 	getScene().getObject().UpdateObjectLocalTransform();
-	
-	std::cerr << "[drawScene] callung UpdateWorldTransform.. " << std::endl;
 	getScene().getObject().UpdateWorldTransform();
 
 	//get object matrix
@@ -72,8 +76,6 @@ void Renderer::drawScene()
 	objectMatrix = getScene().getObject().getObjectMatrix();
 	worldMatrix = getScene().getObject().getWorldMatrix();
 	
-	
-	std::cerr << "[drawScene] mat_projection:\n" << glm::to_string(worldMatrix) << std::endl;
 	glm::mat4x4 mat_projection;
 	glm::mat4x4 mat_view;
 
@@ -82,7 +84,6 @@ void Renderer::drawScene()
 	mat_projection = getScene().getCamera().getProjectionMatrix();
 	mat_view = getScene().getCamera().getViewMatrix();
 	
-
 	if (_isMeshLoaded)
 	{
 		std::cout << "[drawScene]: _isMeshLoaded is true... " << std::endl;

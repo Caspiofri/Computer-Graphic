@@ -6,6 +6,9 @@ Renderable::Renderable(Shader* shader, GLenum drawMode)
 }
 
 Renderable::~Renderable() {
+	std::cerr << "[Renderable] destructor called! Deleting VAO: " << _vao << ", VBO: " << _vbo << std::endl;
+	std::cerr << "[Renderable::~Renderable] deleting this = " << this << std::endl;
+
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);
 	glDeleteVertexArrays(1, &_vao);
@@ -20,29 +23,26 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatri
 		return;
 	}
 
-	std::cout << "[Renderable::draw]: activating shader" << std::endl;
 	_shader->use();
-
-
-	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
 	_shader->setMat4("objectMatrix", objectMatrix);
-
-	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
 	_shader->setMat4("worldMatrix", worldMatrix);
-
-	std::cout << "[Renderable::draw]: sending view matrix" << std::endl;
 	_shader->setMat4("view", view);
-
-	std::cout << "[Renderable::draw]: sending projection matrix" << std::endl;
 	_shader->setMat4("projection", projection);
 
 	_shader->setFloat("scale", scale);
+	GLboolean isVAO = glIsVertexArray(_vao);
+	std::cout << "[DEBUG] glIsVertexArray(" << _vao << ") = " << isVAO << std::endl;
 
-	std::cout << "[Renderable::draw]: binding VAO (id=" << _vao << ")" << std::endl;
 	glBindVertexArray(_vao);
 
-	std::cout << "[Renderable::draw]: drawing elements, index count = " << _indexCount << std::endl;
-	glDrawElements(_drawMode, _indexCount, GL_UNSIGNED_INT, 0);
+	if (_usesEBO) {
+		std::cout << "[Renderable::draw]: glDrawElements, index count = " << _indexCount << std::endl;
+		glDrawElements(_drawMode, _indexCount, GL_UNSIGNED_INT, 0);
+	}
+	else {
+		std::cout << "[Renderable::draw]: glDrawArrays, index count = " << _indexCount << std::endl;
+		glDrawArrays(_drawMode, 0, _indexCount);
+	}
 
 	std::cout << "[Renderable::draw]: unbinding VAO" << std::endl;
 	glBindVertexArray(0);

@@ -32,8 +32,6 @@ private:
 	std::string filename;
 	GLenum      type;
 	std::string source;
-
-	GLuint compile(GLenum type, const std::string& source);
 	std::string readShaderSource(const std::string& shaderFileName);
 
 };

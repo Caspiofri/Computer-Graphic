@@ -1,7 +1,7 @@
 #pragma once
 // BBox.h
-#pragma once
 #include <glm/glm.hpp>
+#include "Vertex.h"
 #include <vector>
 
 class BBox {
@@ -11,7 +11,7 @@ private:
 
 public:
     BBox();
-    void compute(const std::vector<glm::vec3>& vertices);
+    void compute(std::vector<Vertex>& vertices);
     void reset();
 
     const glm::vec3& getMinCorner() const { return _minCorner; }
@@ -19,4 +19,3 @@ public:
 
     std::vector<glm::vec3> getCorners() const;
 };
-#pragma once

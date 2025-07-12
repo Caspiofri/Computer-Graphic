@@ -1,5 +1,4 @@
 #include "BBox.h"
-#include "Utils.h"
 #include "common_glm_config.h"
 
 #include <cfloat>
@@ -13,16 +12,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include "Vertex.h"
 
 BBox::BBox() : _minCorner(glm::vec3(FLT_MAX)), _maxCorner(glm::vec3(-FLT_MAX)) {}
 
-void BBox::compute(const std::vector<glm::vec3>& vertices) {
+void BBox::compute(std::vector<Vertex>& vertices) {
     _minCorner = glm::vec3(FLT_MAX);
     _maxCorner = glm::vec3(-FLT_MAX);
 
     for (const auto& vertex : vertices) {
-        _minCorner = glm::min(_minCorner, vertex);
-        _maxCorner = glm::max(_maxCorner, vertex);
+        _minCorner = glm::min(_minCorner, glm::vec3(vertex.position));
+        _maxCorner = glm::max(_maxCorner, glm::vec3(vertex.position));
     }
 
     if (std::abs(_maxCorner.z - _minCorner.z) < 1e-5f) {

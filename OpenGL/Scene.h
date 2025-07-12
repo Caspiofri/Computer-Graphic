@@ -15,7 +15,7 @@
 
 class Scene {
 public:
-	bool loadModel(const std::wstring& filename, Shader* shader);
+	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader);
 	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
 	void initializeScene();
 	// Loading of the model from a file
@@ -26,12 +26,11 @@ public:
 
 	void updateCameraMatrices();
 	
+	std::vector<Vertex> convertNormalsToLine(const std::vector<Vertex>& vertices);
+
 	Object& getObject() { return _object; }
 	Camera& getCamera() { return _camera; }
-	// Setters
-	//void setShowNormals(bool show) { _showNormals = show; }
-	//void setShowBBox(bool show) { _showBBox = show; }
-	// Getters
+	
 
 private:
 	//std::unique_ptr<LineSet> _normals;
@@ -40,6 +39,7 @@ private:
 	//std::shared_ptr<Shader> _lineShader;
 	Object _object;
 	Camera _camera;
+	bool _isCube = true;
 	bool _showNormals = false;
 	bool _showBBox = false;
 };

@@ -4,12 +4,15 @@
 #include "MathLib.h"
 #include <glm/glm.hpp>
 #include <set>
+#include "LineSet.h"
 
 class Object {
 private:
     std::string _name;
     MeshLoader _meshLoader;
     std::unique_ptr<TriangleMesh> _meshDrawer;
+    std::unique_ptr<LineSet> _normalsDrawer;
+    std::unique_ptr<LineSet> _bboxDrawer;
     glm::mat4 _objectTranslationMatrix = glm::mat4(1.0f);
     glm::mat4 _objectRotationMatrix = glm::mat4(1.0f);
 	glm::mat4 _objectScaleMatrix = glm::mat4(1.0f);
@@ -60,21 +63,32 @@ public:
     const glm::mat4& getObjectMatrix() const;
     void setWorldMatrix(const glm::mat4& mat);
     const glm::mat4& getWorldMatrix() const;
-    std::unique_ptr<TriangleMesh> getMeshDrawer() const {
-        return std::make_unique<TriangleMesh>(*_meshDrawer);
+    glm::mat4 getObjectTranslationMatrix() const {
+        return _objectTranslationMatrix;
     }
-    
-	glm::mat4 getObjectTranslationMatrix() const {
-		return _objectTranslationMatrix;
-	}
     glm::mat4 getObjectRotationMatrix() const {
         return _objectRotationMatrix;
     }
     // Setter:
     MeshLoader setMeshLoader(const MeshLoader& mesh) { return _meshLoader = mesh; }
 
+    const std::unique_ptr<TriangleMesh>& getMeshDrawer() const {
+        return _meshDrawer;
+    }
+    const std::unique_ptr<LineSet>& getNormalDrawer() const {
+        return _normalsDrawer;
+    }
+    const std::unique_ptr<LineSet>& getBboxDrawer() const {
+        return _bboxDrawer;
+    }
+  
     void setMeshDrawer(std::unique_ptr<TriangleMesh> mesh) {
         _meshDrawer = std::move(mesh);
     }
-
+    void setNormalDrawer(std::unique_ptr<LineSet> lineSet) {
+        _normalsDrawer = std::move(lineSet);
+    }
+    void setBboxDrawer(std::unique_ptr<LineSet> lineSet) {
+        _bboxDrawer = std::move(lineSet);
+    }
 };

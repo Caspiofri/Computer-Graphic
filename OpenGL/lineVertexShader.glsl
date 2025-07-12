@@ -1,14 +1,21 @@
 #version 460 core
 
-layout(location = 0) in vec3 vPosition;
+layout(location = 0) in vec4 vPosition;
+layout(location = 1) in vec4 vColor;
 
-uniform mat4 rotation;
-uniform mat4 translation;
+uniform mat4 objectMatrix;
+uniform mat4 worldMatrix;
+uniform mat4 view;
 uniform mat4 projection;
 uniform float scale;
 
+//These colors will be interpolated by the rasterizer for each triangle after the vertex shader terminates.
+//The interpolated colors will become the input of the fragment shader
+out vec4 color;
+
+
 void main()
 {
-    vec4 pos = vec4(vPosition * scale, 1.0);
-    gl_Position = projection * translation * rotation * pos;
+   	gl_Position = vPosition * objectMatrix * worldMatrix  *view * projection * scale;
+	color = vColor; //pass throgh the color
 }

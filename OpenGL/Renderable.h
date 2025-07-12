@@ -19,4 +19,5 @@ protected:
 	Shader* _shader;
 	GLenum _drawMode;
 	int _indexCount;
+	bool _usesEBO = true;
 };

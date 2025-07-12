@@ -13,7 +13,33 @@
 #include "Object.h"
 #include "Vertex.h"
 
-bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
+
+std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
+	std::vector<Vertex> lineVertices;
+
+	for (const auto& v : vertices) {
+		glm::vec4 start = v.position;
+		glm::vec4 end = v.position;
+		end.x += v.normal.x * Settings::_normalScale;
+		end.y += v.normal.y * Settings::_normalScale;
+		end.z += v.normal.z * Settings::_normalScale;
+
+		Vertex startVertex;
+		startVertex.position = start;
+		startVertex.color = glm::vec4(1.0f); // White
+
+		Vertex endVertex;
+		endVertex.position = end;
+		endVertex.color = glm::vec4(1.0f); // White
+
+		lineVertices.push_back(startVertex);
+		lineVertices.push_back(endVertex);
+	}
+
+	return lineVertices;
+}
+
+bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader) {
 	std::cerr << "[loadModel] ======== before uploadFrom========= " << std::endl;
 
 	if (!(_object.loadMesh(filename))) {
@@ -21,48 +47,60 @@ bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
 		std::wcout << L"Failed to load model from file: " << filename << std::endl;
 		return false;
 	}
-	// Send to renderable(Trianglemesh) data from object  
-	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), shader));
+	// attach renderable objects to the object
+	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), meshShader));
+
+	auto normalLines = convertNormalsToLines(_object.getMeshLoader().getVertices());
+	_object.setNormalDrawer(std::make_unique<LineSet>(normalLines, lineShader));
+
+	std::vector<Vertex> bboxVertices;
+	glm::vec4 color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+
+	std::vector<glm::vec3> corners = _object.getMeshLoader().getBoundingBox().getCorners();
+	int boxEdges[24] = {
+	0,1, 1,5, 5,4, 4,0,  
+	2,3, 3,7, 7,6, 6,2,  
+	0,2, 1,3, 4,6, 5,7  
+	};
+
+	for (int i = 0; i < 24; i += 2)
+	{
+		Vertex v1, v2;
+		v1.position = glm::vec4(corners[boxEdges[i]], 1.0f);
+		v2.position = glm::vec4(corners[boxEdges[i + 1]], 1.0f);
+		v1.normal = glm::vec3(0.0f);
+		v2.normal = glm::vec3(0.0f);
+		v1.color = color;
+		v2.color = color;
+		bboxVertices.push_back(v1);
+		bboxVertices.push_back(v2);
+	}
+	_object.setBboxDrawer(std::make_unique<LineSet>(bboxVertices , lineShader));
+	
 	if(_object.getMeshLoader().getVertices().empty())
 	{
 		std::cerr << "Mesh not loaded!" << std::endl;
 		return false;
 	}
-	if (_showNormals) {
-		std::cerr << "renderer of normals" << std::endl;
-
-		/*	std::vector<glm::vec3> lines = generateNormalLines(vertexData);
-			_normals = std::make_unique<LineSet>(lines, _lineShader);*/
-	}
-
-	if (_showBBox) {
-		std::cerr << "renderer of BBox" << std::endl;
-
-		//std::vector<glm::vec3> boxLines = generateBBoxLines(rawMesh);
-		//_bbox = std::make_unique<LineSet>(boxLines, _lineShader);
-	}
+	_isCube = false;
 	return true;
 }
 
 void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
-
-	std::cerr << "[Scene::draw] drawing mesh" << std::endl;
-	std::cerr << "[Scene::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
-	std::cerr << "[Scene::draw] projection:\n" << glm::to_string(projection) << std::endl;
-	std::cerr << "[Scene::draw] view:\n" << glm::to_string(view) << std::endl;
-
+	std::cerr << "[Scene::draw] scale" << scale << std::endl;
 	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale);
 
 	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
-
-	if (_showBBox)
+	if (!_isCube && Settings::_BBoxBtn)
 	{
-		// Draw bounding box if available
+		_object.getBboxDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
 	}
-	if (_showNormals)
+
+	if (!_isCube && Settings::_vertexNormalsBtn)
 	{
-		// Draw normals if available
+		std::cerr << "[Scene::draw] drawing normals" << std::endl;
+		_object.getNormalDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
 	}
 
 }
@@ -88,42 +126,33 @@ void Scene::initSceneWithCube(Shader* shader)
 	std::vector<glm::vec4> colors;
 	std::vector<glm::uvec3> triangles;
 
-	std::cerr << "[initSceneWithCube] creating cube" << std::endl;
 	createCube(positions, colors, triangles);
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	std::cerr << "[initSceneWithCube] creating vertexes" << std::endl;
 	for (size_t i = 0; i < positions.size(); ++i) {
 		Vertex v;
 		v.position = positions[i];
 		v.color = colors[i];
 		v.normal = glm::vec3(0.0f, 0.0f, 1.0f);
 		vertices.push_back(v);
-		std::cout << "[initSceneWithCube] vertex " << i << ": position = " << glm::to_string(v.position)
-			<< ", color = " << glm::to_string(v.color)
-			<< ", normal = " << glm::to_string(v.normal) << std::endl;
+
 	}
 
-	std::cerr << "[initSceneWithCube] creating indices" << std::endl;
 	for (const glm::uvec3& tri : triangles) {
 		indices.push_back(tri.x);
 		indices.push_back(tri.y);
 		indices.push_back(tri.z);
 	}
 	for (size_t i = 0; i < indices.size(); i += 3)
-		std::cout << "[initSceneWithCube] triangle " << i / 3 << ": " << indices[i] << ", " << indices[i + 1] << ", " << indices[i + 2] << std::endl;
 
-	std::cerr << "[initSceneWithCube] calling TriangleMesh " << std::endl;
 	_object.setMeshDrawer(std::make_unique<TriangleMesh>(vertices, indices, shader));
+	_isCube = true;
 }
 
 
 void Scene::updateCameraMatrices() {
-	std::cerr << "[Scene::initializeScene] _aspectRatio:\n" << Settings::_aspectRatio << std::endl;
-	std::cerr << "[Scene::initializeScene] _farPlane:\n" << Settings::_farPlane << std::endl;
-	std::cerr << "[Scene::initializeScene] _nearPlane:\n" << Settings::_nearPlane << std::endl;
 	_camera.updateFromUI();
 	_camera.updateViewMatrix();
 	_camera.setPerspective();

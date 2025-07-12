@@ -104,10 +104,8 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 			<< "  Normal   = " << glm::to_string(_vertices[vi].normal) << "\n"
 			<< "  Color    = " << glm::to_string(_vertices[vi].color) << "\n";
 	}
-	//updateBoundingBox();
+	updateBoundingBox();
 
-	// Count the indexes for the EBO
-	//_indexCount = static_cast<GLsizei>(_indices.size());
 	return true;
 }
 
@@ -130,10 +128,17 @@ void MeshLoader::normalizeModel()
 	}
 }
 
-//void GLMesh::updateBoundingBox()
-//{
-//
-//}
+void MeshLoader::updateBoundingBox()
+{
+	_boundingBox.compute( _vertices);
+	std::cout << "[updateBoundingBox] Bounding Box:\n"
+		<< "  Min Corner = " << glm::to_string(_boundingBox.getMinCorner()) << "\n"
+		<< "  Max Corner = " << glm::to_string(_boundingBox.getMaxCorner()) << "\n";
+}
+
+const BBox& MeshLoader::getBoundingBox() const {
+	return _boundingBox;
+}
 
 void MeshLoader::reset() {
 	_vertices.clear();
@@ -141,14 +146,3 @@ void MeshLoader::reset() {
 	_normals.clear();
 	//_boundingBox.reset();
 }
-
-//void MeshLoader::draw() const {
-//	if (_vao) {
-//		glBindVertexArray(_vao);
-//		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(_indexCount), GL_UNSIGNED_INT, 0);
-//		glBindVertexArray(0);
-//	}
-//	else {
-//		std::cerr << "Error: VAO is not initialized." << std::endl;
-//	}
-//}

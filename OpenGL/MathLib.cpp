@@ -137,16 +137,10 @@ glm::mat4 MathLib::perspective(float fov, float aspect, float near, float far) {
 }
 
 glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up) {
-    std::cerr << "[MathLib::lookAt] target:\n" << glm::to_string(target) << std::endl;
-    std::cerr << "[MathLib::lookAt] eye:\n" << glm::to_string(eye) << std::endl;
-    std::cerr << "[MathLib::lookAt] old up:\n" << glm::to_string(up) << std::endl;
+    
     glm::vec3 f = glm::normalize(target - eye);     // forward
     glm::vec3 r = glm::normalize(glm::cross(f, up)); // right
     glm::vec3 u = glm::cross(r, f);                 // recalculated up
-    std::cerr << "[MathLib::lookAt] forward:\n" << glm::to_string(f) << std::endl;
-    std::cerr << "[MathLib::lookAt] right:\n" << glm::to_string(r) << std::endl;
-    std::cerr << "[MathLib::lookAt] up:\n" << glm::to_string(u) << std::endl;
-
 
     glm::mat4 rotation = glm::mat4(1.0f);
     rotation[0][0] = r.x;
@@ -160,14 +154,11 @@ glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const g
     rotation[0][2] = -f.x;
     rotation[1][2] = -f.y;
     rotation[2][2] = -f.z;
-    std::cerr << "[MathLib::lookAt] rotation:\n" << glm::to_string(rotation) << std::endl;
 
     glm::mat4 translation = glm::mat4(1.0f);
     translation[0][3] = -eye.x;
     translation[1][3] = -eye.y;
     translation[2][3] = -eye.z;
-    std::cerr << "[MathLib::lookAt] translation:\n" << glm::to_string(translation) << std::endl;
-    std::cerr << "[MathLib::lookAt] view:\n" << glm::to_string(rotation * translation) << std::endl;
 
     return rotation * translation;
 }
