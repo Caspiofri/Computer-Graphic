@@ -32,6 +32,8 @@ public:
 
 	Shader* _triangleShader = nullptr;
 	Shader* _lineShader = nullptr;
+	Shader* _gouraudShader = nullptr;
+	Shader* _phongShader = nullptr;
 	Scene _scene;
 
 	// Getters
@@ -42,16 +44,11 @@ public:
 	// Setters
 	void setTriangleShader(Shader* shader) { _triangleShader = shader; }
 	void setLineShader(Shader* shader) { _lineShader = shader; }
+	void setGrouaudShader(Shader* shader) { _gouraudShader = shader; }
+	void setPhongShader(Shader* shader) { _phongShader = shader; }
 
 private:
-	//std::vector<Pixel> _pixels;
-	//std::vector<uint32_t> _colorBuffer; //32-bit ARGB
-	//std::vector<float> _depthBuffer; // z-values of pixels
-	//void ConvertQuaternionToMatrix(const float quaternion[4], glm::mat4x4& matrix);
-	//void createTranslationMatrix(float x, float y, float z, glm::mat4x4& matrix);
-	//void antTeakBar_UIscale();
-	//void antTweakBarSettings();
-	//void Terminate();
+
 
 };
 

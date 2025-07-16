@@ -15,7 +15,7 @@
 
 class Scene {
 public:
-	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader);
+	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader, Shader* grouaudShader);
 	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
 	void initializeScene();
 	// Loading of the model from a file
@@ -31,16 +31,22 @@ public:
 	Object& getObject() { return _object; }
 	Camera& getCamera() { return _camera; }
 	
+	//  Light Managment
+	const Light& getLight1() const { return _light1; }
+	const Light& getLight2() const { return _light2; }
+	const glm::vec3 getAmbientLight() const { return _ambientLight; }
 
 private:
-	//std::unique_ptr<LineSet> _normals;
-	//std::unique_ptr<LineSet> _bbox;
 
-	//std::shared_ptr<Shader> _lineShader;
 	Object _object;
 	Camera _camera;
 	bool _isCube = true;
 	bool _showNormals = false;
 	bool _showBBox = false;
+
+	Light _light1, _light2;
+	glm::vec3 _ambientLight;
+
 };
+
 

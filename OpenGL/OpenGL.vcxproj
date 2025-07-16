@@ -15,11 +15,15 @@
     <ClCompile Include="..\Utils\wavefront_obj.cpp" />
     <ClCompile Include="BBox.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="GouraudSet.cpp" />
     <ClCompile Include="LineSet.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MathLib.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="phongFragmentShader.glsl" />
+    <ClCompile Include="PhongSet.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -34,6 +38,9 @@
     <ClInclude Include="BBox.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="common_glm_config.h" />
+    <ClInclude Include="GouraudSet.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="LineSet.h" />
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="MeshLoader.h" />
@@ -50,8 +57,10 @@
   <ItemGroup>
     <None Include="..\Shaders\fragmentShader.glsl" />
     <None Include="..\Shaders\vertexShader.glsl" />
+    <None Include="gouraudFragmentShader.glsl" />
     <None Include="lineFragmentShader.glsl" />
     <None Include="lineVertexShader.glsl" />
+    <None Include="gouraudVertexShader.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0E4AD993-21E0-4CF9-910B-3E132BF6083C}</ProjectGuid>

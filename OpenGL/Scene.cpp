@@ -39,7 +39,7 @@ std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 	return lineVertices;
 }
 
-bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader) {
+bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader , Shader* gouraudShader) {
 	std::cerr << "[loadModel] ======== before uploadFrom========= " << std::endl;
 
 	if (!(_object.loadMesh(filename))) {
@@ -49,6 +49,8 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 	}
 	// attach renderable objects to the object
 	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), meshShader));
+	_object.setGouraudSet(std::make_unique<GouraudSet>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), gouraudShader));
+
 
 	auto normalLines = convertNormalsToLines(_object.getMeshLoader().getVertices());
 	_object.setNormalDrawer(std::make_unique<LineSet>(normalLines, lineShader));
@@ -89,7 +91,8 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
 	std::cerr << "[Scene::draw] scale" << scale << std::endl;
-	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale);
+
+	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale , _camera.getPosition());
 
 	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
 	if (!_isCube && Settings::_BBoxBtn)
@@ -115,7 +118,7 @@ void Scene::initializeScene() {
 
 	_camera = Camera();
 
-	//updateCameraMatrices();
+	updateCameraMatrices();
 }
 
 void Scene::initSceneWithCube(Shader* shader)

@@ -100,15 +100,27 @@ bool Object::loadMesh(const std::wstring& filePath) {
 	}
 	return true;
 }
-void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection , float scale) {
+void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection , const float scale, const glm::vec3 cameraPos){
 
-	if (_meshDrawer) {
+	std::cerr << "[Object::draw] shading mode is : " << Settings::_shadingMode << std::endl;
+
+
+	switch(Settings::_shadingMode) {
+		case SIMPLE: {
+			_meshDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);
+			break;
+		}
+		case GOURAUD: {
+			_gouraudSet->setCameraPos(cameraPos);
+			_gouraudSet->draw(objectMatrix, worldMatrix, view, projection, scale);
+			break;
+		}
+		/*case PHONG: {
+			_bboxDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);
+			break;
+		}*/
+	}
 	
-		_meshDrawer->draw(objectMatrix, worldMatrix,view, projection, scale);
-	}
-	else {
-		std::cerr << "[Object::draw] No mesh drawer set. Cannot draw object." << std::endl;
-	}
 }
 
 void Object::clear() {

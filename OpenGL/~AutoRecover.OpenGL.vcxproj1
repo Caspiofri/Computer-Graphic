@@ -15,6 +15,9 @@
     <ClCompile Include="..\Utils\wavefront_obj.cpp" />
     <ClCompile Include="BBox.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="gouraudVertexShader.glsl" />
+    <ClCompile Include="LineSet.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="MathLib.cpp" />
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -33,6 +36,9 @@
     <ClInclude Include="BBox.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="common_glm_config.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="LineSet.h" />
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Object.h" />
@@ -48,6 +54,7 @@
   <ItemGroup>
     <None Include="..\Shaders\fragmentShader.glsl" />
     <None Include="..\Shaders\vertexShader.glsl" />
+    <None Include="gouaudFragmentShader.glsl" />
     <None Include="lineFragmentShader.glsl" />
     <None Include="lineVertexShader.glsl" />
   </ItemGroup>

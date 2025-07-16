@@ -11,6 +11,7 @@ TriangleMesh::TriangleMesh(const std::vector<Vertex>& vertices,
 	setupBuffers();
 }
 
+
 void TriangleMesh::setupBuffers() {
 	std::cerr << "[TriangleMesh] in setupBuffers" << std::endl;
 

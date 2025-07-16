@@ -95,7 +95,14 @@ int main(int argc, char *argv[])
 
 void TweakBarSettings()
 {
+
 	TwBar* bar = TwNewBar("TweakBar");
+
+	TwEnumVal shadingMenu[] = {
+	{ SIMPLE, "simple" },
+	{ GOURAUD,   "Gouraud" },
+	{ PHONG,     "Phong" }
+	};
 
 	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLUT and OpenGL.' "); // Message added to the help bar.
 	TwDefine(" TweakBar size='350 800' color='96 216 224' "); // change default tweak bar size and color
@@ -138,6 +145,60 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Show Bounding Box", TW_TYPE_BOOL8, &Settings::_BBoxBtn, " group='Object Geometry Visualization' label='Show Bounding Box' ");
 	TwAddVarRW(bar, "Show Vertex Normals", TW_TYPE_BOOL8, &Settings::_vertexNormalsBtn, " group='Object Geometry Visualization' label='Show Vertex Normals' ");
 	TwAddVarRW(bar, "Normal Scale", TW_TYPE_DOUBLE, &Settings::_normalScale, " group='Object Geometry Visualization' min=0.1 max=5 step=0.1 ");
+
+
+	// Material property sliders
+	TwAddVarRW(bar, "Ambient k_a", TW_TYPE_FLOAT, &Settings::_ambient,
+		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Ambient reflection coefficient'");
+	TwAddVarRW(bar, "Diffuse k_d", TW_TYPE_FLOAT, &Settings::_diffuse,
+		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Diffuse reflection coefficient'");
+	TwAddVarRW(bar, "Specular k_s", TW_TYPE_FLOAT, &Settings::_specular,
+		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Specular reflection coefficient'");
+	TwAddVarRW(bar, "Shininess", TW_TYPE_FLOAT, &Settings::_shininess,
+		" group='Material properties' min=1.0 max=100.0 step=1.0 help='Specular highlight shininess exponent'");
+	// Base color as RGB
+	TwAddVarRW(bar, "Material Color", TW_TYPE_COLOR3F, &Settings::_baseColor,
+		" group='Material properties' label='Base Color' help='Base material color (RGB)' ");
+	// Double-sided lighting toggle
+	TwAddVarRW(bar, "Double-Sided", TW_TYPE_BOOL8, &Settings::_doubleSided,
+		" group='Material properties' label='Double-Sided Lighting' help='If enabled, light back faces by inverting normal'");
+	/*TwType zModeType = TwDefineEnum("ZBufferMode", zBufferModes, 3);
+	TwAddVarRW(bar, "Z-Buffer Mode", zModeType, &Settings::_zBufferMode, " group='Material propertiess' ");*/
+
+	//Light properties
+
+	// Light type enum for AntTweakBar
+	TwEnumVal lightTypeMenu[] = { {DIRECTIONAL, "Directional"}, {POINTY, "Point"} };
+	TwType lightTypeTW = TwDefineEnum("LightType", lightTypeMenu, 2);
+
+	//// Global ambient light color
+	TwAddVarRW(bar, "Ambient Light", TW_TYPE_COLOR3F, &Settings::_ambientLight,
+		"group='Global Light properties' label='Ambient Light' help='Global ambient light intensity (RGB)' ");
+
+	TwType shadingType = TwDefineEnum("ShadingMode", shadingMenu, 3);
+	TwAddVarRW(bar, "Shading Mode", shadingType, &Settings::_shadingMode, " group='Global Light properties' ");
+
+	// Light1 controls
+	TwAddVarRW(bar, "Light1 Type", lightTypeTW, &Settings::_light1Type,
+		" group='Light1 properties' label='Light 1 Type' help='Select directional or point light'");
+	TwAddVarRW(bar, "Light1 Direction", TW_TYPE_DIR3F, &Settings::_light1Direction,
+		" group='Light1 properties' label='Light 1 Direction' opened=true help='Direction for directional light (normalized)' ");
+	TwAddVarRW(bar, "Light1 Position", TW_TYPE_DIR3F, &Settings::_light1Pos,
+		" group='Light1 properties' label='Light 1 Position' opened=true help='Position for point light (world coordinates)' ");
+	TwAddVarRW(bar, "Light1 Color", TW_TYPE_COLOR3F, &Settings::_light1Intensity,
+		" group='Light1 properties' label='Light 1 Color' help='Intensity/Color of Light 1' ");
+
+	// Light2 controls (including enable toggle)
+	TwAddVarRW(bar, "Light2 Enabled", TW_TYPE_BOOL8, &Settings::_light2Enabled,
+		" group='Light2 properties' label='Enable Light 2' help='Toggle second light source on/off' ");
+	TwAddVarRW(bar, "Light2 Type", lightTypeTW, &Settings::_light2Type,
+		" group='Light2 properties' label='Light 2 Type' help='Select directional or point light'");
+	TwAddVarRW(bar, "Light2 Direction", TW_TYPE_DIR3F, &Settings::_light2Direction,
+		" group='Light2 properties' label='Light 2 Direction' opened=true help='Direction for Light 2 (if directional)' ");
+	TwAddVarRW(bar, "Light2 Position", TW_TYPE_DIR3F, &Settings::_light2Pos,
+		" group='Light2 properties' label='Light 2 Position' opened=true help='Position for Light 2 (if point)' ");
+	TwAddVarRW(bar, "Light2 Color", TW_TYPE_COLOR3F, &Settings::_light2Intensity,
+		" group='Light2 properties' label='Light 2 Color' help='Intensity/Color of Light 2' ");
 	
 }
 

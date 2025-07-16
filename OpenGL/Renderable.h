@@ -15,6 +15,8 @@ public:
 	virtual void setupBuffers() = 0; // Abstract method to be implemented by derived classes
 
 protected:
+	virtual void setShaderUniforms();
+
 	GLuint _vao, _vbo, _ebo;
 	Shader* _shader;
 	GLenum _drawMode;

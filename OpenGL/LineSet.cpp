@@ -46,7 +46,7 @@ void LineSet::setupBuffers() {
 	if (err1 != GL_NO_ERROR) std::cerr << "[ERROR] position attrib failed: 0x" << std::hex << err1 << std::endl;
 
 	// DEBUGING
-	glEnableVertexAttribArray(1); // Location 1 -color
+	glEnableVertexAttribArray(1); // Location 1 - color
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
 	GLenum err2 = glGetError();
 	if (err2 != GL_NO_ERROR) {

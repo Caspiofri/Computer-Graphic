@@ -28,6 +28,18 @@ void Renderer::initScene() {
 		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
 		return;
 	}
+	setGrouaudShader(new Shader("gouraudVertexShader.glsl", "gouraudFragmentShader.glsl"));
+	if (!_gouraudShader->getID())
+	{
+		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
+		return;
+	}
+	/*setPhongShader(new Shader("phongVertexShader.glsl", "phongFragmentShader.glsl"));
+	if (!_lineShader->getID())
+	{
+		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
+		return;
+	}*/
 	
 	std::cout << "\n -- Step 1 : Done!  ";
 	std::cout << "\n-- Step 2 : init Scene With Cube .. -- ";
@@ -43,7 +55,7 @@ bool Renderer::loadModelToScene(const std::wstring& filename) {
 		std::cerr << "[Renderer::loadModelToScene] Shader not initialized or invalid." << std::endl;
 		return false;
 	}
-	bool result = _scene.loadModel(filename, _triangleShader , _lineShader);
+	bool result = _scene.loadModel(filename, _triangleShader , _lineShader , _gouraudShader);
 	if (result)
 	{
 		std::cout << "[Renderer::loadModelToScene] Model loaded successfully." << std::endl;
@@ -97,6 +109,7 @@ void Renderer::drawScene()
 		std::cout << "[drawScene]: calling initSceneWithCube" << std::endl;
 		_scene.initSceneWithCube(_triangleShader);
 	}
+	
 	//_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
 	_scene.draw(objectMatrix, worldMatrix, mat_projection, mat_view, Settings::_scale);
 

@@ -14,6 +14,10 @@ Renderable::~Renderable() {
 	glDeleteVertexArrays(1, &_vao);
 }
 
+void Renderable::setShaderUniforms() {
+	std::cout << "[Renderable::setShaderUniforms] setting default uniforms" << std::endl;
+	// set differently in server renderable classes
+}
 void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view , const glm::mat4& projection,const float scale)
 {
 	std::cout << "[Renderable::draw]: start drawing" << std::endl;
@@ -24,6 +28,9 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatri
 	}
 
 	_shader->use();
+	
+	setShaderUniforms();
+
 	_shader->setMat4("objectMatrix", objectMatrix);
 	_shader->setMat4("worldMatrix", worldMatrix);
 	_shader->setMat4("view", view);

@@ -63,6 +63,18 @@
     <ClCompile Include="LineSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="phongFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="GouraudSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Utils\Utils.h">
@@ -116,6 +128,15 @@
     <ClInclude Include="LineSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GouraudSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\fragmentShader.glsl">
@@ -128,6 +149,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="lineFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="gouraudFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="gouraudVertexShader.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

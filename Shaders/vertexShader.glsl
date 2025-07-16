@@ -13,8 +13,6 @@ uniform float scale;
 //The interpolated colors will become the input of the fragment shader
 out vec4 color;
 
-
-
 void main()
 {
 

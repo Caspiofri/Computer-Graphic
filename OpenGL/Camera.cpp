@@ -89,12 +89,11 @@ void Camera::setPerspective() {
 
 //official camera update function
 void Camera::updateFromUI() {
-  /*  if (Settings::_skipNextCameraUpdate) {
-        return;
-    }*/
 
     // Step 0: data from controlers
+
     _position = glm::vec3(Settings::_camTransX, Settings::_camTransY, Settings::_camTransZ);
+    std::cerr << "[Camera::updateFromUI] camera position: " << glm::to_string(_position) << ".\n";
 
     float yaw = glm::radians(Settings::_camRotY);
     float pitch = glm::radians(Settings::_camRotX);
