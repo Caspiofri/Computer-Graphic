@@ -78,7 +78,7 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		const auto& v2 = glm::vec3(_vertices[i2].position);
 
 		// compute this face's normal using its vertices
-		glm::vec3 fn = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+		glm::vec3 fn = glm::normalize(glm::cross(v2 - v0, v1 - v0));
 		faceNormals[fi] = fn;
 
 		// associate the face with each of its vertices

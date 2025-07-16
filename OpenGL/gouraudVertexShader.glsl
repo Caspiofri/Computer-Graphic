@@ -73,11 +73,17 @@ void main()
 {
 
     mat4 modelMatrix = objectMatrix * worldMatrix ;
-    vec3 worldPos = vec3(vPosition* modelMatrix);
-    vec3 worldNormal = normalize(vNormal *mat3(transpose(inverse(modelMatrix))));
-    vec3 V = normalize(viewPos - worldPos);
+    
+    vec4 worldPos4 = vPosition * modelMatrix;
+    vec3 worldPos = worldPos4.xyz / worldPos4.w;
 
-    if (dot(worldNormal, V) < 0.0 && materialDoubleSided)
+    mat3 normalMatrix = mat3(transpose(inverse(modelMatrix)));
+    vec3 worldNormal = normalize(vNormal * normalMatrix);
+
+     vec3 V = normalize(viewPos - worldPos);
+
+
+     if (dot(worldNormal, V) < 0.0 && materialDoubleSided)
         worldNormal = -worldNormal;
 
     vec3 color = vec3(0.0);
@@ -95,6 +101,11 @@ void main()
      //                        light2Direction, light2Intensity);
 
     vColor = color;
-	gl_Position = vPosition * objectMatrix * worldMatrix  *view * projection * scale;
+	
+    gl_Position = vPosition;
+
+	gl_Position.w = gl_Position.w / scale;
+	
+	gl_Position = gl_Position * objectMatrix * worldMatrix  *view * projection;
 
 }
