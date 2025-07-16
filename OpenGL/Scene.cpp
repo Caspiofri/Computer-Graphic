@@ -16,8 +16,9 @@
 
 std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 	std::vector<Vertex> lineVertices;
-
+	int index = 0;
 	for (const auto& v : vertices) {
+		index++;
 		glm::vec4 start = v.position;
 		glm::vec4 end = v.position;
 		end.x += v.normal.x * Settings::_normalScale;
@@ -31,7 +32,10 @@ std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 		Vertex endVertex;
 		endVertex.position = end;
 		endVertex.color = glm::vec4(1.0f); // White
-
+		std::cout << "[convertNormalsToLines] Vertex " << index << ":\n"
+			<< "  startVertex = " << glm::to_string(startVertex.position) << "\n"
+			<< "  endVertex   = " << glm::to_string(endVertex.position) << "\n"
+			<< "  normal    = " << glm::to_string(v.normal) << "\n";
 		lineVertices.push_back(startVertex);
 		lineVertices.push_back(endVertex);
 	}

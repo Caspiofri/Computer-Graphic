@@ -59,12 +59,12 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
         NdotL = abs(NdotL);
 
     // Diffuse
-    vec3 diffuse = intensity * materialDiffuse * NdotL * materialBaseColor;
+    vec3 diffuse = materialBaseColor * NdotL  *materialDiffuse * intensity ;
 
     // Specular
     vec3 R = reflect(-L, N);
     float RdotV = max(dot(R, V), 0.0);
-    vec3 specular = intensity * materialSpecular * pow(RdotV, materialShininess);
+    vec3 specular =  pow(RdotV, materialShininess) *materialSpecular * intensity ;
 
     return diffuse + specular;
 }
@@ -72,9 +72,9 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
 void main()
 {
 
-    mat4 modelMatrix = worldMatrix * objectMatrix;
-    vec3 worldPos = vec3(modelMatrix * vPosition);
-    vec3 worldNormal = normalize(mat3(transpose(inverse(modelMatrix))) * vNormal);
+    mat4 modelMatrix = objectMatrix * worldMatrix ;
+    vec3 worldPos = vec3(vPosition* modelMatrix);
+    vec3 worldNormal = normalize(vNormal *mat3(transpose(inverse(modelMatrix))));
     vec3 V = normalize(viewPos - worldPos);
 
     if (dot(worldNormal, V) < 0.0 && materialDoubleSided)
@@ -82,12 +82,12 @@ void main()
 
     vec3 color = vec3(0.0);
     // Ambient
-    color += ambientLight*materialBaseColor* materialAmbient;
+    color += ambientLight * materialBaseColor * materialAmbient;
 
     // Light 1
-    //color += computeLighting(worldPos, worldNormal, V,true,
-     //                        light1Type, light1Position,
-    //                         light1Direction, light1Intensity);
+    color += computeLighting(worldPos, worldNormal, V,true,
+                             light1Type, light1Position,
+                             light1Direction, light1Intensity);
 
     // Light 2
     //color += computeLighting(worldPos, worldNormal, V,

@@ -131,9 +131,6 @@ void MeshLoader::normalizeModel()
 void MeshLoader::updateBoundingBox()
 {
 	_boundingBox.compute( _vertices);
-	std::cout << "[updateBoundingBox] Bounding Box:\n"
-		<< "  Min Corner = " << glm::to_string(_boundingBox.getMinCorner()) << "\n"
-		<< "  Max Corner = " << glm::to_string(_boundingBox.getMaxCorner()) << "\n";
 }
 
 const BBox& MeshLoader::getBoundingBox() const {
