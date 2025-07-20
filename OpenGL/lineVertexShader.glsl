@@ -16,6 +16,11 @@ out vec4 color;
 
 void main()
 {
-   	gl_Position = vPosition * objectMatrix * worldMatrix  *view * projection * scale;
+   		
+    gl_Position = vPosition;
+
+	gl_Position.w = gl_Position.w / scale;
+	
+	gl_Position = gl_Position * objectMatrix * worldMatrix  *view * projection;
 	color = vColor; //pass throgh the color
 }

@@ -7,6 +7,7 @@
 #include <set>
 #include "LineSet.h"
 #include "GouraudSet.h"
+#include "Material.h"
 
 class Object {
 private:
@@ -14,6 +15,8 @@ private:
 
     // meshes and shaders
     MeshLoader _meshLoader;
+    Material _material;
+
     std::unique_ptr<TriangleMesh> _meshDrawer;
     std::unique_ptr<LineSet> _normalsDrawer;
     std::unique_ptr<LineSet> _bboxDrawer;
@@ -30,12 +33,50 @@ private:
     glm::mat4 _worldRotationMatrix = glm::mat4(1.0f);
 
 
+
 public:
     Object();
-    void ApplyTransformations();
-    void ApplyWorldTransformations();
+
+    // mesh and drawing functions
+    bool loadMesh(const std::wstring& filePath);
+    void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection, const float scale, const glm::vec3 cameraPos);
+    void buildMeshDrawerFromLoader(Shader* shader);
+    void clear();
+    MeshLoader getMeshLoader() const { return _meshLoader; }
+
+
+    // == transformation functions == 
+  
+    void scale(glm::vec3 scaleFactor);
+
+    void translateObj(glm::vec3 translation);
+    glm::mat4 getObjectTranslationMatrix() const {
+        return _objectTranslationMatrix;
+    }
+
+    void rotateObj();
+    glm::mat4 getObjectRotationMatrix() const {
+        return _objectRotationMatrix;
+    }
+
+    void updateObjectMatrix();
     void UpdateObjectLocalTransform();
+
+    void setObjectMatrix(const glm::mat4& mat);
+    const glm::mat4& getObjectMatrix() const;
+
+    void ApplyTransformations();
+
+
+    void translateWorld(glm::vec3 translation);
+    void rotateWorld();
+    
+    void ApplyWorldTransformations();
+
     void UpdateWorldTransform();
+    void setWorldMatrix(const glm::mat4& mat);
+    const glm::mat4& getWorldMatrix() const;
+ 
 	void clearObjTransformations() {
 		_objectTranslationMatrix = glm::mat4(1.0f);
 		_objectRotationMatrix = glm::mat4(1.0f);
@@ -47,37 +88,9 @@ public:
         _worldRotationMatrix = glm::mat4(1.0f);
         _worldMatrix = glm::mat4(1.0f);
     }
-
-    bool loadMesh(const std::wstring& filePath);
-    void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection, const float scale, const glm::vec3 cameraPos);
-    void buildMeshDrawerFromLoader(Shader* shader);
-    void clear();
-
-
-    // Gettert:
-    MeshLoader getMeshLoader() const { return _meshLoader; }
-    //void rotate(float angle, glm::vec3 axis);
    
-    void translateObj(glm::vec3 translation);
-    void rotateObj();
 
-
-    void translateWorld(glm::vec3 translation);
-    void rotateWorld();
-
-    void scale(glm::vec3 scaleFactor);
-    void updateObjectMatrix();
-    void setObjectMatrix(const glm::mat4& mat);
-    const glm::mat4& getObjectMatrix() const;
-    void setWorldMatrix(const glm::mat4& mat);
-    const glm::mat4& getWorldMatrix() const;
-    glm::mat4 getObjectTranslationMatrix() const {
-        return _objectTranslationMatrix;
-    }
-    glm::mat4 getObjectRotationMatrix() const {
-        return _objectRotationMatrix;
-    }
-    // Setter:
+    // shaders renderables:
     MeshLoader setMeshLoader(const MeshLoader& mesh) { return _meshLoader = mesh; }
 
     const std::unique_ptr<TriangleMesh>& getMeshDrawer() const {
@@ -106,4 +119,10 @@ public:
 	void setGouraudSet(std::unique_ptr<GouraudSet> gouraudSet) {
 		_gouraudSet = std::move(gouraudSet);
 	}
+    
+
+	//Material properties
+    bool setMaterial(const Material& m);
+    Material& getMaterial() { return _material; }
+    const Material& getMaterial() const { return _material; }
 };

@@ -96,6 +96,9 @@ void Renderer::drawScene()
 	mat_projection = getScene().getCamera().getProjectionMatrix();
 	mat_view = getScene().getCamera().getViewMatrix();
 	
+	getScene().updateMaterial();
+	getScene().updateLight();
+
 	if (_isMeshLoaded)
 	{
 		std::cout << "[drawScene]: _isMeshLoaded is true... " << std::endl;

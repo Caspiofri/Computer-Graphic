@@ -43,16 +43,11 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatri
 	glBindVertexArray(_vao);
 
 	if (_usesEBO) {
-		std::cout << "[Renderable::draw]: glDrawElements, index count = " << _indexCount << std::endl;
 		glDrawElements(_drawMode, _indexCount, GL_UNSIGNED_INT, 0);
 	}
 	else {
-		std::cout << "[Renderable::draw]: glDrawArrays, index count = " << _indexCount << std::endl;
 		glDrawArrays(_drawMode, 0, _indexCount);
 	}
 
-	std::cout << "[Renderable::draw]: unbinding VAO" << std::endl;
 	glBindVertexArray(0);
-
-	std::cout << "[Renderable::draw]: done drawing" << std::endl;
 }

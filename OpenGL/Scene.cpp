@@ -27,15 +27,11 @@ std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 
 		Vertex startVertex;
 		startVertex.position = start;
-		startVertex.color = glm::vec4(1.0f); // White
+		startVertex.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
 		Vertex endVertex;
 		endVertex.position = end;
-		endVertex.color = glm::vec4(1.0f); // White
-		std::cout << "[convertNormalsToLines] Vertex " << index << ":\n"
-			<< "  startVertex = " << glm::to_string(startVertex.position) << "\n"
-			<< "  endVertex   = " << glm::to_string(endVertex.position) << "\n"
-			<< "  normal    = " << glm::to_string(v.normal) << "\n";
+		endVertex.color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f); // Green for end
 		lineVertices.push_back(startVertex);
 		lineVertices.push_back(endVertex);
 	}
@@ -94,11 +90,9 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 
 void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
-	std::cerr << "[Scene::draw] scale" << scale << std::endl;
 
 	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale , _camera.getPosition());
 
-	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
 	if (!_isCube && Settings::_BBoxBtn)
 	{
 		_object.getBboxDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
@@ -106,7 +100,6 @@ void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, co
 
 	if (!_isCube && Settings::_vertexNormalsBtn)
 	{
-		std::cerr << "[Scene::draw] drawing normals" << std::endl;
 		_object.getNormalDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
 	}
 
@@ -163,4 +156,33 @@ void Scene::updateCameraMatrices() {
 	_camera.updateFromUI();
 	_camera.updateViewMatrix();
 	_camera.setPerspective();
+}
+
+void Scene::updateMaterial() {
+	Material& mat = _object.getMaterial();
+	mat.setAmbient(Settings::_ambient);
+	mat.setDiffuse(Settings::_diffuse);
+	mat.setSpecular(Settings::_specular);
+	mat.setShininess(Settings::_shininess);
+	mat.setBaseColor(glm::vec3(Settings::_baseColor));
+	mat.setDoubleSided(Settings::_doubleSided);
+}
+
+
+void Scene::updateLight() {
+	// === Light Sync ===
+	_light1.setEnabled(true);
+	_light1.setPosition(Settings::_light1Pos);
+	_light1.setIntensity(Settings::_light1Intensity);
+	_light1.setDirection(Settings::_light1Direction);
+	_light1.setType(Settings::_light1Type);
+	_light2.setEnabled(Settings::_light2Enabled);
+	_light2.setPosition(Settings::_light2Pos);
+	_light2.setIntensity(Settings::_light2Intensity);
+	_light2.setDirection(Settings::_light2Direction);
+	_light2.setType(Settings::_light2Type);
+
+	// === Ambient Light Sync ===
+	_ambientLight = glm::vec3(Settings::_ambientLight);
+
 }

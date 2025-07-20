@@ -102,9 +102,6 @@ bool Object::loadMesh(const std::wstring& filePath) {
 }
 void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection , const float scale, const glm::vec3 cameraPos){
 
-	std::cerr << "[Object::draw] shading mode is : " << Settings::_shadingMode << std::endl;
-
-
 	switch(Settings::_shadingMode) {
 		case SIMPLE: {
 			_meshDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);

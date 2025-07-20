@@ -211,7 +211,6 @@ void TW_CALL loadOBJModel(void *data)
 	if(result)
 	{
 		_isMeshLoaded = true;
-
 	}
 	else
 	{

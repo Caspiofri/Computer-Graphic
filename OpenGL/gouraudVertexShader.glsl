@@ -24,7 +24,7 @@ uniform float materialShininess;
 uniform bool materialDoubleSided;
 
 // Light 1
-uniform int light1Type;         // 0 = point, 1 = directional
+uniform int light1Type;         // 0 = directional, 1 = point
 uniform vec3 light1Position;    
 uniform vec3 light1Direction;   
 uniform vec3 light1Intensity;
@@ -44,8 +44,8 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
     if (!enabled) return vec3(0.0);
 
     vec3 L;
-    if (type == 1) { // DIRECTIONAL
-        L = normalize(-dir);
+    if (type == 0) { // DIRECTIONAL
+        L = normalize(dir);
     } else { // POINT
         L = normalize(pos - P);
     }
@@ -96,9 +96,9 @@ void main()
                              light1Direction, light1Intensity);
 
     // Light 2
-    //color += computeLighting(worldPos, worldNormal, V,
-     //                        light2Enabled, light2Type, light2Position,
-     //                        light2Direction, light2Intensity);
+    color += computeLighting(worldPos, worldNormal, V,
+                           light2Enabled, light2Type, light2Position,
+                            light2Direction, light2Intensity);
 
     vColor = color;
 	

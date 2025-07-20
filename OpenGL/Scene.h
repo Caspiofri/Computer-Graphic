@@ -25,6 +25,10 @@ public:
 	void toggleBBox(bool show);
 
 	void updateCameraMatrices();
+
+	void updateMaterial();
+
+	void updateLight();
 	
 	std::vector<Vertex> convertNormalsToLine(const std::vector<Vertex>& vertices);
 
