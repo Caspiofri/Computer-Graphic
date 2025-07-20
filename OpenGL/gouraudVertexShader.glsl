@@ -59,12 +59,12 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
         NdotL = abs(NdotL);
 
     // Diffuse
-    vec3 diffuse = materialBaseColor * NdotL  *materialDiffuse * intensity ;
+    vec3 diffuse = materialBaseColor * NdotL * materialDiffuse * intensity ;
 
     // Specular
     vec3 R = reflect(-L, N);
     float RdotV = max(dot(R, V), 0.0);
-    vec3 specular =  pow(RdotV, materialShininess) *materialSpecular * intensity ;
+    vec3 specular =  pow(RdotV, materialShininess) * materialSpecular * intensity ;
 
     return diffuse + specular;
 }

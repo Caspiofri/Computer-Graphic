@@ -22,7 +22,6 @@
     <ClCompile Include="MeshLoader.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object.cpp" />
-    <ClCompile Include="phongFragmentShader.glsl" />
     <ClCompile Include="PhongSet.cpp" />
     <ClCompile Include="Renderable.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -45,6 +44,7 @@
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="PhongSet.h" />
     <ClInclude Include="Renderable.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
@@ -61,6 +61,8 @@
     <None Include="lineFragmentShader.glsl" />
     <None Include="lineVertexShader.glsl" />
     <None Include="gouraudVertexShader.glsl" />
+    <None Include="phongFragmentShader.glsl" />
+    <None Include="phongVertexShader.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0E4AD993-21E0-4CF9-910B-3E132BF6083C}</ProjectGuid>

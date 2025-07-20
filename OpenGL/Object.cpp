@@ -112,10 +112,11 @@ void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, c
 			_gouraudSet->draw(objectMatrix, worldMatrix, view, projection, scale);
 			break;
 		}
-		/*case PHONG: {
-			_bboxDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);
+		case PHONG: {
+			_phongSet->setCameraPos(cameraPos);
+			_phongSet->draw(objectMatrix, worldMatrix, view, projection, scale);
 			break;
-		}*/
+		}
 	}
 	
 }

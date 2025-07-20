@@ -34,12 +34,12 @@ void Renderer::initScene() {
 		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
 		return;
 	}
-	/*setPhongShader(new Shader("phongVertexShader.glsl", "phongFragmentShader.glsl"));
+	setPhongShader(new Shader("phongVertexShader.glsl", "phongFragmentShader.glsl"));
 	if (!_lineShader->getID())
 	{
 		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
 		return;
-	}*/
+	}
 	
 	std::cout << "\n -- Step 1 : Done!  ";
 	std::cout << "\n-- Step 2 : init Scene With Cube .. -- ";
@@ -102,7 +102,6 @@ void Renderer::drawScene()
 	if (_isMeshLoaded)
 	{
 		std::cout << "[drawScene]: _isMeshLoaded is true... " << std::endl;
-
 	}
 	else
 	{

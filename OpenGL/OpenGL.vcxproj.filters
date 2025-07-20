@@ -66,9 +66,6 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="phongFragmentShader.glsl">
-      <Filter>Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="GouraudSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,9 +90,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Settings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexBufferBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
@@ -137,6 +131,12 @@
     <ClInclude Include="GouraudSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PhongSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBufferBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\fragmentShader.glsl">
@@ -155,6 +155,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="gouraudVertexShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="phongFragmentShader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="phongVertexShader.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

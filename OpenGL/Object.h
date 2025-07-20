@@ -7,6 +7,7 @@
 #include <set>
 #include "LineSet.h"
 #include "GouraudSet.h"
+#include "PhongSet.h"
 #include "Material.h"
 
 class Object {
@@ -21,7 +22,7 @@ private:
     std::unique_ptr<LineSet> _normalsDrawer;
     std::unique_ptr<LineSet> _bboxDrawer;
     std::unique_ptr<GouraudSet> _gouraudSet;
-    //std::unique_ptr<PhongSet> _phongSet;
+    std::unique_ptr<PhongSet> _phongSet;
 
     // matrices for object transformations
     glm::mat4 _objectTranslationMatrix = glm::mat4(1.0f);
@@ -105,7 +106,10 @@ public:
     const std::unique_ptr<GouraudSet>& getGouraudSet() const {
         return _gouraudSet;
     }
-    
+	const std::unique_ptr<PhongSet>& getPhongSet() const {
+		return _phongSet;
+	}
+
   
     void setMeshDrawer(std::unique_ptr<TriangleMesh> mesh) {
         _meshDrawer = std::move(mesh);
@@ -118,6 +122,9 @@ public:
     }
 	void setGouraudSet(std::unique_ptr<GouraudSet> gouraudSet) {
 		_gouraudSet = std::move(gouraudSet);
+	}
+	void setPhongSet(std::unique_ptr<PhongSet> phongSet) {
+		_phongSet = std::move(phongSet);
 	}
     
 
