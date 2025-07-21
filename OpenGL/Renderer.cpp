@@ -12,6 +12,55 @@
 #include <string>
 #include <glm/gtx/string_cast.hpp>
 
+GLuint Renderer::loadTextureFromFile(const std::wstring& filename) {
+	GLuint textureID = getScene().getObject().getTextureID();
+	if (textureID)
+	{
+		glDeleteTextures(1, &textureID);
+		textureID = 0;
+	}
+	BYTE* imageRawData = 0;
+	unsigned int imageWidth = 0;
+	unsigned int imageHeight = 0;
+	FREE_IMAGE_FORMAT format = FreeImage_GetFileTypeU(filename.c_str(), 0);
+	if (format == FIF_UNKNOWN) {
+		format = FreeImage_GetFIFFromFilenameU(filename.c_str());
+	}
+	if (format == FIF_UNKNOWN || !FreeImage_FIFSupportsReading(format)) {
+		std::cout << "Unknown image format!\n";
+		return 0;
+	}
+	FIBITMAP* bitmap = FreeImage_LoadU(format, filename.c_str());
+	if (!bitmap) {
+		std::cout << "Failed to load image: " << filename.c_str() << "\n";
+		return 0;
+	}
+	FIBITMAP* image = FreeImage_ConvertTo32Bits(bitmap);
+	FreeImage_Unload(bitmap);
+	if (!image) {
+		std::cout << "Failed to convert image: " << filename.c_str() << "\n";
+		std::cout << "Failed to convert image: " << filename.c_str() << "\n";
+		return 0;
+	}
+	imageRawData = (BYTE*)FreeImage_GetBits(image);
+	imageWidth = FreeImage_GetWidth(image);
+	imageHeight = FreeImage_GetHeight(image);
+	
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, imageRawData);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	FreeImage_Unload(image);
+	return textureID;
+
+}
+
 void Renderer::initScene() {
 
 	setTriangleShader(new Shader("..\\Shaders\\vertexShader.glsl", "..\\Shaders\\fragmentShader.glsl"));
@@ -44,6 +93,7 @@ void Renderer::initScene() {
 	_scene.initSceneWithCube(_triangleShader);
 
 }
+
 
 bool Renderer::loadModelToScene(const std::wstring& filename) {
 	std::wcout << "[Renderer::loadModelToScene] loading model from file: " << filename << std::endl;

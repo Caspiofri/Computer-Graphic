@@ -99,6 +99,7 @@ void Shader::setVec3(const std::string& name, const glm::vec3& value) const {
 void Shader::setBool(const std::string& name, bool value) const {
 	glUniform1i(glGetUniformLocation(_id, name.c_str()), (int)value);
 }
+
 std::string Shader::readShaderSource(const std::string& shaderFileName)
 {
 	std::ifstream ifile(shaderFileName);

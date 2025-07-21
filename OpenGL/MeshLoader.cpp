@@ -24,6 +24,7 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 	_vertices.clear();
 	_indices.clear();
 	_normals.clear();
+	_texcoords.clear();
 
 	glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	for (const auto& v : wf.m_points) {
@@ -51,13 +52,24 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		_indices.push_back(f.v[1]);
 		_indices.push_back(f.v[2]);
 	}
-	//std::cout << "[uploadFrom] Indices:\n";
-	//for (size_t i = 0; i < _indices.size(); i += 3) {
-	//	std::cout << "  Triangle " << (i / 3) << ": "
-	//		<< _indices[i] << ", "
-	//		<< _indices[i + 1] << ", "
-	//		<< _indices[i + 2] << "\n";
-	//}
+	if (wf.m_textureCoordinates.size() > 0) {
+		for (size_t fi = 0; fi < wf.m_faces.size(); ++fi) {
+			const auto& face = wf.m_faces[fi];
+			for (int i = 0; i < 3; ++i) {
+				int vertexIndex = face.v[i];
+				int texcoordIndex = face.t[i];
+
+				if (vertexIndex >= 0 && texcoordIndex >= 0 &&
+					vertexIndex < _vertices.size() &&
+					texcoordIndex < wf.m_textureCoordinates.size()) {
+
+					const Wavefront_obj::Vector& tex = wf.m_textureCoordinates[texcoordIndex];
+					_vertices[vertexIndex].texcoord = glm::vec2(tex[0], tex[1]);
+				}
+			}
+		}
+	}
+
 
 	size_t F = _indices.size() / 3;
 	std::vector<glm::vec3> faceNormals(F);
@@ -90,8 +102,6 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		for (int fi : pointToFaces[vi])
 			sum += faceNormals.at(fi);
 		_vertices[vi].normal = glm::normalize(sum);
-		std::cout << "[uploadFrom] Vertex " << vi << ":\n"
-			<< "  Normal   = " << glm::to_string(_vertices[vi].normal) << "\n";
 	}
 	
 	updateBoundingBox();

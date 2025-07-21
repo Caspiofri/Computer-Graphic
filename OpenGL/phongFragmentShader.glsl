@@ -1,6 +1,7 @@
 #version 460 
 in vec3 FragPos;
 in vec3 worldNormal;
+in vec2 FragTexCoords;
 
 out vec4 FragColor;
 
@@ -31,6 +32,11 @@ uniform int light2Type;
 uniform vec3 light2Position;
 uniform vec3 light2Direction;
 uniform vec3 light2Intensity;
+
+// Texture
+uniform bool useTexture;
+uniform sampler2D texMap;
+
 
 vec3 computeLighting(vec3 P, vec3 N, vec3 V,
                      bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity) {
@@ -64,7 +70,6 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
 void main()
 {
     vec3 color = vec3(0.0);
-
     vec3 N = normalize(worldNormal);
 
     vec3 V = normalize(viewPos - FragPos);
@@ -72,9 +77,18 @@ void main()
     if (materialDoubleSided && dot(N, V) < 0.0)
         N = -N;
 
+    // Ambient or texture
+    vec3 baseColor;
 
-    // Ambient
-    //color += ambientLight * materialBaseColor * materialAmbient;
+    if (useTexture) {
+      // vec4 texColor = texture(texMap, vec2(FragTexCoords.x, 1.0 - FragTexCoords.y));
+      //  baseColor = texColor.rgb;
+      baseColor = vec3(FragTexCoords.x, FragTexCoords.y, 0.0);
+
+    } else {
+        color += ambientLight * materialBaseColor * materialAmbient;
+    }
+     color += baseColor;
 
     // Light 1
     color += computeLighting(FragPos, N, V, true, light1Type, light1Position, light1Direction, light1Intensity);

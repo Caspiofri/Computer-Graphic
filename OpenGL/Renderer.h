@@ -36,6 +36,8 @@ public:
 	Shader* _phongShader = nullptr;
 	Scene _scene;
 
+	GLuint loadTextureFromFile(const std::wstring& filename);
+
 	// Getters
 	Shader* getTriangleShader() { return _triangleShader ; }
 	//const Scene& getScene() const { return _scene; }

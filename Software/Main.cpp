@@ -51,8 +51,6 @@ void Keyboard(unsigned char k, int x, int y);
 void Special(int k, int x, int y);
 void Terminate(void);
 
-
-
 int main(int argc, char *argv[])
 {
 	// Initialize openGL, glut, glew

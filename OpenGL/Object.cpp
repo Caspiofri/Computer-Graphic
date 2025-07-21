@@ -114,6 +114,8 @@ void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, c
 		}
 		case PHONG: {
 			_phongSet->setCameraPos(cameraPos);
+			if(getTextureID() != 0)
+				_phongSet->setTextureID(getTextureID());
 			_phongSet->draw(objectMatrix, worldMatrix, view, projection, scale);
 			break;
 		}

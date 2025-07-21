@@ -23,6 +23,7 @@ private:
     std::unique_ptr<LineSet> _bboxDrawer;
     std::unique_ptr<GouraudSet> _gouraudSet;
     std::unique_ptr<PhongSet> _phongSet;
+    GLuint _textureID;
 
     // matrices for object transformations
     glm::mat4 _objectTranslationMatrix = glm::mat4(1.0f);
@@ -107,6 +108,9 @@ public:
 	const std::unique_ptr<PhongSet>& getPhongSet() const {
 		return _phongSet;
 	}
+    const GLuint getTextureID() const {
+        return _textureID;
+    }
 
   
     void setMeshDrawer(std::unique_ptr<TriangleMesh> mesh) {
@@ -123,6 +127,9 @@ public:
 	}
 	void setPhongSet(std::unique_ptr<PhongSet> phongSet) {
 		_phongSet = std::move(phongSet);
+	}
+    void setTextureID(GLuint textureID) {
+		_textureID = textureID;
 	}
     
 
