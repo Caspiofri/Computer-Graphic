@@ -43,11 +43,6 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 
 		vert.color = color;
 
-		std::cout << "[uploadFrom] Vertex " << index << ":\n"
-			<< "  Position = " << glm::to_string(vert.position) << "\n"
-			<< "  Normal   = " << glm::to_string(vert.normal) << "\n"
-			<< "  Color    = " << glm::to_string(vert.color) << "\n";
-
 		_vertices.push_back(vert);
 	}
 
@@ -56,13 +51,13 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		_indices.push_back(f.v[1]);
 		_indices.push_back(f.v[2]);
 	}
-	std::cout << "[uploadFrom] Indices:\n";
-	for (size_t i = 0; i < _indices.size(); i += 3) {
-		std::cout << "  Triangle " << (i / 3) << ": "
-			<< _indices[i] << ", "
-			<< _indices[i + 1] << ", "
-			<< _indices[i + 2] << "\n";
-	}
+	//std::cout << "[uploadFrom] Indices:\n";
+	//for (size_t i = 0; i < _indices.size(); i += 3) {
+	//	std::cout << "  Triangle " << (i / 3) << ": "
+	//		<< _indices[i] << ", "
+	//		<< _indices[i + 1] << ", "
+	//		<< _indices[i + 2] << "\n";
+	//}
 
 	size_t F = _indices.size() / 3;
 	std::vector<glm::vec3> faceNormals(F);
@@ -95,19 +90,12 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		for (int fi : pointToFaces[vi])
 			sum += faceNormals.at(fi);
 		_vertices[vi].normal = glm::normalize(sum);
-		std::cout << "[_normals.resize] vertex.position = " << glm::to_string(_vertices[vi].normal) << std::endl;
-
-	}
-	for (size_t vi = 0; vi < _vertices.size(); ++vi) {
 		std::cout << "[uploadFrom] Vertex " << vi << ":\n"
-			<< "  Position = " << glm::to_string(_vertices[vi].position) << "\n"
-			<< "  Normal   = " << glm::to_string(_vertices[vi].normal) << "\n"
-			<< "  Color    = " << glm::to_string(_vertices[vi].color) << "\n";
+			<< "  Normal   = " << glm::to_string(_vertices[vi].normal) << "\n";
 	}
-	//updateBoundingBox();
+	
+	updateBoundingBox();
 
-	// Count the indexes for the EBO
-	//_indexCount = static_cast<GLsizei>(_indices.size());
 	return true;
 }
 
@@ -125,15 +113,17 @@ void MeshLoader::normalizeModel()
 		glm::vec3 pos3D(vertex.position);
 		pos3D = (pos3D - center) / maxLength;
 		vertex.position = glm::vec4(pos3D, 1.0f);
-		std::cout << "[normalizeModel()] vertex.position = " << glm::to_string(vertex.position) << std::endl;
-
 	}
 }
 
-//void GLMesh::updateBoundingBox()
-//{
-//
-//}
+void MeshLoader::updateBoundingBox()
+{
+	_boundingBox.compute( _vertices);
+}
+
+const BBox& MeshLoader::getBoundingBox() const {
+	return _boundingBox;
+}
 
 void MeshLoader::reset() {
 	_vertices.clear();
@@ -141,14 +131,3 @@ void MeshLoader::reset() {
 	_normals.clear();
 	//_boundingBox.reset();
 }
-
-//void MeshLoader::draw() const {
-//	if (_vao) {
-//		glBindVertexArray(_vao);
-//		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(_indexCount), GL_UNSIGNED_INT, 0);
-//		glBindVertexArray(0);
-//	}
-//	else {
-//		std::cerr << "Error: VAO is not initialized." << std::endl;
-//	}
-//}

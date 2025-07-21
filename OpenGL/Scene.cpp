@@ -1,5 +1,6 @@
 #pragma once
 #include "common_glm_config.h"
+#include "Settings.h"
 #include <string>
 #include <Glew/include/gl/glew.h>
 #include <glm/glm.hpp>
@@ -11,8 +12,55 @@
 #include "Utils/Utils.h"
 #include "Object.h"
 #include "Vertex.h"
+#include "LineSet.h"
 
-bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
+
+std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
+	std::vector<Vertex> lineVertices;
+	int index = 0;
+	for (const auto& v : vertices) {
+		index++;
+		glm::vec4 start = v.position;
+		glm::vec4 end = v.position;
+		end.x += v.normal.x * Settings::_normalScale;
+		end.y += v.normal.y * Settings::_normalScale;
+		end.z += v.normal.z * Settings::_normalScale;
+
+		Vertex startVertex;
+		startVertex.position = start;
+		startVertex.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+
+		Vertex endVertex;
+		endVertex.position = end;
+		endVertex.color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f); // Green for end
+		lineVertices.push_back(startVertex);
+		lineVertices.push_back(endVertex);
+	}
+
+	return lineVertices;
+}
+
+std::vector<Vertex> createAxisVertices(float length = 1.0f) {
+	std::vector<Vertex> vertices;
+
+	glm::vec4 origin(0.0f, 0.0f, 0.0f, 1.0f);
+
+	// X axis - red
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(1, 0, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(length, 0, 0, 1), glm::vec3(0), glm::vec4(1, 0, 0, 1) });
+
+	// Y axis - green
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(0, 1, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, length, 0, 1), glm::vec3(0), glm::vec4(0, 1, 0, 1) });
+
+	// Z axis - blue
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(0, 0, 1, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, 0, length, 1), glm::vec3(0), glm::vec4(0, 0, 1, 1) });
+
+	return vertices;
+}
+
+bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader , Shader* gouraudShader, Shader* phongShader) {
 	std::cerr << "[loadModel] ======== before uploadFrom========= " << std::endl;
 
 	if (!(_object.loadMesh(filename))) {
@@ -20,50 +68,88 @@ bool Scene::loadModel(const std::wstring& filename, Shader* shader) {
 		std::wcout << L"Failed to load model from file: " << filename << std::endl;
 		return false;
 	}
-	// Send to renderable(Trianglemesh) data from object  
-	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), shader));
+	// attach renderable objects to the object
+	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), meshShader));
+	_object.setGouraudSet(std::make_unique<GouraudSet>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), gouraudShader));
+	_object.setPhongSet(std::make_unique<PhongSet>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), phongShader));
+
+
+	auto normalLines = convertNormalsToLines(_object.getMeshLoader().getVertices());
+	_object.setNormalDrawer(std::make_unique<LineSet>(normalLines, lineShader));
+
+	std::vector<Vertex> bboxVertices;
+	glm::vec4 color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+
+	std::vector<glm::vec3> corners = _object.getMeshLoader().getBoundingBox().getCorners();
+	int boxEdges[24] = {
+	0,1, 1,5, 5,4, 4,0,  
+	2,3, 3,7, 7,6, 6,2,  
+	0,2, 1,3, 4,6, 5,7  
+	};
+
+	for (int i = 0; i < 24; i += 2)
+	{
+		Vertex v1, v2;
+		v1.position = glm::vec4(corners[boxEdges[i]], 1.0f);
+		v2.position = glm::vec4(corners[boxEdges[i + 1]], 1.0f);
+		v1.normal = glm::vec3(0.0f);
+		v2.normal = glm::vec3(0.0f);
+		v1.color = color;
+		v2.color = color;
+		bboxVertices.push_back(v1);
+		bboxVertices.push_back(v2);
+	}
+	_object.setBboxDrawer(std::make_unique<LineSet>(bboxVertices , lineShader));
+	
 	if(_object.getMeshLoader().getVertices().empty())
 	{
 		std::cerr << "Mesh not loaded!" << std::endl;
 		return false;
 	}
-	if (_showNormals) {
-		std::cerr << "renderer of normals" << std::endl;
-
-		/*	std::vector<glm::vec3> lines = generateNormalLines(vertexData);
-			_normals = std::make_unique<LineSet>(lines, _lineShader);*/
-	}
-
-	if (_showBBox) {
-		std::cerr << "renderer of BBox" << std::endl;
-
-		//std::vector<glm::vec3> boxLines = generateBBoxLines(rawMesh);
-		//_bbox = std::make_unique<LineSet>(boxLines, _lineShader);
-	}
+	_isCube = false;
 	return true;
 }
 
-void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, float scale)
+void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
 
-	std::cerr << "[Scene::draw] drawing mesh" << std::endl;
-	std::cerr << "[Scene::draw] worldMatrix:\n" << glm::to_string(worldMatrix) << std::endl;
+	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale , _camera.getPosition());
 
-	_object.draw(objectMatrix, worldMatrix ,  projection, scale);
-
-	std::cerr << "[Scene::draw] done drawing meshy" << std::endl;
-
-	if (_showBBox)
+	if (!_isCube && Settings::_BBoxBtn)
 	{
-		// Draw bounding box if available
-	}
-	if (_showNormals)
-	{
-		// Draw normals if available
+		_object.getBboxDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
 	}
 
+	if (!_isCube && Settings::_vertexNormalsBtn)
+	{
+		_object.getNormalDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
+	}
+	if (Settings::_worldAxisBtn)
+	{
+		_worldAxisDrawer->draw(glm::mat4(1.0f), worldMatrix, view, projection, scale);
+	}
+	if (Settings::_objAxisBtn)
+	{
+		_objectAxisDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);
+	}
 }
+// ===== Initialize Camera in Scene =====
+void Scene::initializeScene(Shader* lineShader) {
 
+	/*_light1 = Light();
+	_light2 = Light();
+	_light2.setEnabled(false);
+
+	_ambientLight = glm::vec3(0.2f);*/ // a low ambient intensity default (or 1.0f for full white)
+	std::vector<Vertex> worldAxisPoints = createAxisVertices(1.0f);
+	std::vector<Vertex> objectAxisPoints = createAxisVertices(0.5f);
+	setWorldAxisDrawer(std::make_unique<LineSet>(worldAxisPoints, lineShader));
+	setObjectAxisDrawer(std::make_unique<LineSet>(objectAxisPoints, lineShader));
+
+	_camera = Camera();
+
+	updateCameraMatrices();
+}
 
 void Scene::initSceneWithCube(Shader* shader)
 {
@@ -73,41 +159,64 @@ void Scene::initSceneWithCube(Shader* shader)
 	std::vector<glm::vec4> colors;
 	std::vector<glm::uvec3> triangles;
 
-	std::cerr << "[initSceneWithCube] creating cube" << std::endl;
 	createCube(positions, colors, triangles);
-
-	for (size_t i = 0; i < positions.size(); ++i)
-		std::cout << "[initSceneWithCube] pos[" << i << "] = " << glm::to_string(positions[i]) << std::endl;
-	for (size_t i = 0; i < colors.size(); ++i)
-		std::cout << "[initSceneWithCube] color[" << i << "] = " << glm::to_string(colors[i]) << std::endl;
-	for (size_t i = 0; i < triangles.size(); ++i)
-		std::cout << "[initSceneWithCube] tri[" << i << "] = " << glm::to_string(triangles[i]) << std::endl;
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 
-	std::cerr << "[initSceneWithCube] creating vertexes" << std::endl;
 	for (size_t i = 0; i < positions.size(); ++i) {
 		Vertex v;
 		v.position = positions[i];
 		v.color = colors[i];
 		v.normal = glm::vec3(0.0f, 0.0f, 1.0f);
 		vertices.push_back(v);
-		std::cout << "[initSceneWithCube] vertex " << i << ": position = " << glm::to_string(v.position)
-			<< ", color = " << glm::to_string(v.color)
-			<< ", normal = " << glm::to_string(v.normal) << std::endl;
+
 	}
 
-	std::cerr << "[initSceneWithCube] creating indices" << std::endl;
 	for (const glm::uvec3& tri : triangles) {
 		indices.push_back(tri.x);
 		indices.push_back(tri.y);
 		indices.push_back(tri.z);
 	}
 	for (size_t i = 0; i < indices.size(); i += 3)
-		std::cout << "[initSceneWithCube] triangle " << i / 3 << ": " << indices[i] << ", " << indices[i + 1] << ", " << indices[i + 2] << std::endl;
 
-	std::cerr << "[initSceneWithCube] calling TriangleMesh " << std::endl;
 	_object.setMeshDrawer(std::make_unique<TriangleMesh>(vertices, indices, shader));
+	_isCube = true;
 }
 
+
+void Scene::updateCameraMatrices() {
+	_camera.updateFromUI();
+	_camera.updateViewMatrix();
+	_camera.setPerspective();
+}
+
+void Scene::updateMaterial() {
+	Material& mat = _object.getMaterial();
+	mat.setAmbient(Settings::_ambient);
+	mat.setDiffuse(Settings::_diffuse);
+	mat.setSpecular(Settings::_specular);
+	mat.setShininess(Settings::_shininess);
+	mat.setBaseColor(glm::vec3(Settings::_baseColor));
+	mat.setDoubleSided(Settings::_doubleSided);
+}
+
+
+void Scene::updateLight() {
+	// === Light Sync ===
+	_light1.setEnabled(true);
+	_light1.setPosition(Settings::_light1Pos);
+	_light1.setIntensity(Settings::_light1Intensity);
+	_light1.setDirection(Settings::_light1Direction);
+	_light1.setType(Settings::_light1Type);
+
+	_light2.setEnabled(Settings::_light2Enabled);
+	_light2.setPosition(Settings::_light2Pos);
+	_light2.setIntensity(Settings::_light2Intensity);
+	_light2.setDirection(Settings::_light2Direction);
+	_light2.setType(Settings::_light2Type);
+
+	// === Ambient Light Sync ===
+	_ambientLight = glm::vec3(Settings::_ambientLight);
+
+}

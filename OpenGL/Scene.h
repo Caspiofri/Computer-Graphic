@@ -5,7 +5,7 @@
 #include <vector>
 //#include "Utils.h"
 //#include "../Obj Parser/wavefront_obj.h"
-//#include "Camera.h"
+#include "Camera.h"
 //#include <glm/ext/matrix_float4x4.hpp>
 #include "MeshLoader.h"
 #include "TriangleMesh.h"
@@ -15,28 +15,53 @@
 
 class Scene {
 public:
-	bool loadModel(const std::wstring& filename, Shader* shader);
-	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, float scale);
+	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader, Shader* grouaudShader , Shader* phongShader);
+	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
+	void initializeScene(Shader* lineShader);
 	// Loading of the model from a file
 	//void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection);          // Render the scene with the given view-projection matrix
 	void initSceneWithCube(Shader* shader);
 	void toggleNormals(bool show);
 	void toggleBBox(bool show);
+
+	void updateCameraMatrices();
+
+	void updateMaterial();
+
+	void updateLight();
 	
-	//const Object& getObject() const { return _object; }
+	std::vector<Vertex> convertNormalsToLine(const std::vector<Vertex>& vertices);
+
+	void setWorldAxisDrawer(std::unique_ptr<LineSet> lineSet) {
+		_worldAxisDrawer = std::move(lineSet);
+	}
+	void setObjectAxisDrawer(std::unique_ptr<LineSet> lineSet) {
+		_objectAxisDrawer = std::move(lineSet);
+	}
+
+	void setWorldAxisDrawer(bool isCube) { _isCube = isCube; }
+
 	Object& getObject() { return _object; }
-	// Setters
-	//void setShowNormals(bool show) { _showNormals = show; }
-	//void setShowBBox(bool show) { _showBBox = show; }
-	// Getters
+	Camera& getCamera() { return _camera; }
+	
+	//  Light Managment
+	const Light& getLight1() const { return _light1; }
+	const Light& getLight2() const { return _light2; }
+	const glm::vec3 getAmbientLight() const { return _ambientLight; }
 
 private:
-	//std::unique_ptr<LineSet> _normals;
-	//std::unique_ptr<LineSet> _bbox;
 
-	//std::shared_ptr<Shader> _lineShader;
 	Object _object;
+	Camera _camera;
+	bool _isCube = true;
 	bool _showNormals = false;
 	bool _showBBox = false;
+	std::unique_ptr<LineSet> _worldAxisDrawer;
+	std::unique_ptr<LineSet> _objectAxisDrawer;
+
+	Light _light1, _light2;
+	glm::vec3 _ambientLight;
+
 };
+
 

@@ -10,13 +10,16 @@ public:
 	Renderable(Shader* shader, GLenum drawMode);
 	virtual ~Renderable();
 
-	void draw(const glm::mat4& objectMatrix, const glm::mat4& projection, const glm::mat4& worldMatrix , float scale);
+	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix , const glm::mat4& view,  const glm::mat4& projection,  float scale);
 
 	virtual void setupBuffers() = 0; // Abstract method to be implemented by derived classes
 
 protected:
+	virtual void setShaderUniforms();
+
 	GLuint _vao, _vbo, _ebo;
 	Shader* _shader;
 	GLenum _drawMode;
 	int _indexCount;
+	bool _usesEBO = true;
 };

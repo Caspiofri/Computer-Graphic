@@ -137,6 +137,7 @@ glm::mat4 MathLib::perspective(float fov, float aspect, float near, float far) {
 }
 
 glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up) {
+    
     glm::vec3 f = glm::normalize(target - eye);     // forward
     glm::vec3 r = glm::normalize(glm::cross(f, up)); // right
     glm::vec3 u = glm::cross(r, f);                 // recalculated up
@@ -155,9 +156,9 @@ glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const g
     rotation[2][2] = -f.z;
 
     glm::mat4 translation = glm::mat4(1.0f);
-    translation[3][0] = -eye.x;
-    translation[3][1] = -eye.y;
-    translation[3][2] = -eye.z;
+    translation[0][3] = -eye.x;
+    translation[1][3] = -eye.y;
+    translation[2][3] = -eye.z;
 
     return rotation * translation;
 }

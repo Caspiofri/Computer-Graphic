@@ -11,24 +11,21 @@ TriangleMesh::TriangleMesh(const std::vector<Vertex>& vertices,
 	setupBuffers();
 }
 
+
 void TriangleMesh::setupBuffers() {
 	std::cerr << "[TriangleMesh] in setupBuffers" << std::endl;
 
 	// Building buffers
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
-	std::cout << "[uploadFrom] _vao = " << _vao << std::endl;
 
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), _vertices.data(), GL_STATIC_DRAW);
-	std::cout << "[uploadFrom] _vbo = " << _vbo << std::endl;
 
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), _indices.data(), GL_STATIC_DRAW);
-
-	std::cout << "[uploadFrom] _ebo = " << _ebo << std::endl;
 
 	// Setting vertex attributes
 	glEnableVertexAttribArray(0); // Position

@@ -31,19 +31,17 @@ public:
 	std::vector<Vertex> getVertices() const { return _vertices; }
 	std::vector<glm::vec3> getNormals() const { return _normals; }
 	std::vector<unsigned int> getIndices() const { return _indices; }
+	const BBox& getBoundingBox() const;
+
 
 private:
 	std::vector<Vertex> _vertices;
 	std::vector<glm::vec3> _normals;
 	std::vector<unsigned int> _indices;
-
-	GLuint _vao;
-	GLuint _vbo;
-	GLuint _ebo;
-	GLuint _normalVBO = 0;
-	GLuint _normalVAO = 0;
-	size_t _indexCount;
+	BBox _boundingBox;
 
 	void normalizeModel();
+
+	void updateBoundingBox();
 
 };
