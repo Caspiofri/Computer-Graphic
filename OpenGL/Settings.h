@@ -9,7 +9,8 @@ namespace Settings {
 	extern bool _vertexNormalsBtn; // Show Vertex Normals button
 	extern double _normalScale; // Scale for vertex normals
 	extern bool _isMeshLoaded; // Flag to check if mesh is loaded
-
+	extern bool _worldAxisBtn;
+	extern bool _objAxisBtn;
 	//camera settings :
 	extern int _screenWidth, _screenHeight;
 	extern float _aspectRatio;

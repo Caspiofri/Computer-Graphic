@@ -8,7 +8,8 @@ namespace Settings {
 	bool _vertexNormalsBtn = false; // Show Vertex Normals button
 	double _normalScale = 1.0; // Scale for vertex normals
 	bool _isMeshLoaded = false; // Flag to check if mesh is loaded
-	
+	bool _worldAxisBtn = false, _objAxisBtn = false;
+
 	// camera settings :
 	int _screenWidth = 600;
 	int _screenHeight = 800;

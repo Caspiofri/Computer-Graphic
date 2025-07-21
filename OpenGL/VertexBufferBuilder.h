@@ -21,10 +21,6 @@ public:
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-		std::cout << "[setupVAO] vao = " << vao << ", vbo = " << vbo << std::endl;
-		std::cout << "[setupVAO] uploaded " << vertices.size() << " vertices of size " << sizeof(VertexType) << std::endl;
-		
-	
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexType), vertices.data(), GL_STATIC_DRAW);
 
 		for (const auto& attr : attributes) {

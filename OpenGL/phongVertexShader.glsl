@@ -18,11 +18,11 @@ void main()
    mat4 modelMatrix = objectMatrix * worldMatrix ;
     
     vec4 worldPos4 = vPosition * modelMatrix;
-    vec3 FragPos = worldPos4.xyz / worldPos4.w;
+    FragPos = worldPos4.xyz / worldPos4.w;
 
     mat3 normalMatrix = mat3(transpose(inverse(modelMatrix)));
-    vec3 worldNormal = normalize(vNormal * normalMatrix);
-	
+    worldNormal = normalize(vNormal * normalMatrix);
+
     gl_Position = vPosition;
 
 	gl_Position.w = gl_Position.w / scale;

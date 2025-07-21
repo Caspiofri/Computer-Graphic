@@ -13,7 +13,6 @@
 #include <glm/gtx/string_cast.hpp>
 
 void Renderer::initScene() {
-	std::cout << "\n-- Renderer::initScene: starting .. -- ";
 
 	setTriangleShader(new Shader("..\\Shaders\\vertexShader.glsl", "..\\Shaders\\fragmentShader.glsl"));
 
@@ -41,9 +40,7 @@ void Renderer::initScene() {
 		return;
 	}
 	
-	std::cout << "\n -- Step 1 : Done!  ";
-	std::cout << "\n-- Step 2 : init Scene With Cube .. -- ";
-	_scene.initializeScene();
+	_scene.initializeScene(_lineShader);
 	_scene.initSceneWithCube(_triangleShader);
 
 }
@@ -70,7 +67,6 @@ bool Renderer::loadModelToScene(const std::wstring& filename) {
 
 void Renderer::drawScene()
 {
-	std::cerr << "[drawScene] starting .. " << std::endl;
 
 	if (!_triangleShader->getID())
 	{
@@ -99,23 +95,16 @@ void Renderer::drawScene()
 	getScene().updateMaterial();
 	getScene().updateLight();
 
-	if (_isMeshLoaded)
+	if(!_isMeshLoaded)
 	{
-		std::cout << "[drawScene]: _isMeshLoaded is true... " << std::endl;
-	}
-	else
-	{
-		std::cout << "[drawScene]: no mesh loaded - rendering cube ... " << std::endl;
 		// If no mesh is loaded, draw a default cube
 		int numIndices = 36; // 6 faces * 2 triangles per face * 3 indices per triangle
-		std::cout << "[drawScene]: calling initSceneWithCube" << std::endl;
 		_scene.initSceneWithCube(_triangleShader);
 	}
 	
 	//_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
 	_scene.draw(objectMatrix, worldMatrix, mat_projection, mat_view, Settings::_scale);
 
-	std::cout << "[drawScene]: draw mesh executed !" << std::endl;
 	// Unbind the shader program after drawing
 	glUseProgram(0);
 

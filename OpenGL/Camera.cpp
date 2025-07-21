@@ -93,7 +93,6 @@ void Camera::updateFromUI() {
     // Step 0: data from controlers
 
     _position = glm::vec3(Settings::_camTransX, Settings::_camTransY, Settings::_camTransZ);
-    std::cerr << "[Camera::updateFromUI] camera position: " << glm::to_string(_position) << ".\n";
 
     float yaw = glm::radians(Settings::_camRotY);
     float pitch = glm::radians(Settings::_camRotX);
@@ -102,7 +101,7 @@ void Camera::updateFromUI() {
     // Step 1: Forward vector
     _forward.x = cos(pitch) * sin(yaw);
     _forward.y = sin(pitch);
-    _forward.z = cos(pitch) * cos(yaw);
+    _forward.z = -cos(pitch) * cos(yaw);
     _forward = MathLib::normalize(_forward);
 
     if (glm::length(_forward) < 1e-6f) {
@@ -111,6 +110,7 @@ void Camera::updateFromUI() {
     }
 
     _target = _position + _forward;
+    std::cerr << "[Camera::updateFromUI] camera _target: " << glm::to_string(_target) << ".\n";
 
     glm::vec3 worldUp = glm::vec3(0, 1, 0);
     _up = MathLib::normalize(worldUp);

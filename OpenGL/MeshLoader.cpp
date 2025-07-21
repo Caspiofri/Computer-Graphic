@@ -43,11 +43,6 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 
 		vert.color = color;
 
-	/*	std::cout << "[uploadFrom] Vertex " << index << ":\n"
-			<< "  Position = " << glm::to_string(vert.position) << "\n"
-			<< "  Normal   = " << glm::to_string(vert.normal) << "\n"
-			<< "  Color    = " << glm::to_string(vert.color) << "\n";*/
-
 		_vertices.push_back(vert);
 	}
 
@@ -95,13 +90,10 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		for (int fi : pointToFaces[vi])
 			sum += faceNormals.at(fi);
 		_vertices[vi].normal = glm::normalize(sum);
+		std::cout << "[uploadFrom] Vertex " << vi << ":\n"
+			<< "  Normal   = " << glm::to_string(_vertices[vi].normal) << "\n";
 	}
-	//for (size_t vi = 0; vi < _vertices.size(); ++vi) {
-	//	std::cout << "[uploadFrom] Vertex " << vi << ":\n"
-	//		<< "  Position = " << glm::to_string(_vertices[vi].position) << "\n"
-	//		<< "  Normal   = " << glm::to_string(_vertices[vi].normal) << "\n"
-	//		<< "  Color    = " << glm::to_string(_vertices[vi].color) << "\n";
-	//}
+	
 	updateBoundingBox();
 
 	return true;

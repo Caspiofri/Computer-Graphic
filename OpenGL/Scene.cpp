@@ -12,6 +12,7 @@
 #include "Utils/Utils.h"
 #include "Object.h"
 #include "Vertex.h"
+#include "LineSet.h"
 
 
 std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
@@ -37,6 +38,26 @@ std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 	}
 
 	return lineVertices;
+}
+
+std::vector<Vertex> createAxisVertices(float length = 1.0f) {
+	std::vector<Vertex> vertices;
+
+	glm::vec4 origin(0.0f, 0.0f, 0.0f, 1.0f);
+
+	// X axis - red
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(1, 0, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(length, 0, 0, 1), glm::vec3(0), glm::vec4(1, 0, 0, 1) });
+
+	// Y axis - green
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(0, 1, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, length, 0, 1), glm::vec3(0), glm::vec4(0, 1, 0, 1) });
+
+	// Z axis - blue
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(0, 0, 1, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, 0, length, 1), glm::vec3(0), glm::vec4(0, 0, 1, 1) });
+
+	return vertices;
 }
 
 bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader , Shader* gouraudShader, Shader* phongShader) {
@@ -103,16 +124,27 @@ void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, co
 	{
 		_object.getNormalDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
 	}
-
+	if (Settings::_worldAxisBtn)
+	{
+		_worldAxisDrawer->draw(glm::mat4(1.0f), worldMatrix, view, projection, scale);
+	}
+	if (Settings::_objAxisBtn)
+	{
+		_objectAxisDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);
+	}
 }
 // ===== Initialize Camera in Scene =====
-void Scene::initializeScene() {
+void Scene::initializeScene(Shader* lineShader) {
 
 	/*_light1 = Light();
 	_light2 = Light();
 	_light2.setEnabled(false);
 
 	_ambientLight = glm::vec3(0.2f);*/ // a low ambient intensity default (or 1.0f for full white)
+	std::vector<Vertex> worldAxisPoints = createAxisVertices(1.0f);
+	std::vector<Vertex> objectAxisPoints = createAxisVertices(0.5f);
+	setWorldAxisDrawer(std::make_unique<LineSet>(worldAxisPoints, lineShader));
+	setObjectAxisDrawer(std::make_unique<LineSet>(objectAxisPoints, lineShader));
 
 	_camera = Camera();
 

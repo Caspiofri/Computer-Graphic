@@ -17,7 +17,7 @@ class Scene {
 public:
 	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader, Shader* grouaudShader , Shader* phongShader);
 	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
-	void initializeScene();
+	void initializeScene(Shader* lineShader);
 	// Loading of the model from a file
 	//void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection);          // Render the scene with the given view-projection matrix
 	void initSceneWithCube(Shader* shader);
@@ -31,6 +31,15 @@ public:
 	void updateLight();
 	
 	std::vector<Vertex> convertNormalsToLine(const std::vector<Vertex>& vertices);
+
+	void setWorldAxisDrawer(std::unique_ptr<LineSet> lineSet) {
+		_worldAxisDrawer = std::move(lineSet);
+	}
+	void setObjectAxisDrawer(std::unique_ptr<LineSet> lineSet) {
+		_objectAxisDrawer = std::move(lineSet);
+	}
+
+	void setWorldAxisDrawer(bool isCube) { _isCube = isCube; }
 
 	Object& getObject() { return _object; }
 	Camera& getCamera() { return _camera; }
@@ -47,6 +56,8 @@ private:
 	bool _isCube = true;
 	bool _showNormals = false;
 	bool _showBBox = false;
+	std::unique_ptr<LineSet> _worldAxisDrawer;
+	std::unique_ptr<LineSet> _objectAxisDrawer;
 
 	Light _light1, _light2;
 	glm::vec3 _ambientLight;

@@ -2,6 +2,9 @@
 #include "MeshLoader.h"
 #include "Settings.h"
 #include "PhongSet.h"
+#include <iostream>
+#include <glm/gtx/string_cast.hpp>
+
 
 PhongSet::PhongSet(const std::vector<Vertex>& vertices,
 	const std::vector<unsigned int>& indices,
@@ -10,12 +13,10 @@ PhongSet::PhongSet(const std::vector<Vertex>& vertices,
 	_vertices(vertices),
 	_indices(indices) {
 	_indexCount = static_cast<GLsizei>(_indices.size());
-	_cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	_cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
 	setupBuffers();
 }
 void PhongSet::setShaderUniforms() {
-
-	std::cout << "[GouraudSet::setShaderUniforms] setting uniforms for Gouraud shading" << std::endl;
 
 	// settings light parameters
 	_shader->setVec3("viewPos", _cameraPos);
@@ -32,6 +33,8 @@ void PhongSet::setShaderUniforms() {
 	// Light 1
 	_shader->setInt("light1Type", Settings::_light1Type);
 	_shader->setVec3("light1Position", Settings::_light1Pos);
+
+
 	_shader->setVec3("light1Direction", Settings::_light1Direction);
 	_shader->setVec3("light1Intensity", Settings::_light1Intensity);
 
@@ -50,19 +53,14 @@ void PhongSet::setupBuffers() {
 	// Building buffers
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
-	std::cout << "[GouraudSet] _vao = " << _vao << std::endl;
 
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
 	glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(Vertex), _vertices.data(), GL_STATIC_DRAW);
-	std::cout << "[GouraudSet] _vbo = " << _vbo << std::endl;
-	std::cout << "[GouraudSet]Number of vertices: " << _vertices.size() << std::endl;
 
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indices.size() * sizeof(unsigned int), _indices.data(), GL_STATIC_DRAW);
-
-	std::cout << "[GouraudSet] _ebo = " << _ebo << std::endl;
 
 	// Setting vertex attributes
 	glEnableVertexAttribArray(0); // Position

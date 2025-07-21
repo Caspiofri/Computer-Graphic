@@ -70,22 +70,12 @@ int main(int argc, char *argv[])
 	// Initialize Shaders
 	_renderer.initScene();
 
-	// Init the scene
-	
-	std::cout << "\n-- Step 2 : Done!  ";
-
 	atexit(Terminate);  // called after glutMainLoop ends
 
-	//// Create a tweak bar
-	//TweakBarSettings();
-
-	std::cout << "\n-- Step 3 : call TweakBar.. -- ";
 
 	// Create a tweak bar
 	TweakBarSettings();
 	
-	std::cout << "\n-- Step 4 : call glutMainLoop.. -- ";
-
 	// Call the GLUT main loop
 	glutMainLoop();
 
@@ -145,6 +135,10 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Show Bounding Box", TW_TYPE_BOOL8, &Settings::_BBoxBtn, " group='Object Geometry Visualization' label='Show Bounding Box' ");
 	TwAddVarRW(bar, "Show Vertex Normals", TW_TYPE_BOOL8, &Settings::_vertexNormalsBtn, " group='Object Geometry Visualization' label='Show Vertex Normals' ");
 	TwAddVarRW(bar, "Normal Scale", TW_TYPE_DOUBLE, &Settings::_normalScale, " group='Object Geometry Visualization' min=0.1 max=5 step=0.1 ");
+
+	// Axis Visualization
+	TwAddVarRW(bar, "Show World Axis", TW_TYPE_BOOL8, &Settings::_worldAxisBtn, "group='Axis Visualization' label='World Axis' ");
+	TwAddVarRW(bar, "Show Object Axis", TW_TYPE_BOOL8, &Settings::_objAxisBtn, "group='Axis Visualization' label='Object Axis' ");
 
 
 	// Material property sliders
