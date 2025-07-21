@@ -1,6 +1,6 @@
 #version 460 
 in vec3 FragPos;
-in vec3 Normal;
+in vec3 worldNormal;
 
 out vec4 FragColor;
 
@@ -35,36 +35,51 @@ uniform vec3 light2Intensity;
 vec3 computeLighting(vec3 P, vec3 N, vec3 V,
                      bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity) {
     if (!enabled) return vec3(0.0);
+ 
 
     vec3 L;
     if (type == 0) { // DIRECTIONAL
-        L = normalize(dir);
+        L = normalize(-dir);
     } else { // POINT
         L = normalize(pos - P);
     }
+   
+    float NdotL  = dot(N, L);
+   
+    if (NdotL < 0.0) return vec3(0.1, 0.0, 0.1);
 
-    float NdotL = dot(N, L);
+
+     if (NdotL == 0)
+       return vec3(0.1, 0.0, 0.5);
 
     if (!materialDoubleSided && NdotL <= 0.0)
         return vec3(0.0);
-
-    if (materialDoubleSided)
+   if (materialDoubleSided)
         NdotL = abs(NdotL);
 
     // Diffuse
     vec3 diffuse = materialBaseColor * NdotL * materialDiffuse * intensity;
+     if (length(diffuse) < 0.001) return vec3(0.0, 1.0, 0.0); // ירוק – Diffuse אפסי
+     if (diffuse == vec3(0.0)) return vec3(0.0, 0.5, 0.0); // ירוק – Diffuse אפסי
+
 
     // Specular
     vec3 R = reflect(-L, N);
+    if (R ==  vec3(0.0))
+       return vec3(0.0, 0.0, 0.3);
     float RdotV = max(dot(R, V), 0.0);
     vec3 specular = pow(RdotV, materialShininess) * materialSpecular * intensity;
+   if (length(specular) < 0.001) return vec3(0.0, 0.0, 1.0); // כחול – Specular אפסי
+    if (specular == vec3(0.0)) return vec3(0.0, 0.0, 0.5); // ירוק – Diffuse אפסי
 
     return diffuse + specular;
 }
 
 void main()
 {
-    vec3 N = normalize(Normal);
+ 
+
+    vec3 N = normalize(worldNormal);
     vec3 V = normalize(viewPos - FragPos);
 
     if (materialDoubleSided && dot(N, V) < 0.0)
@@ -73,13 +88,14 @@ void main()
     vec3 color = vec3(0.0);
 
     // Ambient
-    color += ambientLight * materialBaseColor * materialAmbient;
+    //color += ambientLight * materialBaseColor * materialAmbient;
 
     // Light 1
-    color += computeLighting(FragPos, N, V, light1Enabled, light1Type, light1Position, light1Direction, light1Intensity);
-    
+    color += computeLighting(FragPos, N, V, true, light1Type, light1Position, light1Direction, light1Intensity);
+  
     // Light 2
-    color += computeLighting(FragPos, N, V, light2Enabled, light2Type, light2Position, light2Direction, light2Intensity);
-
+    //color += computeLighting(FragPos, N, V, light2Enabled, light2Type, light2Position, light2Direction, light2Intensity);
+     
+    
     FragColor = vec4(color, 1.0);
 }

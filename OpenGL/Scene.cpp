@@ -39,7 +39,7 @@ std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 	return lineVertices;
 }
 
-bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader , Shader* gouraudShader) {
+bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader* lineShader , Shader* gouraudShader, Shader* phongShader) {
 	std::cerr << "[loadModel] ======== before uploadFrom========= " << std::endl;
 
 	if (!(_object.loadMesh(filename))) {
@@ -50,6 +50,7 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 	// attach renderable objects to the object
 	_object.setMeshDrawer(std::make_unique<TriangleMesh>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), meshShader));
 	_object.setGouraudSet(std::make_unique<GouraudSet>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), gouraudShader));
+	_object.setPhongSet(std::make_unique<PhongSet>(_object.getMeshLoader().getVertices(), _object.getMeshLoader().getIndices(), phongShader));
 
 
 	auto normalLines = convertNormalsToLines(_object.getMeshLoader().getVertices());
@@ -176,6 +177,7 @@ void Scene::updateLight() {
 	_light1.setIntensity(Settings::_light1Intensity);
 	_light1.setDirection(Settings::_light1Direction);
 	_light1.setType(Settings::_light1Type);
+
 	_light2.setEnabled(Settings::_light2Enabled);
 	_light2.setPosition(Settings::_light2Pos);
 	_light2.setIntensity(Settings::_light2Intensity);

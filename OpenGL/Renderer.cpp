@@ -55,7 +55,7 @@ bool Renderer::loadModelToScene(const std::wstring& filename) {
 		std::cerr << "[Renderer::loadModelToScene] Shader not initialized or invalid." << std::endl;
 		return false;
 	}
-	bool result = _scene.loadModel(filename, _triangleShader , _lineShader , _gouraudShader);
+	bool result = _scene.loadModel(filename, _triangleShader , _lineShader , _gouraudShader , _phongShader);
 	if (result)
 	{
 		std::cout << "[Renderer::loadModelToScene] Model loaded successfully." << std::endl;

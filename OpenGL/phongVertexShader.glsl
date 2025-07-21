@@ -11,7 +11,7 @@ uniform mat4 projection;
 uniform float scale;
 
 out vec3 FragPos;
-out vec3 Normal;
+out vec3 worldNormal;
 
 void main()
 {

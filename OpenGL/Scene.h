@@ -15,7 +15,7 @@
 
 class Scene {
 public:
-	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader, Shader* grouaudShader);
+	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader, Shader* grouaudShader , Shader* phongShader);
 	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
 	void initializeScene();
 	// Loading of the model from a file

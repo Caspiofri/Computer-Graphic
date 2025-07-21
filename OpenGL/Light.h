@@ -11,7 +11,7 @@ class Light {
 public:
 
 	// Constructor
-	Light() : _type(DIRECTIONAL), _direction(glm::vec3(0, 0, -1.0f)), _position(glm::vec3(0.0f)),
+	Light() : _type(DIRECTIONAL), _direction(glm::vec3(0, 0, -1.0f)), _position(glm::vec3(glm::vec3(0, 0, 5.0f))),
 		_intensity(glm::vec3(1.0f)), enabled(true) {
 	}
 

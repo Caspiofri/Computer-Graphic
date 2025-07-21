@@ -45,7 +45,7 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
 
     vec3 L;
     if (type == 0) { // DIRECTIONAL
-        L = normalize(dir);
+        L = normalize(-dir);
     } else { // POINT
         L = normalize(pos - P);
     }

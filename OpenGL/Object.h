@@ -33,8 +33,6 @@ private:
     glm::mat4 _worldTranslationMatrix = glm::mat4(1.0f);
     glm::mat4 _worldRotationMatrix = glm::mat4(1.0f);
 
-
-
 public:
     Object();
 
