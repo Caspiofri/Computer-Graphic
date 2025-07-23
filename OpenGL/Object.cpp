@@ -109,6 +109,8 @@ void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, c
 		}
 		case GOURAUD: {
 			_gouraudSet->setCameraPos(cameraPos);
+			if (getTextureID() != 0)
+				_gouraudSet->setTextureID(getTextureID());
 			_gouraudSet->draw(objectMatrix, worldMatrix, view, projection, scale);
 			break;
 		}

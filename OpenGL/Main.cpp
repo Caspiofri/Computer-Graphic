@@ -228,7 +228,7 @@ void TW_CALL loadTexture(void* data)
 		_renderer.getScene().getObject().setTextureID(texID);
 		if (_renderer.getScene().getObject().getTextureID())
 		{
-			std::cout << "Texture loaded successfully with ID: " << texID << std::endl;		
+			std::cout << "Texture loaded successfully with ID: " << texID << std::endl;
 		}
 		else
 		{

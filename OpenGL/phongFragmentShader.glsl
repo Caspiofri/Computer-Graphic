@@ -39,7 +39,7 @@ uniform sampler2D texMap;
 
 
 vec3 computeLighting(vec3 P, vec3 N, vec3 V,
-                     bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity) {
+                     bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity, vec4 baseColor) {
     if (!enabled) return vec3(0.0);
  
 
@@ -58,7 +58,7 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
         NdotL = abs(NdotL);
 
     // Diffuse
-    vec3 diffuse = materialBaseColor * NdotL * materialDiffuse * intensity;
+    vec3 diffuse = baseColor.rgb * NdotL * materialDiffuse * intensity;
 
     // Specular
     vec3 R = reflect(-L, N);
@@ -85,18 +85,17 @@ void main()
       baseColor = texture2D(texMap ,FragTexCoords) ;
 
     } else {
-        color += ambientLight * materialBaseColor * materialAmbient;
-        baseColor = vec4(color, 1.0);
+        baseColor = vec4(materialBaseColor, 1.0);
     }
-     FragColor = baseColor;
+
+     finalColor = vec4(ambientLight,1.0) * baseColor * materialAmbient;
 
     // Light 1
-    //color += computeLighting(FragPos, N, V, true, light1Type, light1Position, light1Direction, light1Intensity);
-    //finalColor = vec4(color, 1.0);
+    color = computeLighting(FragPos, N, V, true, light1Type, light1Position, light1Direction, light1Intensity , baseColor);
+    finalColor += vec4(color, 1.0);
     // Light 2
-   // color += computeLighting(FragPos, N, V, light2Enabled, light2Type, light2Position, light2Direction, light2Intensity);
-    //finalColor = vec4(color, 1.0);
-
+    color = computeLighting(FragPos, N, V, light2Enabled, light2Type, light2Position, light2Direction, light2Intensity, baseColor);
+    finalColor += vec4(color, 1.0);
     
-    //FragColor = finalColor;
+    FragColor = finalColor;
 }

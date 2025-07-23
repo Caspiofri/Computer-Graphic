@@ -71,13 +71,6 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 			}
 		}
 	}
-	for (const auto& v : _vertices) {
-		//print vertex info
-		std::cout << "vertex position: " << glm::to_string(v.position) << std::endl;
-		std::cout << "vertex texcoord: " << glm::to_string(v.texcoord) << std::endl;
-
-	}
-
 
 	size_t F = _indices.size() / 3;
 	std::vector<glm::vec3> faceNormals(F);

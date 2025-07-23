@@ -39,6 +39,17 @@ void GouraudSet::setShaderUniforms() {
 	_shader->setVec3("light2Direction", Settings::_light2Direction);
 	_shader->setVec3("light2Intensity", Settings::_light2Intensity);
 
+	//Texture 
+	if (_hasTexture) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _textureID);
+		_shader->setInt("texMap", 0);
+		_shader->setBool("useTexture", true);
+	}
+	else {
+		_shader->setBool("useTexture", false);
+	}
+
 }
 
 void GouraudSet::setupBuffers() {

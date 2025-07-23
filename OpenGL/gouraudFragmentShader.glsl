@@ -1,11 +1,11 @@
 #version 460 //compatible with OpenGL version 4.6 (latest version)
 
 
-in vec3 vColor;     // World-space position
+in vec4 vColor;     // World-space position
 out vec4 FragColor; 
 
 
 void main()
 {
-    FragColor = vec4(clamp(vColor, 0.0, 1.0), 1.0);
+    FragColor = vColor;
 }
