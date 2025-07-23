@@ -2,6 +2,7 @@
 
 layout(location = 0) in vec4 vPosition;
 layout(location = 1) in vec3 vNormal;
+layout(location = 2) in vec2 vTexCoords;
 
 // MVP matrix - sent via renderable->draw
 uniform mat4 objectMatrix;
@@ -12,20 +13,24 @@ uniform float scale;
 
 out vec3 FragPos;
 out vec3 worldNormal;
+out vec2 FragTexCoords;
 
 void main()
 {
-   mat4 modelMatrix = objectMatrix * worldMatrix ;
-    
+    // Calculate world position
+    mat4 modelMatrix = objectMatrix * worldMatrix ;
     vec4 worldPos4 = vPosition * modelMatrix;
     FragPos = worldPos4.xyz / worldPos4.w;
 
+    // Calculate world normal
     mat3 normalMatrix = mat3(transpose(inverse(modelMatrix)));
     worldNormal = normalize(vNormal * normalMatrix);
 
-    gl_Position = vPosition;
+    // Calculate texture
+    FragTexCoords  = vTexCoords;
 
+
+    gl_Position = vPosition;
 	gl_Position.w = gl_Position.w / scale;
-	
 	gl_Position = gl_Position * objectMatrix * worldMatrix  *view * projection;
 }

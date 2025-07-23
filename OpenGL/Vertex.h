@@ -15,6 +15,6 @@ struct Vertex
 {
 	glm::vec4 position;
 	glm::vec3 normal;
-	//glm::vec3 texcoord;
+	glm::vec2 texcoord;
 	glm::vec4 color;
 };

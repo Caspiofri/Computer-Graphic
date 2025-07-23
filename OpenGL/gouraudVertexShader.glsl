@@ -3,6 +3,7 @@
 // data about each vertex
 layout(location = 0) in vec4 vPosition;
 layout(location = 1) in vec3 vNormal;
+layout(location = 2) in vec2 vTexCoords;
 
 // MVP matrix - sent via renderable->draw
 uniform mat4 objectMatrix;
@@ -36,11 +37,15 @@ uniform vec3 light2Position;
 uniform vec3 light2Direction;
 uniform vec3 light2Intensity;
 
+// Texture
+uniform bool useTexture;
+uniform sampler2D texMap;
+
 // out to framebuffer 
-out vec3 vColor;
+out vec4 vColor;
 
 vec3 computeLighting(vec3 P, vec3 N, vec3 V,
-                     bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity) {
+                     bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity,  vec4 baseColor) {
     if (!enabled) return vec3(0.0);
 
     vec3 L;
@@ -59,7 +64,7 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
         NdotL = abs(NdotL);
 
     // Diffuse
-    vec3 diffuse = materialBaseColor * NdotL * materialDiffuse * intensity ;
+    vec3 diffuse = baseColor.rgb  * NdotL * materialDiffuse * intensity ;
 
     // Specular
     vec3 R = reflect(-L, N);
@@ -87,25 +92,36 @@ void main()
         worldNormal = -worldNormal;
 
     vec3 color = vec3(0.0);
+    vec4 baseColor = vec4(0.0);
+    vec4 finalColor = vec4(0.0);
+
+    if (useTexture) {
+      baseColor = texture2D(texMap ,vTexCoords);
+
+    } else {
+        baseColor = vec4(materialBaseColor, 1.0);
+    }
+
     // Ambient
-    color += ambientLight * materialBaseColor * materialAmbient;
+    //color += ambientLight * materialBaseColor * materialAmbient;
+    finalColor = vec4(ambientLight,1.0) * baseColor * materialAmbient;
 
     // Light 1
     color += computeLighting(worldPos, worldNormal, V,true,
                              light1Type, light1Position,
-                             light1Direction, light1Intensity);
+                             light1Direction, light1Intensity, baseColor);
+    finalColor += vec4(color, 1.0);
 
     // Light 2
     color += computeLighting(worldPos, worldNormal, V,
                            light2Enabled, light2Type, light2Position,
-                            light2Direction, light2Intensity);
+                            light2Direction, light2Intensity, baseColor);
+    finalColor += vec4(color, 1.0);
 
-    vColor = color;
+    vColor = finalColor;
 	
     gl_Position = vPosition;
-
 	gl_Position.w = gl_Position.w / scale;
-	
 	gl_Position = gl_Position * objectMatrix * worldMatrix  *view * projection;
 
 }

@@ -14,6 +14,9 @@ PhongSet::PhongSet(const std::vector<Vertex>& vertices,
 	_indices(indices) {
 	_indexCount = static_cast<GLsizei>(_indices.size());
 	_cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
+	_cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);
+	_hasTexture = false;
+	_textureID = 0;
 	setupBuffers();
 }
 void PhongSet::setShaderUniforms() {
@@ -33,8 +36,6 @@ void PhongSet::setShaderUniforms() {
 	// Light 1
 	_shader->setInt("light1Type", Settings::_light1Type);
 	_shader->setVec3("light1Position", Settings::_light1Pos);
-
-
 	_shader->setVec3("light1Direction", Settings::_light1Direction);
 	_shader->setVec3("light1Intensity", Settings::_light1Intensity);
 
@@ -45,6 +46,16 @@ void PhongSet::setShaderUniforms() {
 	_shader->setVec3("light2Direction", Settings::_light2Direction);
 	_shader->setVec3("light2Intensity", Settings::_light2Intensity);
 
+	//Texture 
+	if (_hasTexture) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _textureID);
+		_shader->setInt("texMap", 0);
+		_shader->setBool("useTexture", true);
+	}
+	else {
+		_shader->setBool("useTexture", false);
+	}
 }
 
 void PhongSet::setupBuffers() {
@@ -70,13 +81,9 @@ void PhongSet::setupBuffers() {
 	glEnableVertexAttribArray(1); // normals
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
-
-	//glEnableVertexAttribArray(1); // Normal
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-
-	//glEnableVertexAttribArray(2); // Texture 
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoord));
-
+	// Texture 
+	glEnableVertexAttribArray(2); // Texture 
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoord));
 
 	glBindVertexArray(0); // Unbind VAO
 }

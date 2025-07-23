@@ -1,6 +1,7 @@
 #version 460 
 in vec3 FragPos;
 in vec3 worldNormal;
+in vec2 FragTexCoords;
 
 out vec4 FragColor;
 
@@ -32,8 +33,13 @@ uniform vec3 light2Position;
 uniform vec3 light2Direction;
 uniform vec3 light2Intensity;
 
+// Texture
+uniform bool useTexture;
+uniform sampler2D texMap;
+
+
 vec3 computeLighting(vec3 P, vec3 N, vec3 V,
-                     bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity) {
+                     bool enabled, int type, vec3 pos, vec3 dir, vec3 intensity, vec4 baseColor) {
     if (!enabled) return vec3(0.0);
  
 
@@ -52,7 +58,7 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
         NdotL = abs(NdotL);
 
     // Diffuse
-    vec3 diffuse = materialBaseColor * NdotL * materialDiffuse * intensity;
+    vec3 diffuse = baseColor.rgb * NdotL * materialDiffuse * intensity;
 
     // Specular
     vec3 R = reflect(-L, N);
@@ -63,8 +69,6 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
 
 void main()
 {
-    vec3 color = vec3(0.0);
-
     vec3 N = normalize(worldNormal);
 
     vec3 V = normalize(viewPos - FragPos);
@@ -72,16 +76,26 @@ void main()
     if (materialDoubleSided && dot(N, V) < 0.0)
         N = -N;
 
+    // Ambient or texture
+    vec3 color = vec3(0.0);
+    vec4 baseColor = vec4(0.0);
+    vec4 finalColor = vec4(0.0);
 
-    // Ambient
-    //color += ambientLight * materialBaseColor * materialAmbient;
+    if (useTexture) {
+      baseColor = texture2D(texMap ,FragTexCoords) ;
+
+    } else {
+        baseColor = vec4(materialBaseColor, 1.0);
+    }
+
+     finalColor = vec4(ambientLight,1.0) * baseColor * materialAmbient;
 
     // Light 1
-    color += computeLighting(FragPos, N, V, true, light1Type, light1Position, light1Direction, light1Intensity);
-  
+    color = computeLighting(FragPos, N, V, true, light1Type, light1Position, light1Direction, light1Intensity , baseColor);
+    finalColor += vec4(color, 1.0);
     // Light 2
-    color += computeLighting(FragPos, N, V, light2Enabled, light2Type, light2Position, light2Direction, light2Intensity);
-     
+    color = computeLighting(FragPos, N, V, light2Enabled, light2Type, light2Position, light2Direction, light2Intensity, baseColor);
+    finalColor += vec4(color, 1.0);
     
-    FragColor = vec4(color, 1.0);
+    FragColor = finalColor;
 }
