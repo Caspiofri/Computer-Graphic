@@ -220,26 +220,25 @@ void TW_CALL loadTexture(void* data)
 {
 	std::wstring fileName = getOpenFileName();
 	GLuint texID = _renderer.loadTextureFromFile(fileName);
-	if (texID && _renderer.getScene().getObject().getMeshLoader().getVertices().size() > 0 && _renderer.getScene().getObject().getMeshLoader().getTexcoords().size() > 0)
+	std::cout << "==== after loading texture ==== \n" << std::endl;
+
+	// Attach the texture to the object
+	if (texID && _renderer.getScene().getObject().getMeshLoader().getVertices().size() > 0 && _renderer.getScene().getObject().getMeshLoader().isUsingTexture())
 	{
 		_renderer.getScene().getObject().setTextureID(texID);
 		if (_renderer.getScene().getObject().getTextureID())
 		{
-			std::cout << "Texture loaded successfully with ID: " << texID << std::endl;
-		
+			std::cout << "Texture loaded successfully with ID: " << texID << std::endl;		
 		}
 		else
 		{
 			std::cerr << "Texture failed to load" << std::endl;
-		}
-		
+		}	
 	}
 	else
 	{
 		std::cerr << "No valid texture" << std::endl;
 	}
-	//std::cout << "The number of triangles in the model is: " << _renderer.getScene().getObject().getMeshLoader().getIndices().size() << std::endl;
-
 }
 
 

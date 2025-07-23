@@ -27,15 +27,16 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 	_texcoords.clear();
 
 	glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	// loading vertices from OBJ
 	for (const auto& v : wf.m_points) {
 		int index = _vertices.size();
 		Vertex vert;
+
 		vert.position = glm::vec4(v[0], v[1], v[2], 1.0f);
 		vert.normal = glm::vec3(0.0f); 
-		
-		// to do - change to texture 
-		//vert.texcoord = glm::vec3(0.0f); // Assuming no texture coordinates for now
 
+		//simple coloring for init scene
 		switch (index % 3) {
 			case 0: color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); break; // red
 			case 1: color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f); break; // green
@@ -43,16 +44,17 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		}
 
 		vert.color = color;
-
 		_vertices.push_back(vert);
 	}
 
+	// loading faces from OBJ - create triangle and texture order
 	for (const auto& f : wf.m_faces) {
 		_indices.push_back(f.v[0]);
 		_indices.push_back(f.v[1]);
 		_indices.push_back(f.v[2]);
 	}
 	if (wf.m_textureCoordinates.size() > 0) {
+		_usingTexture = true;
 		for (size_t fi = 0; fi < wf.m_faces.size(); ++fi) {
 			const auto& face = wf.m_faces[fi];
 			for (int i = 0; i < 3; ++i) {
@@ -68,6 +70,12 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 				}
 			}
 		}
+	}
+	for (const auto& v : _vertices) {
+		//print vertex info
+		std::cout << "vertex position: " << glm::to_string(v.position) << std::endl;
+		std::cout << "vertex texcoord: " << glm::to_string(v.texcoord) << std::endl;
+
 	}
 
 
