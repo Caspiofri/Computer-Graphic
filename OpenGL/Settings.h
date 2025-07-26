@@ -11,6 +11,8 @@ namespace Settings {
 	extern bool _isMeshLoaded; // Flag to check if mesh is loaded
 	extern bool _worldAxisBtn;
 	extern bool _objAxisBtn;
+	extern bool _ShowBezierCurve;
+
 	//camera settings :
 	extern int _screenWidth, _screenHeight;
 	extern float _aspectRatio;
@@ -37,6 +39,13 @@ namespace Settings {
 	extern bool _doubleSided;
 	extern bool _materialChanged;
 	//extern ZBufferMode _zBufferMode;
+
+	// Animation
+	extern glm::vec3 _P0, _P1, _P2, _P3; // Control points for Bezier curve
+	extern float _t;
+	extern bool _useBezier;
+	extern bool _playAnimation;
+	extern float _animationSpeed;
 
 	//light settings: 
 	extern ShadingMode _shadingMode;

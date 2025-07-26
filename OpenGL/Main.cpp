@@ -40,6 +40,7 @@ void MouseMotion(int x, int y);
 void PassiveMouseMotion(int x, int y);
 void Keyboard(unsigned char k, int x, int y);
 void Special(int k, int x, int y);
+void animationState();
 void Terminate(void);
 
 //custom functions:
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
 	glutPassiveMotionFunc(PassiveMouseMotion);
 	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(Special);
-
+	glutIdleFunc(animationState);
 	//send 'glutGetModifers' function pointer to AntTweakBar.
 	//required because the GLUT key event functions do not report key modifiers states.
 	//TwGLUTModifiersFunc(glutGetModifiers);
@@ -195,7 +196,22 @@ void TweakBarSettings()
 		" group='Light2 properties' label='Light 2 Position' opened=true help='Position for Light 2 (if point)' ");
 	TwAddVarRW(bar, "Light2 Color", TW_TYPE_COLOR3F, &Settings::_light2Intensity,
 		" group='Light2 properties' label='Light 2 Color' help='Intensity/Color of Light 2' ");
-	
+
+	/// Animation 
+	TwAddVarRW(bar, "Redner Bezier Curve", TW_TYPE_BOOL8, &Settings::_ShowBezierCurve,
+		"group='Animation' label='Enable Bezier Animation' help='Toggle Bezier curve animation on/off'");
+	TwAddVarRW(bar, "Update Po for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P0,"group = 'Animation' label = 'Po' help = '' ");
+	TwAddVarRW(bar, "Update P1 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P1,"group = 'Animation' label = 'P1' help = '' ");
+	TwAddVarRW(bar, "Update P2 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P2,"group = 'Animation' label = 'P2' help = '' ");
+	TwAddVarRW(bar, "Update P3 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P3,"group = 'Animation' label = 'P3' help = '' ");
+
+	TwAddVarRW(bar, "Position object via Bezier Curve", TW_TYPE_BOOL8, &Settings::_useBezier,
+		"group='Animation' label='Position object via Bezier Curve' help='Position object via Bezier curve'");
+	TwAddVarRW(bar, "Pause/Play", TW_TYPE_BOOL8, &Settings::_playAnimation,
+		"group='Animation' label='Enable Bezier Animation' help='Toggle Bezier curve animation on/off'");
+	TwAddVarRW(bar, "Bezier t", TW_TYPE_FLOAT, &Settings::_t, "group='Animation' label='Bezier t' min=0.0 max=1.0 step=0.01 help='Parameter for Bezier curve'");
+	TwAddVarRW(bar, "Animation Speed", TW_TYPE_FLOAT, &Settings::_animationSpeed, "group='Animation' min=0.01 max=2 step=0.01 label='control speed' help='Speed of the animation'");
+
 }
 
 void TW_CALL loadOBJModel(void *data)
@@ -353,6 +369,14 @@ void Special(int k, int x, int y)
 	glutPostRedisplay();
 }
 
+void animationState()
+{
+	if (Settings::_playAnimation) {
+		glutPostRedisplay();
+
+	}
+
+}
 
 // Function called at exit
 void Terminate(void)

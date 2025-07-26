@@ -31,16 +31,8 @@ void TriangleMesh::setupBuffers() {
 	glEnableVertexAttribArray(0); // Position
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 
-	// DEBUGING
 	glEnableVertexAttribArray(1); // color
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
-
-
-	//glEnableVertexAttribArray(1); // Normal
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-
-	//glEnableVertexAttribArray(2); // Texture 
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texcoord));
 
 
 	glBindVertexArray(0); // Unbind VAO

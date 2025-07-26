@@ -34,6 +34,7 @@ public:
 	Shader* _lineShader = nullptr;
 	Shader* _gouraudShader = nullptr;
 	Shader* _phongShader = nullptr;
+	Shader* _bezierShader = nullptr;
 	Scene _scene;
 
 	GLuint loadTextureFromFile(const std::wstring& filename);

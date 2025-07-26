@@ -109,10 +109,42 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 	_isCube = false;
 	return true;
 }
+// Bezier curve visualization
 
-void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
+std::vector<Vertex> Scene::buildVisualBezier() {
+	int num = 100;
+	std::vector<glm::vec3> sampledPoints = _bezierCurve.getSampledPoints(num);
+	std::cout << "sampledPoints:" << std::endl;
+	for (int i = 0; i < sampledPoints.size(); i++) {
+		std::cout << sampledPoints[i].x << " " << sampledPoints[i].y << " " << sampledPoints[i].z << std::endl;
+	}
+
+	std::vector<Vertex> lineVertices;
+	for (int i = 0; i < sampledPoints.size() - 1; i++) {
+		Vertex v1, v2;
+		v1.position = glm::vec4(sampledPoints[i], 1.0f);
+		v2.position = glm::vec4(sampledPoints[i + 1], 1.0f);
+		v1.normal = glm::vec3(0.0f);
+		v2.normal = glm::vec3(0.0f);
+		v1.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		v2.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		lineVertices.push_back(v1);
+		lineVertices.push_back(v2);
+	}
+
+	return lineVertices;
+}
+void Scene::draw(glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
 
+	if (Settings::_playAnimation || Settings::_useBezier) {
+		glm::vec3 position = _bezierCurve.calculateBezierPoint(Settings::_t);
+		std::cout << "position: " << position.x << " " << position.y << " " << position.z << std::endl;
+		glm::mat4 translation = MathLib::translation(position);
+
+		//currently without translation
+		objectMatrix = translation;
+	}
 	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale , _camera.getPosition());
 
 	if (!_isCube && Settings::_BBoxBtn)
@@ -124,6 +156,10 @@ void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, co
 	{
 		_object.getNormalDrawer()->draw(objectMatrix, worldMatrix, view, projection, scale);
 	}
+	if (Settings::_ShowBezierCurve) {
+		_bezierDrawer->draw(glm::mat4(1.0f), worldMatrix, view, projection, scale);
+	}
+
 	if (Settings::_worldAxisBtn)
 	{
 		_worldAxisDrawer->draw(glm::mat4(1.0f), worldMatrix, view, projection, scale);
@@ -136,15 +172,13 @@ void Scene::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, co
 // ===== Initialize Camera in Scene =====
 void Scene::initializeScene(Shader* lineShader) {
 
-	/*_light1 = Light();
-	_light2 = Light();
-	_light2.setEnabled(false);
 
-	_ambientLight = glm::vec3(0.2f);*/ // a low ambient intensity default (or 1.0f for full white)
 	std::vector<Vertex> worldAxisPoints = createAxisVertices(1.0f);
 	std::vector<Vertex> objectAxisPoints = createAxisVertices(0.5f);
+	std::vector<Vertex> bezierPoints = buildVisualBezier();
 	setWorldAxisDrawer(std::make_unique<LineSet>(worldAxisPoints, lineShader));
 	setObjectAxisDrawer(std::make_unique<LineSet>(objectAxisPoints, lineShader));
+	setBezierDrawer(std::make_unique<LineSet>(bezierPoints, lineShader));
 
 	_camera = Camera();
 
@@ -220,3 +254,27 @@ void Scene::updateLight() {
 	_ambientLight = glm::vec3(Settings::_ambientLight);
 
 }
+
+void Scene::updateAnimation()
+{
+	// todo - change acording to speed settings
+	float deltaTime = 0.01;
+	if (_animForward)
+	{
+		Settings::_t += Settings::_animationSpeed * deltaTime;
+	}
+	else {
+		Settings::_t -= Settings::_animationSpeed * deltaTime;
+	}
+	if(Settings::_t > 1.0f)
+	{
+		Settings::_t = 1.0f;
+		_animForward = false;
+	}
+	else if(Settings::_t < 0.0f)
+	{
+		Settings::_t = 0.0f;
+		_animForward = true;
+	}
+}
+

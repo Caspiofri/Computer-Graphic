@@ -14,6 +14,7 @@
     <ClCompile Include="..\Utils\Utils.cpp" />
     <ClCompile Include="..\Utils\wavefront_obj.cpp" />
     <ClCompile Include="BBox.cpp" />
+    <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GouraudSet.cpp" />
     <ClCompile Include="LineSet.cpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="..\Utils\Utils.h" />
     <ClInclude Include="..\Utils\wavefront_obj.h" />
     <ClInclude Include="BBox.h" />
+    <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="common_glm_config.h" />
     <ClInclude Include="GouraudSet.h" />
@@ -63,6 +65,9 @@
     <None Include="gouraudVertexShader.glsl" />
     <None Include="phongFragmentShader.glsl" />
     <None Include="phongVertexShader.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0E4AD993-21E0-4CF9-910B-3E132BF6083C}</ProjectGuid>

@@ -143,15 +143,16 @@ void Renderer::drawScene()
 	mat_view = getScene().getCamera().getViewMatrix();
 	
 	getScene().updateMaterial();
-	getScene().updateLight();
-
+	getScene().updateLight();\
+	if (Settings::_playAnimation) {
+		getScene().updateAnimation();
+	}
 	if(!_isMeshLoaded)
 	{
 		// If no mesh is loaded, draw a default cube
 		int numIndices = 36; // 6 faces * 2 triangles per face * 3 indices per triangle
 		_scene.initSceneWithCube(_triangleShader);
 	}
-	
 	//_scene.draw(mat_rotation, mat_translation, mat_projection, Settings::_scale);
 	_scene.draw(objectMatrix, worldMatrix, mat_projection, mat_view, Settings::_scale);
 

@@ -62,6 +62,14 @@ namespace Settings {
 	glm::vec3 _light2Intensity = glm::vec3(1.0f);
 	glm::vec3 _light2Direction = glm::vec3(0.0f, 0.0f, -1.0f);
 	LightType _light2Type = DIRECTIONAL;
+	
+	// Animation
+	bool _ShowBezierCurve = false;
+	bool _useBezier = false;
+	glm::vec3 _P0 = glm::vec3(-1.0f, 0.0f, 0.0f), _P1 = glm::vec3(-0.5f, 1.0f, 0.0f), _P2 = glm::vec3(0.5f, -1.0f, 0.0f), _P3 = glm::vec3(1.0f, 0.0f, 0.0f);// control points for Bizier curve
+	float _t = 1.0f;
+	bool _playAnimation = false;
+	float _animationSpeed = 0.2f;
 
 
 	// screen propeties

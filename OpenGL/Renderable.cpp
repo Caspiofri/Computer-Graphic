@@ -46,6 +46,7 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatri
 		glDrawElements(_drawMode, _indexCount, GL_UNSIGNED_INT, 0);
 	}
 	else {
+		glLineWidth(3.0f);
 		glDrawArrays(_drawMode, 0, _indexCount);
 	}
 

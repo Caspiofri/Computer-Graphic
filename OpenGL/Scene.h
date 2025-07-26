@@ -3,20 +3,18 @@
 #include <Glew/include/gl/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
-//#include "Utils.h"
-//#include "../Obj Parser/wavefront_obj.h"
 #include "Camera.h"
-//#include <glm/ext/matrix_float4x4.hpp>
 #include "MeshLoader.h"
 #include "TriangleMesh.h"
 #include "Object.h"
-//#include "Mathlib.h"
-//#include "Light.h"
+#include "Light.h"
+#include "bezierCurve.h"
+
 
 class Scene {
 public:
 	bool loadModel(const std::wstring& filename, Shader* meshShader, Shader* lineShader, Shader* grouaudShader , Shader* phongShader);
-	void draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
+	void draw(glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale);
 	void initializeScene(Shader* lineShader);
 	// Loading of the model from a file
 	//void draw(const glm::mat4& rotation, const glm::mat4& translation, const glm::mat4& projection);          // Render the scene with the given view-projection matrix
@@ -29,6 +27,10 @@ public:
 	void updateMaterial();
 
 	void updateLight();
+
+	void updateAnimation();
+
+	std::vector<Vertex> buildVisualBezier();
 	
 	std::vector<Vertex> convertNormalsToLine(const std::vector<Vertex>& vertices);
 
@@ -38,6 +40,10 @@ public:
 	void setObjectAxisDrawer(std::unique_ptr<LineSet> lineSet) {
 		_objectAxisDrawer = std::move(lineSet);
 	}
+	void setBezierDrawer(std::unique_ptr<LineSet> lineSet) {
+		_bezierDrawer = std::move(lineSet);
+	}
+
 
 	void setWorldAxisDrawer(bool isCube) { _isCube = isCube; }
 
@@ -58,10 +64,13 @@ private:
 	bool _showBBox = false;
 	std::unique_ptr<LineSet> _worldAxisDrawer;
 	std::unique_ptr<LineSet> _objectAxisDrawer;
+	std::unique_ptr<LineSet> _bezierDrawer;
+
 
 	Light _light1, _light2;
 	glm::vec3 _ambientLight;
-
+	BezierCurve _bezierCurve;
+	bool _animForward = true;
 };
 
 
