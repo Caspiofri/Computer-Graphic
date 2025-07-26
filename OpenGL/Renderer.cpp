@@ -39,7 +39,6 @@ GLuint Renderer::loadTextureFromFile(const std::wstring& filename) {
 	FreeImage_Unload(bitmap);
 	if (!image) {
 		std::cout << "Failed to convert image: " << filename.c_str() << "\n";
-		std::cout << "Failed to convert image: " << filename.c_str() << "\n";
 		return 0;
 	}
 	imageRawData = (BYTE*)FreeImage_GetBits(image);

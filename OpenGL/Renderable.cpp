@@ -15,13 +15,10 @@ Renderable::~Renderable() {
 }
 
 void Renderable::setShaderUniforms() {
-	std::cout << "[Renderable::setShaderUniforms] setting default uniforms" << std::endl;
 	// set differently in server renderable classes
 }
 void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view , const glm::mat4& projection,const float scale)
 {
-	std::cout << "[Renderable::draw]: start drawing" << std::endl;
-
 	if (!_shader) {
 		std::cerr << "[Renderable::draw] Error: shader is null!" << std::endl;
 		return;
@@ -38,7 +35,6 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatri
 
 	_shader->setFloat("scale", scale);
 	GLboolean isVAO = glIsVertexArray(_vao);
-	std::cout << "[DEBUG] glIsVertexArray(" << _vao << ") = " << isVAO << std::endl;
 
 	glBindVertexArray(_vao);
 

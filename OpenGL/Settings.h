@@ -23,14 +23,14 @@ namespace Settings {
 	extern double _camTransX, _camTransY, _camTransZ;
 
 	// object transformation settings:
-	extern float _scale; // Scale factor for the model
+	extern float _scale; 
 
 	//object settings :
-	extern float _objQuaternion[4]; // Quaternion for rotation [x, y, z, w]
+	extern float _objQuaternion[4];
 	extern double _objTransX, _objTransY, _objTransZ;
 
 	//world settings :
-	extern float _worldQuaternion[4]; // Quaternion for rotation [x, y, z, w]
+	extern float _worldQuaternion[4]; 
 	extern double _worldTransX, _worldTransY, _worldTransZ;
 
 	//material settings :
@@ -45,7 +45,16 @@ namespace Settings {
 	extern float _t;
 	extern bool _useBezier;
 	extern bool _playAnimation;
+	extern bool _useSlerp;
 	extern float _animationSpeed;
+
+	// slerp 
+	extern double _startSlerpRotX, _startSlerpRotY, _startSlerpRotZ;
+	extern double _endSlerpRotX, _endSlerpRotY, _endSlerpRotZ;
+	
+	//Euler
+	extern double _startEulerRotX, _startEulerRotY, _startEulerRotZ;
+	extern double _endEulerRotX, _endEulerRotY, _endEulerRotZ;
 
 	//light settings: 
 	extern ShadingMode _shadingMode;

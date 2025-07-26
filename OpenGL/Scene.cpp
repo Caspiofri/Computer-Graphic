@@ -134,16 +134,52 @@ std::vector<Vertex> Scene::buildVisualBezier() {
 
 	return lineVertices;
 }
+
+glm::mat4 Scene::calcAnimation() {
+
+	//position
+	glm::vec3 position = _bezierCurve.calculateBezierPoint(Settings::_t);
+	glm::mat4 translation = MathLib::translation(position);
+
+	//rotation
+	glm::mat4 rotation;
+	if (Settings::_useSlerp){
+		std::cout << "t" << Settings::_t << std::endl;
+
+		float startQuat[4], endQuat[4];
+		std::cout << "Settings RotX:" << Settings::_startSlerpRotX << ", Y:" << Settings::_startSlerpRotY << ", Z:" << Settings::_startSlerpRotZ << ", " << std::endl;
+
+		MathLib::convertEulerToQuaternion(Settings::_startSlerpRotX, Settings::_startSlerpRotY, Settings::_startSlerpRotZ, &startQuat[0]);
+		std::cout << "startQuat:" << startQuat[0] <<"," << startQuat[1] << ", " << startQuat[2] << ", " << startQuat[3] <<  std::endl;
+
+		MathLib::convertEulerToQuaternion(Settings::_endSlerpRotX, Settings::_endSlerpRotY, Settings::_endSlerpRotZ, &endQuat[0]);
+		std::cout << "endQuat:" << endQuat[0] << "," << endQuat[1] << ", " << endQuat[2] << ", " << endQuat[3] << std::endl;
+
+		float resultQuat[4];
+		MathLib::slerp_calc(&startQuat[0], &endQuat[0], Settings::_t, &resultQuat[0]);
+		std::cout << "resultQuat:" << resultQuat[0] << "," << resultQuat[1] << ", " << resultQuat[2] << ", " << resultQuat[3] << std::endl;
+
+		ConvertQuaternionToMatrix(&resultQuat[0], rotation);
+	}else {
+		std::cout << "Euler" << std::endl;
+		glm::vec3 rotation_vec = MathLib::euler_calc();
+		std::cout << "rotation vec: " << rotation_vec.x << " " << rotation_vec.y << " " << rotation_vec.z << std::endl;
+		rotation = MathLib::rotation(rotation_vec);
+		std::cout << "rotation mat:" << glm::to_string(rotation) << std::endl;
+	}
+	std::cout << "translation mat:" << glm::to_string(translation) << std::endl;
+	std::cout << "returned mat:" << glm::to_string(rotation * translation) << std::endl;
+
+	return rotation * translation;
+
+}
+
 void Scene::draw(glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& projection, const glm::mat4& view, float scale)
 {
 
-	if (Settings::_playAnimation || Settings::_useBezier) {
-		glm::vec3 position = _bezierCurve.calculateBezierPoint(Settings::_t);
-		std::cout << "position: " << position.x << " " << position.y << " " << position.z << std::endl;
-		glm::mat4 translation = MathLib::translation(position);
+	if (Settings::_playAnimation || Settings::_useBezier) {;
 
-		//currently without translation
-		objectMatrix = translation;
+		objectMatrix = calcAnimation();
 	}
 	_object.draw(objectMatrix, worldMatrix , view ,  projection, scale , _camera.getPosition());
 

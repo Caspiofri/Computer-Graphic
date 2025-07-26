@@ -73,13 +73,11 @@ GLuint Shader::initShader(std::string vertexShaderFileName, std::string fragment
 		//exit( EXIT_FAILURE );
 	}
 
-	std::cerr << "[Shader] ended initShader" << std::endl;
 
 	return program;
 }
 
 void Shader::use() const {
-	std::cerr << "[Shader] call use" << std::endl;
 
 	glUseProgram(_id);
 }

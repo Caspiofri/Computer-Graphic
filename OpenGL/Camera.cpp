@@ -110,7 +110,6 @@ void Camera::updateFromUI() {
     }
 
     _target = _position + _forward;
-    std::cerr << "[Camera::updateFromUI] camera _target: " << glm::to_string(_target) << ".\n";
 
     glm::vec3 worldUp = glm::vec3(0, 1, 0);
     _up = MathLib::normalize(worldUp);

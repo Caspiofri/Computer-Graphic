@@ -9,6 +9,7 @@
 #include "Object.h"
 #include "Light.h"
 #include "bezierCurve.h"
+#include "MathLib.h"
 
 
 class Scene {
@@ -54,6 +55,9 @@ public:
 	const Light& getLight1() const { return _light1; }
 	const Light& getLight2() const { return _light2; }
 	const glm::vec3 getAmbientLight() const { return _ambientLight; }
+
+	// animation
+	glm::mat4 calcAnimation();
 
 private:
 

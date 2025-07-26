@@ -32,7 +32,7 @@ namespace Settings {
 
     // Camera Controls
     double _camTransX = 0.0, _camTransY = 0.0, _camTransZ = 5.0;
-	double _camRotX = 0.0, _camRotY = 0.0, _camRotZ = 0.0;
+	double _camRotX = 0.0, _camRotY = 0.0, _camRotZ = 0.0; // yaw, pitch, roll angels
 
 
 	//settings for material 
@@ -70,7 +70,15 @@ namespace Settings {
 	float _t = 1.0f;
 	bool _playAnimation = false;
 	float _animationSpeed = 0.2f;
+	bool _useSlerp = true;
 
+	//slerp 
+	double _startSlerpRotX, _startSlerpRotY, _startSlerpRotZ;
+	double _endSlerpRotX, _endSlerpRotY, _endSlerpRotZ;
+
+	//Euler
+	double _startEulerRotX, _startEulerRotY, _startEulerRotZ;
+	double _endEulerRotX, _endEulerRotY, _endEulerRotZ;
 
 	// screen propeties
 	void setScreenSize(int width, int height) {

@@ -132,9 +132,6 @@ void TW_CALL loadOBJModel(void *data)
 		std::cerr << "Failed to load obj file" << std::endl;
 	}
 
-	std::cout << "The number of vertices in the model is: " << objScene.m_points.size() << std::endl;
-	std::cout << "The number of triangles in the model is: " << objScene.m_faces.size() << std::endl;
-
 }
 
 

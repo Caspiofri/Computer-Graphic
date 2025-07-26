@@ -90,32 +90,34 @@ glm::mat4 MathLib::scaling(const glm::vec3& v1) {
 
 glm::mat4 MathLib::rotationX(float angle) {
     glm::mat4 mat = MathLib::identity();
-    float rad = angle * M_PI / 180.0f;
-    mat[1][1] = std::cos(rad);
-    mat[1][2] = -std::sin(rad);
-    mat[2][1] = std::sin(rad);
-    mat[2][2] = std::cos(rad);
+    mat[1][1] = std::cos(angle);
+    mat[1][2] = -std::sin(angle);
+    mat[2][1] = std::sin(angle);
+    mat[2][2] = std::cos(angle);
     return mat;
 }
 
 glm::mat4 MathLib::rotationY(float angle) {
     glm::mat4 mat = MathLib::identity();
-    float rad = angle * M_PI / 180.0f;
-    mat[0][0] = std::cos(rad);
-    mat[0][2] = std::sin(rad);
-    mat[2][0] = -std::sin(rad);
-    mat[2][2] = std::cos(rad);
+    mat[0][0] = std::cos(angle);
+    mat[0][2] = std::sin(angle);
+    mat[2][0] = -std::sin(angle);
+    mat[2][2] = std::cos(angle);
     return mat;
 }
 
 glm::mat4 MathLib::rotationZ(float angle) {
     glm::mat4 mat = MathLib::identity();
-    float rad = angle * M_PI / 180.0f;
-    mat[0][0] = std::cos(rad);
-    mat[0][1] = -std::sin(rad);
-    mat[1][0] = std::sin(rad);
-    mat[1][1] = std::cos(rad);
+    mat[0][0] = std::cos(angle);
+    mat[0][1] = -std::sin(angle);
+    mat[1][0] = std::sin(angle);
+    mat[1][1] = std::cos(angle);
     return mat;
+}
+glm::mat4 MathLib::rotation(glm::vec3 rotationVec) {
+	glm::mat4 mat = MathLib::identity();
+    mat = MathLib::rotationZ(rotationVec.z) * MathLib::rotationY(rotationVec.y) * MathLib::rotationX(rotationVec.x);
+	return mat;
 }
 
 
@@ -137,7 +139,7 @@ glm::mat4 MathLib::perspective(float fov, float aspect, float near, float far) {
 }
 
 glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up) {
-    
+
     glm::vec3 f = glm::normalize(target - eye);     // forward
     glm::vec3 r = glm::normalize(glm::cross(f, up)); // right
     glm::vec3 u = glm::cross(r, f);                 // recalculated up
@@ -161,4 +163,68 @@ glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const g
     translation[2][3] = -eye.z;
 
     return rotation * translation;
+}
+
+void MathLib::convertEulerToQuaternion(float RotX, float RotY, float RotZ, float outQuat[4])
+{
+    std::cout << "RotX:" << RotX << ", Y:" << RotY << ", Z:" << RotZ << ", " << std::endl;
+
+    float pitch = glm::radians(RotX);
+    float yaw = glm::radians(RotY);
+    float roll = glm::radians(RotZ);
+
+    float cy = cos(yaw * 0.5f);
+    float sy = sin(yaw * 0.5f);
+    float cp = cos(pitch * 0.5f);
+    float sp = sin(pitch * 0.5f);
+    float cr = cos(roll * 0.5f);
+    float sr = sin(roll * 0.5f);
+
+    outQuat[3] = cr * cp * cy + sr * sp * sy; // w
+    outQuat[0] = sr * cp * cy - cr * sp * sy; // x
+    outQuat[1] = cr * sp * cy + sr * cp * sy; // y
+    outQuat[2] = cr * cp * sy - sr * sp * cy; // z
+
+    float length = sqrt(outQuat[0] * outQuat[0] + outQuat[1] * outQuat[1] +
+        outQuat[2] * outQuat[2] + outQuat[3] * outQuat[3]);
+
+    if (length > 0.0f) {
+        for (int i = 0; i < 4; i++) {
+            outQuat[i] /= length;
+        }
+    }
+    else {
+        // Fallback identity quaternion
+        outQuat[0] = outQuat[1] = outQuat[2] = 0.0f;
+        outQuat[3] = 1.0f;
+    }
+}
+
+void MathLib::slerp_calc(const float q0[4], const float q1[4], float t, float result[4])
+{
+    float dot = q0[0] * q1[0] + q0[1] * q1[1] + q0[2] * q1[2] + q0[3] * q1[3];
+
+    float phi = acos(dot);
+    float sin_phi = sin(phi);
+    float a_u = sin((1.0f - t) * phi) / sin_phi;
+    float b_u = sin(t * phi) / sin_phi;
+
+
+    for (int i = 0; i < 4; i++) {
+        result[i] = a_u * q0[i] + b_u * q1[i];
+    }
+}
+ 
+glm::vec3 MathLib::euler_calc()
+{
+    float yaw0 = glm::radians(Settings::_startEulerRotX);
+    float pitch0 = glm::radians(Settings::_startEulerRotY);
+    float roll0 = glm::radians(Settings::_startEulerRotZ);
+    float yaw1 = glm::radians(Settings::_endEulerRotX);
+    float pitch1 = glm::radians(Settings::_endEulerRotY);
+    float roll1 = glm::radians(Settings::_endEulerRotZ);
+	float yaw = yaw0 + (yaw1 - yaw0) * Settings::_t;
+	float pitch = pitch0 + (pitch1 - pitch0) * Settings::_t;
+	float roll = roll0 + (roll1 - roll0) * Settings::_t;
+	return glm::vec3(yaw, pitch, roll);
 }

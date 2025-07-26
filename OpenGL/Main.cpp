@@ -106,25 +106,25 @@ void TweakBarSettings()
 	//add 'g_scale' to 'bar': this is a modifiable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [s] and [S].
 	TwAddVarRW(bar, "Scale", TW_TYPE_FLOAT, &Settings::_scale, " label='Scale' min=0.01 max=10.0 step=0.01 group=Engine keyIncr=s keyDecr=S");
 	//add 'g_objQuaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
-	
+
 	// Object Transformations
 	TwAddVarRW(bar, "Object Rotation", TW_TYPE_QUAT4F, &Settings::_objQuaternion,
 		" group='Object Transform' label='Object rotation' opened=true help='This is object rotation' ");
 	TwAddVarRW(bar, "Translate Object X", TW_TYPE_DOUBLE, &Settings::_objTransX, " group='Object Transform' min=-10 max=10 step=0.1 ");
 	TwAddVarRW(bar, "Translate Object Y", TW_TYPE_DOUBLE, &Settings::_objTransY, "group='Object Transform' min=-10 max=10 step=0.1 ");
 	TwAddVarRW(bar, "Translate Object Z", TW_TYPE_DOUBLE, &Settings::_objTransZ, "group='Object Transform' min=-10 max=10 step=0.1 ");
-	
+
 	// world Transformations
 	TwAddVarRW(bar, "World Rotation", TW_TYPE_QUAT4F, &Settings::_worldQuaternion,
-		" group='World Transform' label='World rotation' opened=true help='This is World rotation' ");	
+		" group='World Transform' label='World rotation' opened=true help='This is World rotation' ");
 	TwAddVarRW(bar, "Translate World X", TW_TYPE_DOUBLE, &Settings::_worldTransX, " group='World Transform' step=0.1 ");
 	TwAddVarRW(bar, "Translate World Y", TW_TYPE_DOUBLE, &Settings::_worldTransY, " group='World Transform' step=0.1 ");
 	TwAddVarRW(bar, "Translate World Z", TW_TYPE_DOUBLE, &Settings::_worldTransZ, " group='World Transform' step=0.1 ");
 
 	// Perspective
-	TwAddVarRW(bar, "Near Plane", TW_TYPE_DOUBLE, &Settings::_nearPlane,"group='Perspective' min=0.01 max=10 step=0.01");
-	TwAddVarRW(bar, "Far Plane", TW_TYPE_DOUBLE, &Settings::_farPlane,"group='Perspective' min=11 max=5000 step=10");
-	TwAddVarRW(bar, "Field of View", TW_TYPE_DOUBLE, &Settings::_fov,"group='Perspective' min=0.1 max=120 step=1");
+	TwAddVarRW(bar, "Near Plane", TW_TYPE_DOUBLE, &Settings::_nearPlane, "group='Perspective' min=0.01 max=10 step=0.01");
+	TwAddVarRW(bar, "Far Plane", TW_TYPE_DOUBLE, &Settings::_farPlane, "group='Perspective' min=11 max=5000 step=10");
+	TwAddVarRW(bar, "Field of View", TW_TYPE_DOUBLE, &Settings::_fov, "group='Perspective' min=0.1 max=120 step=1");
 
 	// Camera Controls
 	TwAddVarRW(bar, "Translate Camera X", TW_TYPE_DOUBLE, &Settings::_camTransX, " group='Camera Controls' min=-10 max=10 step=0.1 ");
@@ -199,21 +199,42 @@ void TweakBarSettings()
 
 	/// Animation 
 	TwAddVarRW(bar, "Redner Bezier Curve", TW_TYPE_BOOL8, &Settings::_ShowBezierCurve,
-		"group='Animation' label='Enable Bezier Animation' help='Toggle Bezier curve animation on/off'");
-	TwAddVarRW(bar, "Update Po for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P0,"group = 'Animation' label = 'Po' help = '' ");
-	TwAddVarRW(bar, "Update P1 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P1,"group = 'Animation' label = 'P1' help = '' ");
-	TwAddVarRW(bar, "Update P2 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P2,"group = 'Animation' label = 'P2' help = '' ");
-	TwAddVarRW(bar, "Update P3 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P3,"group = 'Animation' label = 'P3' help = '' ");
+		"group='Animation' label='Redner Bezier Curve' help='Toggle Bezier curve animation on/off'");
+	TwAddVarRW(bar, "Update Po for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P0, "group = 'Animation' label = 'Po' help = '' ");
+	TwAddVarRW(bar, "Update P1 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P1, "group = 'Animation' label = 'P1' help = '' ");
+	TwAddVarRW(bar, "Update P2 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P2, "group = 'Animation' label = 'P2' help = '' ");
+	TwAddVarRW(bar, "Update P3 for the Bezier curve", TW_TYPE_DIR3F, &Settings::_P3, "group = 'Animation' label = 'P3' help = '' ");
 
+	// Bezier curve controlers
 	TwAddVarRW(bar, "Position object via Bezier Curve", TW_TYPE_BOOL8, &Settings::_useBezier,
 		"group='Animation' label='Position object via Bezier Curve' help='Position object via Bezier curve'");
 	TwAddVarRW(bar, "Pause/Play", TW_TYPE_BOOL8, &Settings::_playAnimation,
 		"group='Animation' label='Enable Bezier Animation' help='Toggle Bezier curve animation on/off'");
 	TwAddVarRW(bar, "Bezier t", TW_TYPE_FLOAT, &Settings::_t, "group='Animation' label='Bezier t' min=0.0 max=1.0 step=0.01 help='Parameter for Bezier curve'");
 	TwAddVarRW(bar, "Animation Speed", TW_TYPE_FLOAT, &Settings::_animationSpeed, "group='Animation' min=0.01 max=2 step=0.01 label='control speed' help='Speed of the animation'");
+	TwAddVarRW(bar, "Use sLerp", TW_TYPE_BOOL8, &Settings::_useSlerp, "group='Animation' min=0.01 max=2 step=0.01 label='switch between slerp and Euler'");
 
+	//// sLerp animation controlers
+	/*TwAddVarRW(bar, "Start Rotation", TW_TYPE_QUAT4F, &Settings::_startQuaternion,
+		" group='Animation' label='Start Animation Orentation' opened=true help='This is Animation start Orentation' ");
+	TwAddVarRW(bar, "end Rotation", TW_TYPE_QUAT4F, &Settings::_endQuaternion,
+		" group='Animation' label='end Animation Orentation' opened=true help='This is Animation end Orentation' ");*/
+	TwAddVarRW(bar, "Start sLerp Rotation X", TW_TYPE_DOUBLE, &Settings::_startSlerpRotX, "group='Animation Start sLerp'  label='Start X sLerp Orentation' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Start sLerp Rotation Y", TW_TYPE_DOUBLE, &Settings::_startSlerpRotY, "group='Animation Start sLerp' label='Start Y sLerp Orentation'  min=-90. max=90.0f step=1 ");
+	TwAddVarRW(bar, "Start sLerp Rotation Z", TW_TYPE_DOUBLE, &Settings::_startSlerpRotZ, "group='Animation Start sLerp'  label='Start Z sLerp Orentation' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "End sLerp Rotation X", TW_TYPE_DOUBLE, &Settings::_endSlerpRotX, "group='Animation End sLerp' label='End X sLerp Orentation'  min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "End sLerp Rotation Y", TW_TYPE_DOUBLE, &Settings::_endSlerpRotY, "group='Animation End sLerp' label='End Y sLerp Orentation'  min=-90.0f max=90.0f step=1 ");
+	TwAddVarRW(bar, "End sLerp Rotation Z", TW_TYPE_DOUBLE, &Settings::_endSlerpRotZ, "group='Animation End sLerp' label='End Z sLerp Orentation'  min=-180 max=180 step=1 ");
+
+	// Euler controlers
+	TwAddVarRW(bar, "Start Euler Rotation X", TW_TYPE_DOUBLE, &Settings::_startEulerRotX, "group='Animation Start Euler'  label='Start X Euler Orentation' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Start Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_startEulerRotY, "group='Animation Start Euler' label='Start Y Euler Orentation'  min=-90. max=90.0f step=1 ");
+	TwAddVarRW(bar, "Start Euler Rotation Z", TW_TYPE_DOUBLE, &Settings::_startEulerRotZ, "group='Animation Start Euler'  label='Start Z Euler Orentation' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "End Euler Rotation X", TW_TYPE_DOUBLE, &Settings::_endEulerRotX, "group='Animation End Euler' label='End X Euler Orentation'  min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "End Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_endEulerRotY, "group='Animation End Euler' label='End Y Euler Orentation'  min=-90.0f max=90.0f step=1 ");
+	TwAddVarRW(bar, "End Euler Rotation Z", TW_TYPE_DOUBLE, &Settings::_endEulerRotZ, "group='Animation End Euler' label='End Z Euler Orentation'  min=-180 max=180 step=1 ");
 }
-
+ 
 void TW_CALL loadOBJModel(void *data)
 {
 	std::wstring fileName = getOpenFileName();
@@ -226,17 +247,13 @@ void TW_CALL loadOBJModel(void *data)
 	else
 	{
 		std::cerr << "Failed to load obj file" << std::endl;
-		std::cerr << "Failed to load obj file" << std::endl;
 	}
-	std::cout << "The number of vertices in the model is: " << _renderer.getScene().getObject().getMeshLoader().getVertices().size() << std::endl;
-	std::cout << "The number of triangles in the model is: " << _renderer.getScene().getObject().getMeshLoader().getIndices().size() << std::endl;
 
 }
 void TW_CALL loadTexture(void* data)
 {
 	std::wstring fileName = getOpenFileName();
 	GLuint texID = _renderer.loadTextureFromFile(fileName);
-	std::cout << "==== after loading texture ==== \n" << std::endl;
 
 	// Attach the texture to the object
 	if (texID && _renderer.getScene().getObject().getMeshLoader().getVertices().size() > 0 && _renderer.getScene().getObject().getMeshLoader().isUsingTexture())

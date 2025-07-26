@@ -53,12 +53,10 @@ void GouraudSet::setShaderUniforms() {
 }
 
 void GouraudSet::setupBuffers() {
-	std::cerr << "[GouraudSet] in setupBuffers" << std::endl;
 
 	// Building buffers
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
-	std::cout << "[GouraudSet] _vao = " << _vao << std::endl;
 
 	glGenBuffers(1, &_vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
