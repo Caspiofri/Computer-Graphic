@@ -7,9 +7,10 @@
 
 class LineSet : public Renderable {
 public:
-	LineSet(const std::vector<Vertex>& points, Shader* shader);
+	LineSet(const std::vector<Vertex>& points,float lineWidth, Shader* shader);
 	void setupBuffers() override;
 
 private:
 	std::vector<Vertex> _points;
+	float _lineWidth = 1.0f;
 };

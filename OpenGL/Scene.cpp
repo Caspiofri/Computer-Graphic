@@ -43,19 +43,17 @@ std::vector<Vertex> convertNormalsToLines(const std::vector<Vertex>& vertices) {
 std::vector<Vertex> createAxisVertices(float length = 1.0f) {
 	std::vector<Vertex> vertices;
 
-	glm::vec4 origin(0.0f, 0.0f, 0.0f, 1.0f);
-
 	// X axis - red
-	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(1, 0, 0, 1) });
-	vertices.push_back(Vertex{ glm::vec4(length, 0, 0, 1), glm::vec3(0), glm::vec4(1, 0, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0),glm::vec2(0), glm::vec4(1, 0, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(length, 0, 0, 1), glm::vec3(0),glm::vec2(0), glm::vec4(1, 0, 0, 1) });
 
 	// Y axis - green
-	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(0, 1, 0, 1) });
-	vertices.push_back(Vertex{ glm::vec4(0, length, 0, 1), glm::vec3(0), glm::vec4(0, 1, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0),glm::vec2(0), glm::vec4(0, 1, 0, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, length, 0, 1), glm::vec3(0),glm::vec2(0), glm::vec4(0, 1, 0, 1) });
 
 	// Z axis - blue
-	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0), glm::vec4(0, 0, 1, 1) });
-	vertices.push_back(Vertex{ glm::vec4(0, 0, length, 1), glm::vec3(0), glm::vec4(0, 0, 1, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, 0, 0, 1), glm::vec3(0),glm::vec2(0), glm::vec4(0, 0, 1, 1) });
+	vertices.push_back(Vertex{ glm::vec4(0, 0, length, 1), glm::vec3(0),glm::vec2(0), glm::vec4(0, 0, 1, 1) });
 
 	return vertices;
 }
@@ -75,7 +73,7 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 
 
 	auto normalLines = convertNormalsToLines(_object.getMeshLoader().getVertices());
-	_object.setNormalDrawer(std::make_unique<LineSet>(normalLines, lineShader));
+	_object.setNormalDrawer(std::make_unique<LineSet>(normalLines,1.0f, lineShader));
 
 	std::vector<Vertex> bboxVertices;
 	glm::vec4 color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
@@ -99,7 +97,7 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 		bboxVertices.push_back(v1);
 		bboxVertices.push_back(v2);
 	}
-	_object.setBboxDrawer(std::make_unique<LineSet>(bboxVertices , lineShader));
+	_object.setBboxDrawer(std::make_unique<LineSet>(bboxVertices ,1.0, lineShader));
 	
 	if(_object.getMeshLoader().getVertices().empty())
 	{
@@ -199,9 +197,9 @@ void Scene::initializeScene(Shader* lineShader) {
 	std::vector<Vertex> worldAxisPoints = createAxisVertices(1.0f);
 	std::vector<Vertex> objectAxisPoints = createAxisVertices(0.5f);
 	std::vector<Vertex> bezierPoints = buildVisualBezier();
-	setWorldAxisDrawer(std::make_unique<LineSet>(worldAxisPoints, lineShader));
-	setObjectAxisDrawer(std::make_unique<LineSet>(objectAxisPoints, lineShader));
-	setBezierDrawer(std::make_unique<LineSet>(bezierPoints, lineShader));
+	setWorldAxisDrawer(std::make_unique<LineSet>(worldAxisPoints,3.0f, lineShader));
+	setObjectAxisDrawer(std::make_unique<LineSet>(objectAxisPoints, 3.0f, lineShader));
+	setBezierDrawer(std::make_unique<LineSet>(bezierPoints, 3.0f, lineShader));
 
 	_camera = Camera();
 

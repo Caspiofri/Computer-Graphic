@@ -56,6 +56,19 @@ void PhongSet::setShaderUniforms() {
 	else {
 		_shader->setBool("useTexture", false);
 	}
+
+	//deformation
+	if (Settings::_enableDeformation) {
+		_shader->setBool("enableDeformation", true);
+		_shader->setFloat("deformAmplitude", Settings::_deformationAmplitude);
+		_shader->setFloat("deformationTime", Settings::_t);
+		_shader->setFloat("deformationSpeed", Settings::_deformationSpeed);
+		_shader->setFloat("BboxSize", Settings::_BboxSize);
+		_shader->setFloat("waveFrequency", Settings::_waveFrequency);
+	}
+	else {
+		_shader->setBool("enableDeformation", false);
+	}
 }
 
 void PhongSet::setupBuffers() {

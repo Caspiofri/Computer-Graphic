@@ -16,7 +16,7 @@ namespace Settings {
 	//camera settings :
 	extern int _screenWidth, _screenHeight;
 	extern float _aspectRatio;
-	extern double _normalScale, _nearPlane, _farPlane, _fov;
+	extern double _nearPlane, _farPlane, _fov;
 
 	// Camera Controls
 	extern double _camRotX, _camRotY, _camRotZ;

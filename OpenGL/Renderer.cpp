@@ -128,13 +128,9 @@ void Renderer::drawScene()
 	getScene().getObject().UpdateWorldTransform();
 
 	//get object matrix
-	glm::mat4x4 objectMatrix;
-	glm::mat4x4 worldMatrix;
+	glm::mat4x4 objectMatrix, worldMatrix, mat_projection , mat_view;
 	objectMatrix = getScene().getObject().getObjectMatrix();
 	worldMatrix = getScene().getObject().getWorldMatrix();
-	
-	glm::mat4x4 mat_projection;
-	glm::mat4x4 mat_view;
 
 	getScene().updateCameraMatrices();
 

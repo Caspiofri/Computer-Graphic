@@ -137,7 +137,6 @@ void TweakBarSettings()
 	// Object Geometry Visualization
 	TwAddVarRW(bar, "Show Bounding Box", TW_TYPE_BOOL8, &Settings::_BBoxBtn, " group='Object Geometry Visualization' label='Show Bounding Box' ");
 	TwAddVarRW(bar, "Show Vertex Normals", TW_TYPE_BOOL8, &Settings::_vertexNormalsBtn, " group='Object Geometry Visualization' label='Show Vertex Normals' ");
-	TwAddVarRW(bar, "Normal Scale", TW_TYPE_DOUBLE, &Settings::_normalScale, " group='Object Geometry Visualization' min=0.1 max=5 step=0.1 ");
 
 	// Axis Visualization
 	TwAddVarRW(bar, "Show World Axis", TW_TYPE_BOOL8, &Settings::_worldAxisBtn, "group='Axis Visualization' label='World Axis' ");
@@ -159,11 +158,7 @@ void TweakBarSettings()
 	// Double-sided lighting toggle
 	TwAddVarRW(bar, "Double-Sided", TW_TYPE_BOOL8, &Settings::_doubleSided,
 		" group='Material properties' label='Double-Sided Lighting' help='If enabled, light back faces by inverting normal'");
-	/*TwType zModeType = TwDefineEnum("ZBufferMode", zBufferModes, 3);
-	TwAddVarRW(bar, "Z-Buffer Mode", zModeType, &Settings::_zBufferMode, " group='Material propertiess' ");*/
-
-	//Light properties
-
+	
 	// Light type enum for AntTweakBar
 	TwEnumVal lightTypeMenu[] = { {DIRECTIONAL, "Directional"}, {POINTY, "Point"} };
 	TwType lightTypeTW = TwDefineEnum("LightType", lightTypeMenu, 2);
@@ -214,11 +209,7 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Animation Speed", TW_TYPE_FLOAT, &Settings::_animationSpeed, "group='Animation' min=0.01 max=2 step=0.01 label='control speed' help='Speed of the animation'");
 	TwAddVarRW(bar, "Use sLerp", TW_TYPE_BOOL8, &Settings::_useSlerp, "group='Animation' min=0.01 max=2 step=0.01 label='switch between slerp and Euler'");
 
-	//// sLerp animation controlers
-	/*TwAddVarRW(bar, "Start Rotation", TW_TYPE_QUAT4F, &Settings::_startQuaternion,
-		" group='Animation' label='Start Animation Orentation' opened=true help='This is Animation start Orentation' ");
-	TwAddVarRW(bar, "end Rotation", TW_TYPE_QUAT4F, &Settings::_endQuaternion,
-		" group='Animation' label='end Animation Orentation' opened=true help='This is Animation end Orentation' ");*/
+	// slerp
 	TwAddVarRW(bar, "Start sLerp Rotation X", TW_TYPE_DOUBLE, &Settings::_startSlerpRotX, "group='Animation Start sLerp'  label='Start X sLerp Orentation' min=-180 max=180 step=1 ");
 	TwAddVarRW(bar, "Start sLerp Rotation Y", TW_TYPE_DOUBLE, &Settings::_startSlerpRotY, "group='Animation Start sLerp' label='Start Y sLerp Orentation'  min=-90. max=90.0f step=1 ");
 	TwAddVarRW(bar, "Start sLerp Rotation Z", TW_TYPE_DOUBLE, &Settings::_startSlerpRotZ, "group='Animation Start sLerp'  label='Start Z sLerp Orentation' min=-180 max=180 step=1 ");

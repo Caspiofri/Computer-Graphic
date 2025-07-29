@@ -6,7 +6,7 @@
 namespace Settings {
 	bool _BBoxBtn = false; // Show Bounding Box button
 	bool _vertexNormalsBtn = false; // Show Vertex Normals button
-	double _normalScale = 1.0; // Scale for vertex normals
+	double _normalScale = 0.1; // Scale for vertex normals
 	bool _isMeshLoaded = false; // Flag to check if mesh is loaded
 	bool _worldAxisBtn = false, _objAxisBtn = false;
 
@@ -85,7 +85,6 @@ namespace Settings {
 	float _deformationAmplitude = 0.2f, _deformationSpeed = 1.0f;
 	float _BboxSize = 1.0f; // Size of the bounding box for deformation
 	float _waveFrequency = 5.0f; // Frequency of the wave
-	float _waveWidth = 0.5f; // Frequency of the wave
 	// screen propeties
 	void setScreenSize(int width, int height) {
 		_screenWidth = width;
