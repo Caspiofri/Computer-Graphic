@@ -203,7 +203,12 @@ void MathLib::convertEulerToQuaternion(float RotX, float RotY, float RotZ, float
 void MathLib::slerp_calc(const float q0[4], const float q1[4], float t, float result[4])
 {
     float dot = q0[0] * q1[0] + q0[1] * q1[1] + q0[2] * q1[2] + q0[3] * q1[3];
-
+    if (dot == 1.0f) {
+        for (int i = 0; i < 4; i++) {
+            result[i] = q0[i];
+        }// If the quaternions are the same, return q0
+        return;
+    }
     float phi = acos(dot);
     float sin_phi = sin(phi);
     float a_u = sin((1.0f - t) * phi) / sin_phi;
