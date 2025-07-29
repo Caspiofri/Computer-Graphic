@@ -27,15 +27,11 @@ public:
 	void initScene();
 	bool loadModelToScene(const std::wstring& filename);
 	void drawScene();
+	void updateAnimation();
 	void loadOBJModel(void* data);
 	void initGraphics(int argc, char* argv[]);
 
-	Shader* _triangleShader = nullptr;
-	Shader* _lineShader = nullptr;
-	Shader* _gouraudShader = nullptr;
-	Shader* _phongShader = nullptr;
-	Shader* _bezierShader = nullptr;
-	Scene _scene;
+
 
 	GLuint loadTextureFromFile(const std::wstring& filename);
 
@@ -52,6 +48,12 @@ public:
 
 private:
 
-
+	Shader* _triangleShader = nullptr;
+	Shader* _lineShader = nullptr;
+	Shader* _gouraudShader = nullptr;
+	Shader* _phongShader = nullptr;
+	Shader* _bezierShader = nullptr;
+	Scene _scene;
+	bool _animForward = true;
 };
 

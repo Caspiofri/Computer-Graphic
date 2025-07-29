@@ -13,6 +13,7 @@
 class Object {
 private:
     std::string _name;
+    bool _isCube = true;
 
     // meshes and shaders
     MeshLoader _meshLoader;
@@ -48,7 +49,8 @@ public:
     // == transformation functions == 
   
     void scale(glm::vec3 scaleFactor);
-
+    void setIsCube(bool isCube) { _isCube = isCube; }
+    bool getIsCube() { return _isCube; }
     void translateObj(glm::vec3 translation);
     glm::mat4 getObjectTranslationMatrix() const {
         return _objectTranslationMatrix;

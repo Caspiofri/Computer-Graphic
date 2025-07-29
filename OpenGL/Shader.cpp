@@ -4,17 +4,12 @@
 #include <iostream>
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
-	std::cout << "\nsetting Shader\n\a\a\a";
 	 _id = initShader(vertexPath, fragmentPath);
-	 std::cerr << "Shader id is :  " << _id << std::endl;
-
 }
 
 //create a GLSL program object from vertex and fragment shader files
 GLuint Shader::initShader(std::string vertexShaderFileName, std::string fragmentShaderFileName)
 {
-	std::cerr << "[initShader] in initShader" << std::endl;
-
 	ShaderSource shaders[2] =
 	{
 		{vertexShaderFileName, GL_VERTEX_SHADER, std::string()},
@@ -42,7 +37,6 @@ GLuint Shader::initShader(std::string vertexShaderFileName, std::string fragment
 		GLint  compiled;
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 		if (!compiled) {
-			std::cerr << s.filename << " failed to compile:" << std::endl;
 			GLint  logSize = 0;
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logSize);
 			char* logMsg = new char[logSize];
@@ -55,7 +49,6 @@ GLuint Shader::initShader(std::string vertexShaderFileName, std::string fragment
 		glAttachShader(program, shader);
 	}
 
-	/* link  and error check */
 	glLinkProgram(program);
 
 	GLint  linked;
@@ -70,7 +63,6 @@ GLuint Shader::initShader(std::string vertexShaderFileName, std::string fragment
 		delete[] logMsg;
 
 		return 0;
-		//exit( EXIT_FAILURE );
 	}
 
 

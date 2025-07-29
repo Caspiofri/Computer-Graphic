@@ -167,8 +167,6 @@ glm::mat4 MathLib::lookAt(const glm::vec3& eye, const glm::vec3& target, const g
 
 void MathLib::convertEulerToQuaternion(float RotX, float RotY, float RotZ, float outQuat[4])
 {
-    std::cout << "RotX:" << RotX << ", Y:" << RotY << ", Z:" << RotZ << ", " << std::endl;
-
     float pitch = glm::radians(RotX);
     float yaw = glm::radians(RotY);
     float roll = glm::radians(RotZ);

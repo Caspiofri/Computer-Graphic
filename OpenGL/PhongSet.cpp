@@ -47,7 +47,7 @@ void PhongSet::setShaderUniforms() {
 	_shader->setVec3("light2Intensity", Settings::_light2Intensity);
 
 	//Texture 
-	if (_hasTexture) {
+	if (_hasTexture && Settings::_enableTexture && Settings::_objectWithTexture) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _textureID);
 		_shader->setInt("texMap", 0);
@@ -72,8 +72,6 @@ void PhongSet::setShaderUniforms() {
 }
 
 void PhongSet::setupBuffers() {
-	std::cerr << "[GouraudSet] in setupBuffers" << std::endl;
-
 	// Building buffers
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);

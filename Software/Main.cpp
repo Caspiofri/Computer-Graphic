@@ -262,10 +262,6 @@ void drawScene()
 // callback function called by GLUT to render screen
 void Display()
 {
-//  for debugging. Testing how many times the Display function is invoked by the application and when it happens
-// 	static int counter = 0;
-// 	std::cout << "C: " << counter << std::endl;
-// 	counter++;
 
 	glClearColor(0.0, 0.0, 0.0, 1.0); //set the background color to black
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //initialize z-buffer and framebuffer

@@ -9,15 +9,9 @@
 Object::Object() : _meshLoader() {};
 
 void Object::ApplyTransformations() {
-	// the call order is row vector, cause of the shader
-
-	//_objectMatrix = _objectTranslationMatrix * _objectRotationMatrix;
 	_objectMatrix = _objectRotationMatrix * _objectTranslationMatrix;
 }
 void Object::ApplyWorldTransformations() {
-	// the call order is row vector, cause of the shader
-
-	//_objectMatrix = _objectTranslationMatrix * _objectRotationMatrix;
 	_worldMatrix = _worldRotationMatrix * _worldTranslationMatrix;
 }
 
@@ -68,13 +62,10 @@ void Object::translateWorld(glm::vec3 translation) {
 	glm::mat4 translationMatrix = glm::mat4(1.0f);
 	translationMatrix = MathLib::translation(translation);
 	_worldTranslationMatrix = translationMatrix * _worldTranslationMatrix;
-	//ApplyTransformations();
 }
 
 void Object::rotateWorld() {
 	ConvertQuaternionToMatrix(Settings::_worldQuaternion, _worldRotationMatrix);
-
-	//ApplyTransformations();
 }
 
 
@@ -101,7 +92,7 @@ bool Object::loadMesh(const std::wstring& filePath) {
 	return true;
 }
 void Object::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatrix, const glm::mat4& view, const glm::mat4& projection , const float scale, const glm::vec3 cameraPos){
-
+	
 	switch(Settings::_shadingMode) {
 		case SIMPLE: {
 			_meshDrawer->draw(objectMatrix, worldMatrix, view, projection, scale);

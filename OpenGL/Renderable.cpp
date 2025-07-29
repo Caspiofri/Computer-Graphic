@@ -6,9 +6,6 @@ Renderable::Renderable(Shader* shader, GLenum drawMode)
 }
 
 Renderable::~Renderable() {
-	std::cerr << "[Renderable] destructor called! Deleting VAO: " << _vao << ", VBO: " << _vbo << std::endl;
-	std::cerr << "[Renderable::~Renderable] deleting this = " << this << std::endl;
-
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);
 	glDeleteVertexArrays(1, &_vao);

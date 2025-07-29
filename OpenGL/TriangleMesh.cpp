@@ -13,7 +13,6 @@ TriangleMesh::TriangleMesh(const std::vector<Vertex>& vertices,
 
 
 void TriangleMesh::setupBuffers() {
-	std::cerr << "[TriangleMesh] in setupBuffers" << std::endl;
 
 	// Building buffers
 	glGenVertexArrays(1, &_vao);

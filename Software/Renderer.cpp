@@ -48,17 +48,16 @@ void Renderer::resizeBuffer(const unsigned int width, const unsigned int height)
 //creates new texture. This texture is later on used to transfer the software buffer (colorBuffer) to the screen
 void Renderer::createTexture(const unsigned int width, const unsigned int height)
 {
-	//std::cout << "Texture id: " << textureID << std::endl;
-
+	// Delete the old texture
 	if (glIsTexture(textureID))
 	{
 		glDeleteTextures(1, &textureID);
 		textureID = 0;
 	}
 
+	// Create a new texture
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	//std::cout << "Texture id: " << textureID << std::endl;
 
 	// Assuming framebuffer contains pixel data in GL_RGB format
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
@@ -87,7 +86,6 @@ void Renderer::addPixel(unsigned int x, unsigned int y, BYTE r, BYTE g, BYTE b, 
 void Renderer::drawPixels()
 {
 	glBindTexture(GL_TEXTURE_2D, textureID);
-	//std::cout << "Texture id: " << textureID << std::endl;
 
 	//the texture is created in createTexture to avoid creation and deletion every frame. This only transfered the data to the texture.
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, colorBuffer.data());
@@ -95,8 +93,6 @@ void Renderer::drawPixels()
 	GLuint fboID;
 	glGenFramebuffers(1, &fboID);
 	glBindFramebuffer(GL_FRAMEBUFFER, fboID);
-	//std::cout << "Framebuffer id: " << fboID << std::endl;
-
 
 	// Attach the texture to the FBO as the color attachment
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureID, 0);

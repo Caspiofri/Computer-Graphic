@@ -38,7 +38,6 @@ namespace Settings {
 	extern glm::vec3 _baseColor;
 	extern bool _doubleSided;
 	extern bool _materialChanged;
-	//extern ZBufferMode _zBufferMode;
 
 	// Animation
 	extern glm::vec3 _P0, _P1, _P2, _P3; // Control points for Bezier curve
@@ -61,9 +60,13 @@ namespace Settings {
 	extern float _deformationAmplitude, _deformationSpeed;
 	extern float _BboxSize;
 	extern float _waveFrequency;
+
+	// Texture
+	extern bool _enableTexture;
+	extern bool _objectWithTexture;
+
 	//light settings: 
 	extern ShadingMode _shadingMode;
-
 	extern glm::vec3 _ambientLight;
 	extern bool _light2Enabled;
 	extern LightType _light1Type, _light2Type;

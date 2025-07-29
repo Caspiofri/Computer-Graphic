@@ -98,8 +98,7 @@ void TweakBarSettings()
 	TwDefine(" GLOBAL help='This example shows how to integrate AntTweakBar with GLUT and OpenGL.' "); // Message added to the help bar.
 	TwDefine(" TweakBar size='350 800' color='96 216 224' "); // change default tweak bar size and color
 	TwAddButton(bar, "open OBJ file", loadOBJModel, NULL, " label='Open OBJ File...' ");
-	// loading texture for OBJ
-	TwAddButton(bar, "open texture file", loadTexture, NULL, " label='Open Texture File...' ");
+	
 
 	//read only - displaying the draw timer in micro seconds
 	TwAddVarRO(bar, "time (us)", TW_TYPE_UINT32, &ElapsedMicroseconds.LowPart, "help='shows the drawing time in micro seconds'");
@@ -144,6 +143,13 @@ void TweakBarSettings()
 
 
 	// Material property sliders
+
+	// Texture
+	TwAddVarRW(bar, "Enable Texture", TW_TYPE_BOOL8, &Settings::_enableTexture,
+		" group='Texture' label='Enable Texture' help='Enable texture rendering' ");
+	TwAddButton(bar, "open texture file", loadTexture, NULL, "group='Texture' label='import Texture File...' ");
+
+	// Material Properties
 	TwAddVarRW(bar, "Ambient k_a", TW_TYPE_FLOAT, &Settings::_ambient,
 		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Ambient reflection coefficient'");
 	TwAddVarRW(bar, "Diffuse k_d", TW_TYPE_FLOAT, &Settings::_diffuse,
@@ -256,7 +262,7 @@ void TW_CALL loadTexture(void* data)
 	GLuint texID = _renderer.loadTextureFromFile(fileName);
 
 	// Attach the texture to the object
-	if (texID && _renderer.getScene().getObject().getMeshLoader().getVertices().size() > 0 && _renderer.getScene().getObject().getMeshLoader().isUsingTexture())
+	if (texID && _renderer.getScene().getObject().getMeshLoader().getVertices().size() > 0 && Settings::_objectWithTexture)
 	{
 		_renderer.getScene().getObject().setTextureID(texID);
 		if (_renderer.getScene().getObject().getTextureID())

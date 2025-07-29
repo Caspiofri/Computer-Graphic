@@ -15,7 +15,6 @@ namespace Settings {
 	int _screenHeight = 800;
 	float _aspectRatio = 600 / 800;
 
-
 	// object transformation settings:
 	float _scale = 1.0; // Scale factor for the model
 
@@ -48,6 +47,9 @@ namespace Settings {
 	glm::vec3 _ambientLight = glm::vec3(0.0f);
 	ShadingMode _shadingMode = SIMPLE;
 
+	// Texture
+	bool _enableTexture = false;
+	bool _objectWithTexture = false;
 
 	//Light 1
 	bool _light1Enabled = true;

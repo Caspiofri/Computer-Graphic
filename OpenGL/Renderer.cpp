@@ -57,7 +57,6 @@ GLuint Renderer::loadTextureFromFile(const std::wstring& filename) {
 
 	FreeImage_Unload(image);
 	return textureID;
-
 }
 
 void Renderer::initScene() {
@@ -87,7 +86,6 @@ void Renderer::initScene() {
 		std::cout << "\nFatal Error in Line shader creation!\n\a\a\a";
 		return;
 	}
-	
 	_scene.initializeScene(_lineShader);
 	_scene.initSceneWithCube(_triangleShader);
 
@@ -95,7 +93,10 @@ void Renderer::initScene() {
 
 
 bool Renderer::loadModelToScene(const std::wstring& filename) {
-	std::wcout << "[Renderer::loadModelToScene] loading model from file: " << filename << std::endl;
+	if (filename.empty() || filename.find(L".obj") == std::wstring::npos) {
+		std::cerr << "[Renderer::loadModelToScene] Invalid file name." << std::endl;
+		return false;
+	}
 	if (!_triangleShader || !_triangleShader->getID() || !_lineShader->getID())
 	{
 		std::cerr << "[Renderer::loadModelToScene] Shader not initialized or invalid." << std::endl;
@@ -140,7 +141,7 @@ void Renderer::drawScene()
 	getScene().updateMaterial();
 	getScene().updateLight();
 	if (Settings::_playAnimation || Settings::_enableDeformation) {
-		getScene().updateAnimation();
+		updateAnimation();
 	}
 	if(!_isMeshLoaded)
 	{
@@ -154,4 +155,28 @@ void Renderer::drawScene()
 	// Unbind the shader program after drawing
 	glUseProgram(0);
 
+}
+
+// move to bezier
+void Renderer::updateAnimation()
+{
+	// todo - change acording to speed settings
+	float deltaTime = 0.01;
+	if (_animForward)
+	{
+		Settings::_t += Settings::_animationSpeed * deltaTime;
+	}
+	else {
+		Settings::_t -= Settings::_animationSpeed * deltaTime;
+	}
+	if (Settings::_t > 1.0f)
+	{
+		Settings::_t = 1.0f;
+		_animForward = false;
+	}
+	else if (Settings::_t < 0.0f)
+	{
+		Settings::_t = 0.0f;
+		_animForward = true;
+	}
 }
