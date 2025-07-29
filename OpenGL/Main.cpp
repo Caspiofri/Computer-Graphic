@@ -242,7 +242,6 @@ void TweakBarSettings()
 		"group='Deformation' label='Deformation speed' min=0.0 max=2.0 step=0.01 help='Spepd of the deformation'");
 	TwAddVarRW(bar, "Wave Frequency", TW_TYPE_FLOAT, &Settings::_waveFrequency,
 		"group='Deformation' label='Wave Frequency' min=2.0 max=10.0 step=0.01 help='Frequency of the Wave'");
-
 }
  
 void TW_CALL loadOBJModel(void *data)

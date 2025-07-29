@@ -101,33 +101,8 @@ void main()
     // Apply wave form deformation into world space
  
      if(enableDeformation){
-        //float wave = sin(deformationTime * deformationSpeed + length(worldPos.xy) * waveFrequency);
-        //vec3 offset = worldNormal * wave * deformAmplitude * BboxSize; 
-        //worldPos += offset;
-        
-        //float t = abs(sin(deformationTime * deformationSpeed));
-        //float wave = t * sin(length(vPosition.xy) * waveFrequency);
-        //vec3 offset = worldNormal * wave * deformAmplitude * BboxSize;
-        //worldPos += offset;
-
-        // wave func = A * sin(B * (t + C)) + D
-        // A = deformAmplitude * BboxSize
-        // B = waveFrequency
-        // C = deformationTime * deformationSpeed
-        // D = vPosition.x (to offset the wave based on x position)
-
-
-        //float wavePosition = mod(deformationTime * deformationSpeed, 6.0);
-        float wavePosition = deformationTime * deformationSpeed * BboxSize;
-        float disFromwave = abs(vPosition.z -wavePosition) ;
-        float waveWidth = 0.1;
-        float wave = 0.0;
-
-        if(disFromwave < waveWidth){
-            float localPhase = (disFromwave / waveWidth) * 3.14159; // [0, pi]
-            wave = abs(cos(localPhase)) ;
-        }
-        vec3 offset = worldNormal * wave * deformAmplitude * BboxSize;
+        float wave = abs(cos(deformationTime * deformationSpeed + length(worldPos.xy) * waveFrequency));
+        vec3 offset = worldNormal * wave * deformAmplitude * BboxSize*0.1; 
         worldPos += offset;
 
     }

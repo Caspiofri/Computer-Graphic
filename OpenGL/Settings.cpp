@@ -85,6 +85,7 @@ namespace Settings {
 	float _deformationAmplitude = 0.2f, _deformationSpeed = 1.0f;
 	float _BboxSize = 1.0f; // Size of the bounding box for deformation
 	float _waveFrequency = 5.0f; // Frequency of the wave
+	float _waveWidth = 0.5f; // Frequency of the wave
 	// screen propeties
 	void setScreenSize(int width, int height) {
 		_screenWidth = width;
