@@ -22,11 +22,8 @@ public:
 	void initSceneWithCube(Shader* shader);
 	void toggleNormals(bool show);
 	void toggleBBox(bool show);
-
 	void updateCameraMatrices();
-
 	void updateMaterial();
-
 	void updateLight();
 
 	void updateAnimation();

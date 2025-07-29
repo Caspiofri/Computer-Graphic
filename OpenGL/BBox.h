@@ -8,6 +8,7 @@ class BBox {
 private:
     glm::vec3 _minCorner;
     glm::vec3 _maxCorner;
+    float _BboxSize;
 
 public:
     BBox();

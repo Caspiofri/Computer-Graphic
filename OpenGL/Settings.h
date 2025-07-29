@@ -56,6 +56,11 @@ namespace Settings {
 	extern double _startEulerRotX, _startEulerRotY, _startEulerRotZ;
 	extern double _endEulerRotX, _endEulerRotY, _endEulerRotZ;
 
+	// deformation
+	extern bool _enableDeformation;
+	extern float _deformationAmplitude, _deformationSpeed;
+	extern float _BboxSize;
+	extern float _waveFrequency;
 	//light settings: 
 	extern ShadingMode _shadingMode;
 

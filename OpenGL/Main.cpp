@@ -233,6 +233,16 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "End Euler Rotation X", TW_TYPE_DOUBLE, &Settings::_endEulerRotX, "group='Animation End Euler' label='End X Euler Orentation'  min=-180 max=180 step=1 ");
 	TwAddVarRW(bar, "End Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_endEulerRotY, "group='Animation End Euler' label='End Y Euler Orentation'  min=-90.0f max=90.0f step=1 ");
 	TwAddVarRW(bar, "End Euler Rotation Z", TW_TYPE_DOUBLE, &Settings::_endEulerRotZ, "group='Animation End Euler' label='End Z Euler Orentation'  min=-180 max=180 step=1 ");
+
+	// deformation
+	TwAddVarRW(bar, "Enable Deformation", TW_TYPE_BOOL8, &Settings::_enableDeformation,"group='Deformation' label='Enable deformation' help='show deformation on/off'");
+	TwAddVarRW(bar, "Deformation Amplitude", TW_TYPE_FLOAT, &Settings::_deformationAmplitude,
+		"group='Deformation' label='Deformation Amplitude' min=0.0 max=1.0 step=0.01 help='Amplitude of the deformation'");
+	TwAddVarRW(bar, "Deformation speed", TW_TYPE_FLOAT, &Settings::_deformationSpeed,
+		"group='Deformation' label='Deformation speed' min=0.0 max=2.0 step=0.01 help='Spepd of the deformation'");
+	TwAddVarRW(bar, "Wave Frequency", TW_TYPE_FLOAT, &Settings::_waveFrequency,
+		"group='Deformation' label='Wave Frequency' min=2.0 max=10.0 step=0.01 help='Frequency of the Wave'");
+
 }
  
 void TW_CALL loadOBJModel(void *data)
@@ -388,7 +398,7 @@ void Special(int k, int x, int y)
 
 void animationState()
 {
-	if (Settings::_playAnimation) {
+	if (Settings::_playAnimation || Settings::_enableDeformation) {
 		glutPostRedisplay();
 
 	}

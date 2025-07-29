@@ -142,8 +142,8 @@ void Renderer::drawScene()
 	mat_view = getScene().getCamera().getViewMatrix();
 	
 	getScene().updateMaterial();
-	getScene().updateLight();\
-	if (Settings::_playAnimation) {
+	getScene().updateLight();
+	if (Settings::_playAnimation || Settings::_enableDeformation) {
 		getScene().updateAnimation();
 	}
 	if(!_isMeshLoaded)

@@ -109,8 +109,8 @@ bool Scene::loadModel(const std::wstring& filename, Shader* meshShader , Shader*
 	_isCube = false;
 	return true;
 }
-// Bezier curve visualization
 
+//TODO  - move to bezier class
 std::vector<Vertex> Scene::buildVisualBezier() {
 	int num = 100;
 	std::vector<glm::vec3> sampledPoints = _bezierCurve.getSampledPoints(num);
@@ -134,7 +134,7 @@ std::vector<Vertex> Scene::buildVisualBezier() {
 
 	return lineVertices;
 }
-
+//TODO  - move to bezier class
 glm::mat4 Scene::calcAnimation() {
 
 	//position

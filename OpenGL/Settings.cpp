@@ -80,6 +80,11 @@ namespace Settings {
 	double _startEulerRotX, _startEulerRotY, _startEulerRotZ;
 	double _endEulerRotX, _endEulerRotY, _endEulerRotZ;
 
+	//Deformation 
+	bool _enableDeformation = false;
+	float _deformationAmplitude = 0.2f, _deformationSpeed = 1.0f;
+	float _BboxSize = 1.0f; // Size of the bounding box for deformation
+	float _waveFrequency = 5.0f; // Frequency of the wave
 	// screen propeties
 	void setScreenSize(int width, int height) {
 		_screenWidth = width;
