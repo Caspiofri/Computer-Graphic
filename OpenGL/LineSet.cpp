@@ -1,11 +1,12 @@
 #pragma once
 #include "LineSet.h"
 
-LineSet::LineSet(const std::vector<Vertex>& points,
+LineSet::LineSet(const std::vector<Vertex>& points,const float lineWidth, 
 	Shader* shader)
 	: Renderable(shader, GL_LINES)
 {
 	_points = points;
+	_lineWidth = lineWidth;
 	_indexCount = static_cast<GLsizei>(_points.size());
 	_usesEBO = false;
 	setupBuffers();
@@ -32,13 +33,14 @@ void LineSet::setupBuffers() {
 	GLenum err1 = glGetError();
 	if (err1 != GL_NO_ERROR) std::cerr << "[ERROR] position attrib failed: 0x" << std::hex << err1 << std::endl;
 
-	// DEBUGING
 	glEnableVertexAttribArray(1); // Location 1 - color
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
 	GLenum err2 = glGetError();
 	if (err2 != GL_NO_ERROR) {
 		std::cerr << "[ERROR] glVertexAttribPointer failed! Code: 0x" << std::hex << err2 << std::endl;
 	}
+
+	glLineWidth(_lineWidth);
 
 	glBindVertexArray(0); // Unbind VAO
 

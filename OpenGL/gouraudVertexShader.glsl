@@ -41,6 +41,15 @@ uniform vec3 light2Intensity;
 uniform bool useTexture;
 uniform sampler2D texMap;
 
+//Deformation
+uniform bool enableDeformation;
+uniform float deformAmplitude; 
+uniform float deformationTime;
+uniform float deformationSpeed;
+uniform float waveFrequency;
+uniform float BboxSize;
+
+
 // out to framebuffer 
 out vec4 vColor;
 
@@ -77,20 +86,34 @@ vec3 computeLighting(vec3 P, vec3 N, vec3 V,
 void main()
 {
 
+    // Compute model matrix
     mat4 modelMatrix = objectMatrix * worldMatrix ;
-    
-    vec4 worldPos4 = vPosition * modelMatrix;
-    vec3 worldPos = worldPos4.xyz / worldPos4.w;
 
+    // transfer position to worlld space
+     vec4 worldPos4 = vPosition * modelMatrix;
+    vec3 worldPos = worldPos4.xyz;
+
+    // transfer normal to world space
     mat3 normalMatrix = mat3(transpose(inverse(modelMatrix)));
     vec3 worldNormal = normalize(vNormal * normalMatrix);
+    
 
-     vec3 V = normalize(viewPos - worldPos);
+    // Apply wave form deformation into world space
+ 
+     if(enableDeformation){
+        float wave = abs(cos(deformationTime * deformationSpeed + length(worldPos.xy) * waveFrequency));
+        vec3 offset = worldNormal * wave * deformAmplitude * BboxSize*0.1; 
+        worldPos += offset;
 
+    }
 
-     if (dot(worldNormal, V) < 0.0 && materialDoubleSided)
+    //handle double sided materials
+    vec3 V = normalize(viewPos - worldPos);
+    
+    if (dot(worldNormal, V) < 0.0 && materialDoubleSided)
         worldNormal = -worldNormal;
 
+    // calculate light
     vec3 color = vec3(0.0);
     vec4 baseColor = vec4(0.0);
     vec4 finalColor = vec4(0.0);
@@ -98,12 +121,12 @@ void main()
     if (useTexture) {
       baseColor = texture2D(texMap ,vTexCoords);
 
-    } else {
+    }
+    else {
         baseColor = vec4(materialBaseColor, 1.0);
     }
 
     // Ambient
-    //color += ambientLight * materialBaseColor * materialAmbient;
     finalColor = vec4(ambientLight,1.0) * baseColor * materialAmbient;
 
     // Light 1
@@ -119,9 +142,5 @@ void main()
     finalColor += vec4(color, 1.0);
 
     vColor = finalColor;
-	
-    gl_Position = vPosition;
-	gl_Position.w = gl_Position.w / scale;
-	gl_Position = gl_Position * objectMatrix * worldMatrix  *view * projection;
-
+	gl_Position =vec4(worldPos * scale , 1.0) * view * projection;
 }

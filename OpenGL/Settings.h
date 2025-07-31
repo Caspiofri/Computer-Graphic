@@ -16,7 +16,7 @@ namespace Settings {
 	//camera settings :
 	extern int _screenWidth, _screenHeight;
 	extern float _aspectRatio;
-	extern double _normalScale, _nearPlane, _farPlane, _fov;
+	extern double _nearPlane, _farPlane, _fov;
 
 	// Camera Controls
 	extern double _camRotX, _camRotY, _camRotZ;
@@ -38,7 +38,6 @@ namespace Settings {
 	extern glm::vec3 _baseColor;
 	extern bool _doubleSided;
 	extern bool _materialChanged;
-	//extern ZBufferMode _zBufferMode;
 
 	// Animation
 	extern glm::vec3 _P0, _P1, _P2, _P3; // Control points for Bezier curve
@@ -49,16 +48,25 @@ namespace Settings {
 	extern float _animationSpeed;
 
 	// slerp 
-	extern double _startSlerpRotX, _startSlerpRotY, _startSlerpRotZ;
-	extern double _endSlerpRotX, _endSlerpRotY, _endSlerpRotZ;
+	extern float _startSlerp[4];
+	extern float _endSlerp[4];
 	
 	//Euler
 	extern double _startEulerRotX, _startEulerRotY, _startEulerRotZ;
 	extern double _endEulerRotX, _endEulerRotY, _endEulerRotZ;
 
+	// deformation
+	extern bool _enableDeformation;
+	extern float _deformationAmplitude, _deformationSpeed;
+	extern float _BboxSize;
+	extern float _waveFrequency;
+
+	// Texture
+	extern bool _enableTexture;
+	extern bool _objectWithTexture;
+
 	//light settings: 
 	extern ShadingMode _shadingMode;
-
 	extern glm::vec3 _ambientLight;
 	extern bool _light2Enabled;
 	extern LightType _light1Type, _light2Type;

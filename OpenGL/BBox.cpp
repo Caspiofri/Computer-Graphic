@@ -13,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include "Vertex.h"
+#include "Settings.h"
 
 BBox::BBox() : _minCorner(glm::vec3(FLT_MAX)), _maxCorner(glm::vec3(-FLT_MAX)) {}
 
@@ -28,6 +29,8 @@ void BBox::compute(std::vector<Vertex>& vertices) {
     if (std::abs(_maxCorner.z - _minCorner.z) < 1e-5f) {
         _maxCorner.z += 0.1f;
     }
+    _BboxSize = glm::length(_maxCorner);
+    Settings::_BboxSize = _BboxSize;
 }
 
 std::vector<glm::vec3> BBox::getCorners() const {

@@ -40,7 +40,7 @@ void GouraudSet::setShaderUniforms() {
 	_shader->setVec3("light2Intensity", Settings::_light2Intensity);
 
 	//Texture 
-	if (_hasTexture) {
+	if (_hasTexture && Settings::_enableTexture && Settings::_objectWithTexture) {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _textureID);
 		_shader->setInt("texMap", 0);
@@ -50,6 +50,18 @@ void GouraudSet::setShaderUniforms() {
 		_shader->setBool("useTexture", false);
 	}
 
+	//deformation
+	if(Settings::_enableDeformation) {
+		_shader->setBool("enableDeformation", true);
+		_shader->setFloat("deformAmplitude", Settings::_deformationAmplitude);
+		_shader->setFloat("deformationTime", Settings::_t);
+		_shader->setFloat("deformationSpeed", Settings::_deformationSpeed);
+		_shader->setFloat("BboxSize", Settings::_BboxSize);
+		_shader->setFloat("waveFrequency", Settings::_waveFrequency);
+	}
+	else {
+		_shader->setBool("enableDeformation", false);
+	}
 }
 
 void GouraudSet::setupBuffers() {

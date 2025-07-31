@@ -12,7 +12,6 @@ MeshLoader ::~MeshLoader()
 }
 
 bool MeshLoader::uploadFrom(const std::wstring& filePath) {
-	std::cerr << "[uploadFrom] inside uploadFrom" << std::endl;
 
 	Wavefront_obj wf;
 	if (!wf.load_file(filePath)) {  // Now passing std::wstring
@@ -54,7 +53,7 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 		_indices.push_back(f.v[2]);
 	}
 	if (wf.m_textureCoordinates.size() > 0) {
-		_usingTexture = true;
+		Settings::_objectWithTexture = true;
 		for (size_t fi = 0; fi < wf.m_faces.size(); ++fi) {
 			const auto& face = wf.m_faces[fi];
 			for (int i = 0; i < 3; ++i) {
@@ -70,6 +69,9 @@ bool MeshLoader::uploadFrom(const std::wstring& filePath) {
 				}
 			}
 		}
+	}
+	else {
+		Settings::_objectWithTexture = false;
 	}
 
 	size_t F = _indices.size() / 3;

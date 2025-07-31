@@ -31,3 +31,45 @@ std::vector<glm::vec3> BezierCurve::getSampledPoints(int num) {
 	}
 	return points;
 }
+
+std::vector<Vertex> BezierCurve::buildVisualBezier() {
+	int num = 100;
+	std::vector<glm::vec3> sampledPoints = getSampledPoints(num);
+	std::vector<Vertex> lineVertices;
+	for (int i = 0; i < sampledPoints.size() - 1; i++) {
+		Vertex v1, v2;
+		v1.position = glm::vec4(sampledPoints[i], 1.0f);
+		v2.position = glm::vec4(sampledPoints[i + 1], 1.0f);
+		v1.normal = glm::vec3(0.0f);
+		v2.normal = glm::vec3(0.0f);
+		v1.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		v2.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		lineVertices.push_back(v1);
+		lineVertices.push_back(v2);
+	}
+
+	return lineVertices;
+}
+
+glm::mat4 BezierCurve::calcAnimation() {
+
+	//position
+	glm::vec3 position = calculateBezierPoint(Settings::_t);
+	glm::mat4 translation = MathLib::translation(position);
+
+	//rotation
+	glm::mat4 rotation = MathLib::identity();
+	if (Settings::_useSlerp) {
+		
+		float resultQuat[4];
+		MathLib::slerp_calc(Settings::_startSlerp, Settings::_endSlerp, Settings::_t, &resultQuat[0]);
+		ConvertQuaternionToMatrix(&resultQuat[0], rotation);
+
+	}
+	else {
+		glm::vec3 rotation_vec = MathLib::euler_calc();
+		rotation = MathLib::rotation(rotation_vec);
+	}
+
+	return rotation * translation;
+}

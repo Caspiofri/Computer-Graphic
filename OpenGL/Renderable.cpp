@@ -6,9 +6,6 @@ Renderable::Renderable(Shader* shader, GLenum drawMode)
 }
 
 Renderable::~Renderable() {
-	std::cerr << "[Renderable] destructor called! Deleting VAO: " << _vao << ", VBO: " << _vbo << std::endl;
-	std::cerr << "[Renderable::~Renderable] deleting this = " << this << std::endl;
-
 	glDeleteBuffers(1, &_vbo);
 	glDeleteBuffers(1, &_ebo);
 	glDeleteVertexArrays(1, &_vao);
@@ -42,7 +39,6 @@ void Renderable::draw(const glm::mat4& objectMatrix, const glm::mat4& worldMatri
 		glDrawElements(_drawMode, _indexCount, GL_UNSIGNED_INT, 0);
 	}
 	else {
-		glLineWidth(3.0f);
 		glDrawArrays(_drawMode, 0, _indexCount);
 	}
 
