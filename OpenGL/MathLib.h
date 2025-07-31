@@ -30,10 +30,7 @@ public:
     static glm::mat4 perspective(float fov, float aspect, float nearPlane, float farPlane);
     static glm::mat4 lookAt(const glm::vec3& eye, const glm::vec3& target, const glm::vec3& up);
 
-    static void convertEulerToQuaternion(float RotX, float RotY, float RotZ, float outQuat[4]);
-
     //animation slerp cacluclation
     static void slerp_calc(const float q0[4], const float q1[4], float t, float result[4]);
    static glm::vec3 euler_calc();
-    static glm::vec3 convertQuaternionToEuler(const float q[4]);
 };

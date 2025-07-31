@@ -160,7 +160,6 @@ void Renderer::drawScene()
 // move to bezier
 void Renderer::updateAnimation()
 {
-	// todo - change acording to speed settings
 	float deltaTime = 0.01;
 	if (_animForward)
 	{

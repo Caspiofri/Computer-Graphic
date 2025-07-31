@@ -101,69 +101,69 @@ void TweakBarSettings()
 	
 
 	//read only - displaying the draw timer in micro seconds
-	TwAddVarRO(bar, "time (us)", TW_TYPE_UINT32, &ElapsedMicroseconds.LowPart, "help='shows the drawing time in micro seconds'");
+	TwAddVarRO(bar, "time (us)", TW_TYPE_UINT32, &ElapsedMicroseconds.LowPart, "  opened=false  help='shows the drawing time in micro seconds'");
 	//add 'g_scale' to 'bar': this is a modifiable (RW) variable of type TW_TYPE_FLOAT. Its key shortcuts are [s] and [S].
-	TwAddVarRW(bar, "Scale", TW_TYPE_FLOAT, &Settings::_scale, " label='Scale' min=0.01 max=10.0 step=0.01 group=Engine keyIncr=s keyDecr=S");
+	TwAddVarRW(bar, "Scale", TW_TYPE_FLOAT, &Settings::_scale, " label='Scale' min=0.01 max=10.0 step=0.01 group=Engine  opened=false  keyIncr=s keyDecr=S");
 	//add 'g_objQuaternion' to 'bar': this is a variable of type TW_TYPE_QUAT4D which defines the object's orientation using quaternions
 
 	// Object Transformations
 	TwAddVarRW(bar, "Object Rotation", TW_TYPE_QUAT4F, &Settings::_objQuaternion,
 		" group='Object Transform' label='Object rotation' opened=true help='This is object rotation' ");
-	TwAddVarRW(bar, "Translate Object X", TW_TYPE_DOUBLE, &Settings::_objTransX, " group='Object Transform' min=-10 max=10 step=0.1 ");
-	TwAddVarRW(bar, "Translate Object Y", TW_TYPE_DOUBLE, &Settings::_objTransY, "group='Object Transform' min=-10 max=10 step=0.1 ");
-	TwAddVarRW(bar, "Translate Object Z", TW_TYPE_DOUBLE, &Settings::_objTransZ, "group='Object Transform' min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Object X", TW_TYPE_DOUBLE, &Settings::_objTransX, " group='Object Transform' opened=false  min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Object Y", TW_TYPE_DOUBLE, &Settings::_objTransY, "group='Object Transform' opened=false  min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Object Z", TW_TYPE_DOUBLE, &Settings::_objTransZ, "group='Object Transform' opened=false  min=-10 max=10 step=0.1 ");
 
 	// world Transformations
 	TwAddVarRW(bar, "World Rotation", TW_TYPE_QUAT4F, &Settings::_worldQuaternion,
 		" group='World Transform' label='World rotation' opened=true help='This is World rotation' ");
-	TwAddVarRW(bar, "Translate World X", TW_TYPE_DOUBLE, &Settings::_worldTransX, " group='World Transform' step=0.1 ");
-	TwAddVarRW(bar, "Translate World Y", TW_TYPE_DOUBLE, &Settings::_worldTransY, " group='World Transform' step=0.1 ");
-	TwAddVarRW(bar, "Translate World Z", TW_TYPE_DOUBLE, &Settings::_worldTransZ, " group='World Transform' step=0.1 ");
+	TwAddVarRW(bar, "Translate World X", TW_TYPE_DOUBLE, &Settings::_worldTransX, " group='World Transform' opened=false  step=0.1 ");
+	TwAddVarRW(bar, "Translate World Y", TW_TYPE_DOUBLE, &Settings::_worldTransY, " group='World Transform' opened=false  step=0.1 ");
+	TwAddVarRW(bar, "Translate World Z", TW_TYPE_DOUBLE, &Settings::_worldTransZ, " group='World Transform' opened=false  step=0.1 ");
 
 	// Perspective
-	TwAddVarRW(bar, "Near Plane", TW_TYPE_DOUBLE, &Settings::_nearPlane, "group='Perspective' min=0.01 max=10 step=0.01");
-	TwAddVarRW(bar, "Far Plane", TW_TYPE_DOUBLE, &Settings::_farPlane, "group='Perspective' min=11 max=5000 step=10");
-	TwAddVarRW(bar, "Field of View", TW_TYPE_DOUBLE, &Settings::_fov, "group='Perspective' min=0.1 max=120 step=1");
+	TwAddVarRW(bar, "Near Plane", TW_TYPE_DOUBLE, &Settings::_nearPlane, "group='Perspective'  opened=false  min=0.01 max=10 step=0.01");
+	TwAddVarRW(bar, "Far Plane", TW_TYPE_DOUBLE, &Settings::_farPlane, "group='Perspective'  opened=false  min=11 max=5000 step=10");
+	TwAddVarRW(bar, "Field of View", TW_TYPE_DOUBLE, &Settings::_fov, "group='Perspective'  opened=false  min=0.1 max=120 step=1");
 
 	// Camera Controls
-	TwAddVarRW(bar, "Translate Camera X", TW_TYPE_DOUBLE, &Settings::_camTransX, " group='Camera Controls' min=-10 max=10 step=0.1 ");
-	TwAddVarRW(bar, "Translate Camera Y", TW_TYPE_DOUBLE, &Settings::_camTransY, "group='Camera Controls' min=-10 max=10 step=0.1 ");
-	TwAddVarRW(bar, "Translate Camera Z", TW_TYPE_DOUBLE, &Settings::_camTransZ, "group='Camera Controls' min=-10 max=10 step=0.1 ");
-	TwAddVarRW(bar, "Rotate Camera X", TW_TYPE_DOUBLE, &Settings::_camRotX, "group='Camera Controls' min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "Rotate Camera Y", TW_TYPE_DOUBLE, &Settings::_camRotY, "group='Camera Controls' min=-89.0f max=89.0f step=1 ");
-	TwAddVarRW(bar, "Rotate Camera Z", TW_TYPE_DOUBLE, &Settings::_camRotZ, "group='Camera Controls' min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Translate Camera X", TW_TYPE_DOUBLE, &Settings::_camTransX, " group='Camera Controls'  opened=false  min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Camera Y", TW_TYPE_DOUBLE, &Settings::_camTransY, "group='Camera Controls'  opened=false  min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Translate Camera Z", TW_TYPE_DOUBLE, &Settings::_camTransZ, "group='Camera Controls'  opened=false  min=-10 max=10 step=0.1 ");
+	TwAddVarRW(bar, "Rotate Camera X", TW_TYPE_DOUBLE, &Settings::_camRotX, "group='Camera Controls'  opened=false  min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Rotate Camera Y", TW_TYPE_DOUBLE, &Settings::_camRotY, "group='Camera Controls'  opened=false  min=-89.0f max=89.0f step=1 ");
+	TwAddVarRW(bar, "Rotate Camera Z", TW_TYPE_DOUBLE, &Settings::_camRotZ, "group='Camera Controls'  opened=false  min=-180 max=180 step=1 ");
 
 	// Object Geometry Visualization
-	TwAddVarRW(bar, "Show Bounding Box", TW_TYPE_BOOL8, &Settings::_BBoxBtn, " group='Object Geometry Visualization' label='Show Bounding Box' ");
-	TwAddVarRW(bar, "Show Vertex Normals", TW_TYPE_BOOL8, &Settings::_vertexNormalsBtn, " group='Object Geometry Visualization' label='Show Vertex Normals' ");
+	TwAddVarRW(bar, "Show Bounding Box", TW_TYPE_BOOL8, &Settings::_BBoxBtn, " group='Object Geometry Visualization'  opened=false  label='Show Bounding Box' ");
+	TwAddVarRW(bar, "Show Vertex Normals", TW_TYPE_BOOL8, &Settings::_vertexNormalsBtn, " group='Object Geometry Visualization'  opened=false  label='Show Vertex Normals' ");
 
 	// Axis Visualization
-	TwAddVarRW(bar, "Show World Axis", TW_TYPE_BOOL8, &Settings::_worldAxisBtn, "group='Axis Visualization' label='World Axis' ");
-	TwAddVarRW(bar, "Show Object Axis", TW_TYPE_BOOL8, &Settings::_objAxisBtn, "group='Axis Visualization' label='Object Axis' ");
+	TwAddVarRW(bar, "Show World Axis", TW_TYPE_BOOL8, &Settings::_worldAxisBtn, "group='Axis Visualization' opened=false  label='World Axis' ");
+	TwAddVarRW(bar, "Show Object Axis", TW_TYPE_BOOL8, &Settings::_objAxisBtn, "group='Axis Visualization' opened=false  label='Object Axis' ");
 
 
 	// Material property sliders
 
 	// Texture
 	TwAddVarRW(bar, "Enable Texture", TW_TYPE_BOOL8, &Settings::_enableTexture,
-		" group='Texture' label='Enable Texture' help='Enable texture rendering' ");
-	TwAddButton(bar, "open texture file", loadTexture, NULL, "group='Texture' label='import Texture File...' ");
+		" group='Texture' label='Enable Texture'  opened=true  help='Enable texture rendering' ");
+	TwAddButton(bar, "open texture file", loadTexture, NULL, "group='Texture' opened=true label='import Texture File...' ");
 
 	// Material Properties
 	TwAddVarRW(bar, "Ambient k_a", TW_TYPE_FLOAT, &Settings::_ambient,
-		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Ambient reflection coefficient'");
+		" group='Material properties' min=0.0 max=1.0 step=0.1  opened=false  help='Ambient reflection coefficient'");
 	TwAddVarRW(bar, "Diffuse k_d", TW_TYPE_FLOAT, &Settings::_diffuse,
-		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Diffuse reflection coefficient'");
+		" group='Material properties' min=0.0 max=1.0 step=0.1  opened=false  help='Diffuse reflection coefficient'");
 	TwAddVarRW(bar, "Specular k_s", TW_TYPE_FLOAT, &Settings::_specular,
-		" group='Material properties' min=0.0 max=1.0 step=0.1 help='Specular reflection coefficient'");
+		" group='Material properties' min=0.0 max=1.0 step=0.1  opened=false  help='Specular reflection coefficient'");
 	TwAddVarRW(bar, "Shininess", TW_TYPE_FLOAT, &Settings::_shininess,
-		" group='Material properties' min=1.0 max=100.0 step=1.0 help='Specular highlight shininess exponent'");
+		" group='Material properties' min=1.0 max=100.0 step=1.0  opened=false  help='Specular highlight shininess exponent'");
 	// Base color as RGB
 	TwAddVarRW(bar, "Material Color", TW_TYPE_COLOR3F, &Settings::_baseColor,
-		" group='Material properties' label='Base Color' help='Base material color (RGB)' ");
+		" group='Material properties' label='Base Color'  opened=false  help='Base material color (RGB)' ");
 	// Double-sided lighting toggle
 	TwAddVarRW(bar, "Double-Sided", TW_TYPE_BOOL8, &Settings::_doubleSided,
-		" group='Material properties' label='Double-Sided Lighting' help='If enabled, light back faces by inverting normal'");
+		" group='Material properties' label='Double-Sided Lighting'  opened=false  help='If enabled, light back faces by inverting normal'");
 	
 	// Light type enum for AntTweakBar
 	TwEnumVal lightTypeMenu[] = { {DIRECTIONAL, "Directional"}, {POINTY, "Point"} };
@@ -171,20 +171,20 @@ void TweakBarSettings()
 
 	//// Global ambient light color
 	TwAddVarRW(bar, "Ambient Light", TW_TYPE_COLOR3F, &Settings::_ambientLight,
-		"group='Global Light properties' label='Ambient Light' help='Global ambient light intensity (RGB)' ");
+		"group='Global Light properties' label='Ambient Light' opened=false help='Global ambient light intensity (RGB)' ");
 
 	TwType shadingType = TwDefineEnum("ShadingMode", shadingMenu, 3);
-	TwAddVarRW(bar, "Shading Mode", shadingType, &Settings::_shadingMode, " group='Global Light properties' ");
+	TwAddVarRW(bar, "Shading Mode", shadingType, &Settings::_shadingMode, " group='Global Light properties'  opened=false  ");
 
 	// Light1 controls
 	TwAddVarRW(bar, "Light1 Type", lightTypeTW, &Settings::_light1Type,
-		" group='Light1 properties' label='Light 1 Type' help='Select directional or point light'");
+		" group='Light1 properties' label='Light 1 Type' opened=false help='Select directional or point light'");
 	TwAddVarRW(bar, "Light1 Direction", TW_TYPE_DIR3F, &Settings::_light1Direction,
-		" group='Light1 properties' label='Light 1 Direction' opened=true help='Direction for directional light (normalized)' ");
+		" group='Light1 properties' label='Light 1 Direction' opened=false help='Direction for directional light (normalized)' ");
 	TwAddVarRW(bar, "Light1 Position", TW_TYPE_DIR3F, &Settings::_light1Pos,
-		" group='Light1 properties' label='Light 1 Position' opened=true help='Position for point light (world coordinates)' ");
+		" group='Light1 properties' label='Light 1 Position' opened=false help='Position for point light (world coordinates)' ");
 	TwAddVarRW(bar, "Light1 Color", TW_TYPE_COLOR3F, &Settings::_light1Intensity,
-		" group='Light1 properties' label='Light 1 Color' help='Intensity/Color of Light 1' ");
+		" group='Light1 properties' label='Light 1 Color' opened=false help='Intensity/Color of Light 1' ");
 
 	// Light2 controls (including enable toggle)
 	TwAddVarRW(bar, "Light2 Enabled", TW_TYPE_BOOL8, &Settings::_light2Enabled,
@@ -192,9 +192,9 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Light2 Type", lightTypeTW, &Settings::_light2Type,
 		" group='Light2 properties' label='Light 2 Type' help='Select directional or point light'");
 	TwAddVarRW(bar, "Light2 Direction", TW_TYPE_DIR3F, &Settings::_light2Direction,
-		" group='Light2 properties' label='Light 2 Direction' opened=true help='Direction for Light 2 (if directional)' ");
+		" group='Light2 properties' label='Light 2 Direction' opened=false help='Direction for Light 2 (if directional)' ");
 	TwAddVarRW(bar, "Light2 Position", TW_TYPE_DIR3F, &Settings::_light2Pos,
-		" group='Light2 properties' label='Light 2 Position' opened=true help='Position for Light 2 (if point)' ");
+		" group='Light2 properties' label='Light 2 Position' opened=false help='Position for Light 2 (if point)' ");
 	TwAddVarRW(bar, "Light2 Color", TW_TYPE_COLOR3F, &Settings::_light2Intensity,
 		" group='Light2 properties' label='Light 2 Color' help='Intensity/Color of Light 2' ");
 
@@ -216,19 +216,18 @@ void TweakBarSettings()
 	TwAddVarRW(bar, "Use sLerp", TW_TYPE_BOOL8, &Settings::_useSlerp, "group='Animation' min=0.01 max=2 step=0.01 label='switch between slerp and Euler'");
 
 	// slerp
-	TwAddVarRW(bar, "Start sLerp Rotation X", TW_TYPE_DOUBLE, &Settings::_startSlerpRotX, "group='Animation Start sLerp'  label='Start X sLerp Orentation' min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "Start sLerp Rotation Y", TW_TYPE_DOUBLE, &Settings::_startSlerpRotY, "group='Animation Start sLerp' label='Start Y sLerp Orentation'  min=-90. max=90.0f step=1 ");
-	TwAddVarRW(bar, "Start sLerp Rotation Z", TW_TYPE_DOUBLE, &Settings::_startSlerpRotZ, "group='Animation Start sLerp'  label='Start Z sLerp Orentation' min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "End sLerp Rotation X", TW_TYPE_DOUBLE, &Settings::_endSlerpRotX, "group='Animation End sLerp' label='End X sLerp Orentation'  min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "End sLerp Rotation Y", TW_TYPE_DOUBLE, &Settings::_endSlerpRotY, "group='Animation End sLerp' label='End Y sLerp Orentation'  min=-90.0f max=90.0f step=1 ");
-	TwAddVarRW(bar, "End sLerp Rotation Z", TW_TYPE_DOUBLE, &Settings::_endSlerpRotZ, "group='Animation End sLerp' label='End Z sLerp Orentation'  min=-180 max=180 step=1 ");
+	TwAddVarRW(bar, "Start Slerp Orientation", TW_TYPE_QUAT4F, &Settings::_startSlerp,
+		" group='Animation Slerp' label='Start Slerp Orientation' opened=true help='Set here the start orientation.' ");
+	TwAddVarRW(bar, "End Slerp Orientation", TW_TYPE_QUAT4F, &Settings::_endSlerp,
+		" group='Animation Slerp' label='End Slerp Orientation' opened=true help='Set here the end orientation.' ");
+
 
 	// Euler controlers
 	TwAddVarRW(bar, "Start Euler Rotation X", TW_TYPE_DOUBLE, &Settings::_startEulerRotX, "group='Animation Start Euler'  label='Start X Euler Orentation' min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "Start Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_startEulerRotY, "group='Animation Start Euler' label='Start Y Euler Orentation'  min=-90. max=90.0f step=1 ");
+	TwAddVarRW(bar, "Start Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_startEulerRotY, "group='Animation Start Euler' label='Start Y Euler Orentation' min = 0.0f max= 180 step=1 ");
 	TwAddVarRW(bar, "Start Euler Rotation Z", TW_TYPE_DOUBLE, &Settings::_startEulerRotZ, "group='Animation Start Euler'  label='Start Z Euler Orentation' min=-180 max=180 step=1 ");
 	TwAddVarRW(bar, "End Euler Rotation X", TW_TYPE_DOUBLE, &Settings::_endEulerRotX, "group='Animation End Euler' label='End X Euler Orentation'  min=-180 max=180 step=1 ");
-	TwAddVarRW(bar, "End Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_endEulerRotY, "group='Animation End Euler' label='End Y Euler Orentation'  min=-90.0f max=90.0f step=1 ");
+	TwAddVarRW(bar, "End Euler Rotation Y", TW_TYPE_DOUBLE, &Settings::_endEulerRotY, "group='Animation End Euler' label='End Y Euler Orentation'  min=-0.0f max=180.0f step=1 ");
 	TwAddVarRW(bar, "End Euler Rotation Z", TW_TYPE_DOUBLE, &Settings::_endEulerRotZ, "group='Animation End Euler' label='End Z Euler Orentation'  min=-180 max=180 step=1 ");
 
 	// deformation

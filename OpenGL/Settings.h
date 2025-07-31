@@ -48,8 +48,8 @@ namespace Settings {
 	extern float _animationSpeed;
 
 	// slerp 
-	extern double _startSlerpRotX, _startSlerpRotY, _startSlerpRotZ;
-	extern double _endSlerpRotX, _endSlerpRotY, _endSlerpRotZ;
+	extern float _startSlerp[4];
+	extern float _endSlerp[4];
 	
 	//Euler
 	extern double _startEulerRotX, _startEulerRotY, _startEulerRotZ;

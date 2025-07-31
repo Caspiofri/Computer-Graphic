@@ -75,8 +75,8 @@ namespace Settings {
 	bool _useSlerp = true;
 
 	//slerp 
-	double _startSlerpRotX, _startSlerpRotY, _startSlerpRotZ;
-	double _endSlerpRotX, _endSlerpRotY, _endSlerpRotZ;
+	float _startSlerp[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float _endSlerp[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	//Euler
 	double _startEulerRotX, _startEulerRotY, _startEulerRotZ;

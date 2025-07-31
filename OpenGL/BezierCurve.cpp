@@ -32,8 +32,6 @@ std::vector<glm::vec3> BezierCurve::getSampledPoints(int num) {
 	return points;
 }
 
-
-//TODO  - move to bezier class
 std::vector<Vertex> BezierCurve::buildVisualBezier() {
 	int num = 100;
 	std::vector<glm::vec3> sampledPoints = getSampledPoints(num);
@@ -52,7 +50,7 @@ std::vector<Vertex> BezierCurve::buildVisualBezier() {
 
 	return lineVertices;
 }
-//TODO  - move to bezier class
+
 glm::mat4 BezierCurve::calcAnimation() {
 
 	//position
@@ -62,13 +60,11 @@ glm::mat4 BezierCurve::calcAnimation() {
 	//rotation
 	glm::mat4 rotation = MathLib::identity();
 	if (Settings::_useSlerp) {
-		float startQuat[4], endQuat[4];
-		MathLib::convertEulerToQuaternion(Settings::_startSlerpRotX, Settings::_startSlerpRotY, Settings::_startSlerpRotZ, &startQuat[0]);
-		MathLib::convertEulerToQuaternion(Settings::_endSlerpRotX, Settings::_endSlerpRotY, Settings::_endSlerpRotZ, &endQuat[0]);
-
+		
 		float resultQuat[4];
-		MathLib::slerp_calc(&startQuat[0], &endQuat[0], Settings::_t, &resultQuat[0]);
+		MathLib::slerp_calc(Settings::_startSlerp, Settings::_endSlerp, Settings::_t, &resultQuat[0]);
 		ConvertQuaternionToMatrix(&resultQuat[0], rotation);
+
 	}
 	else {
 		glm::vec3 rotation_vec = MathLib::euler_calc();

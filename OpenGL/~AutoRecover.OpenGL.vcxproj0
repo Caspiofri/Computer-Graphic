@@ -16,6 +16,7 @@
     <ClCompile Include="BBox.cpp" />
     <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="GouraudSet.cpp" />
     <ClCompile Include="LineSet.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="common_glm_config.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="GouraudSet.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
